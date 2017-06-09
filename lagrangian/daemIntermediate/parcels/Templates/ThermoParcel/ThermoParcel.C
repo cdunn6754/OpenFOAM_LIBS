@@ -297,7 +297,6 @@ Foam::scalar Foam::ThermoParcel<ParcelType>::calcHeatTransfer
         bp += 6.0*s;
     }
     bp /= rho*d*Cp_*(ap - T_) + ROOTVSMALL;
-
     // Integrate to find the new parcel temperature
     IntegrationScheme<scalar>::integrationResult Tres =
         td.cloud().TIntegrator().integrate(T_, dt, ap*bp, bp);

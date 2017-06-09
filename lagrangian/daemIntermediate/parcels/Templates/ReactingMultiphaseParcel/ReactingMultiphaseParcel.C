@@ -267,6 +267,7 @@ void Foam::ReactingMultiphaseParcel<ParcelType>::calc
     // Temporary integrated rates to go into devolatilization function
     scalarField tempIntegratedDaemRates = this->integratedDaemRates_;
 
+    
     // Calc mass and enthalpy transfer due to devolatilisation
     calcDevolatilisation
     (
@@ -289,6 +290,8 @@ void Foam::ReactingMultiphaseParcel<ParcelType>::calc
         Cs,
 	tempIntegratedDaemRates
     );
+    
+
 
     // Surface reactions
     // ~~~~~~~~~~~~~~~~~
@@ -398,7 +401,6 @@ void Foam::ReactingMultiphaseParcel<ParcelType>::calc
 
     // Heat transfer
     // ~~~~~~~~~~~~~
-
     // Calculate new particle temperature
     this->T_ =
         this->calcHeatTransfer
@@ -414,7 +416,6 @@ void Foam::ReactingMultiphaseParcel<ParcelType>::calc
             dhsTrans,
             Sph
         );
-
 
     this->Cp_ = CpEff(td, pc, this->T_, idG, idL, idS);
 
@@ -582,7 +583,7 @@ void Foam::ReactingMultiphaseParcel<ParcelType>::calcDevolatilisation
             const label id = composition.localToCarrierId(GAS, i);
             const scalar Cp = composition.carrier().Cp(id, this->pc_, Ts);
             const scalar W = composition.carrier().W(id);
-            const scalar Ni = dMassDV[i]/(this->areaS(d)*dt*W);
+            const scalar Ni = dMassDV[i]/(this->areaS(d)*dt*W); //=[mol/(m^2*s)]
 
             // Dab calc'd using API vapour mass diffusivity function
             const scalar Dab =
@@ -591,8 +592,9 @@ void Foam::ReactingMultiphaseParcel<ParcelType>::calcDevolatilisation
                /(this->pc_*beta);
 
             N += Ni;
-            NCpW += Ni*Cp*W;
+            NCpW += Ni*Cp*W; // [J/(kg*K)]
             Cs[id] += Ni*d/(2.0*Dab);
+	    
         }
     }
 }

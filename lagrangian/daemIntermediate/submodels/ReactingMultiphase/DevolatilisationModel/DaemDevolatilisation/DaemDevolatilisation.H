@@ -234,6 +234,7 @@ class DaemDevolatilisation
   // not the gas fraction of the particle
   scalarField initialVolatileMassFractions_;
 
+
             //- Mapping between local and cloud gaseous species
             List<label> volatileToGasMap_;
 

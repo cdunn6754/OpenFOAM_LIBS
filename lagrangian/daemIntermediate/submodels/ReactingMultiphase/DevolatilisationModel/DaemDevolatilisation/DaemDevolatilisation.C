@@ -47,7 +47,7 @@ DaemDevolatilisation
             << nl << endl;
     }
     else
-    {
+    { 
         Info<< "Participating volatile species:" << endl;
 
         // Determine mapping between active volatiles and cloud gas components
@@ -107,14 +107,14 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 
     // The total current volatile mass fraction of the particle (all species)
     scalar volatileMassFraction = sum(YGasEff);
+
    
     // If we are restarting, there is no disk storage for "done" so it will try to 
     // devolatilise parcels which are already done. This leads to dividing by zero 
-    // in the code below since volatileMassFraction == 0. in this case. So probably 
+    // in the code below since volatileMassFraction == 0.  So probably 
     // we should not let that happen
     if (volatileMassFraction >= VSMALL)
       {
-
 	// Quadrature points and wieghts
 	scalarField quadPoints(4,0);
 	scalarField quadWeights(4,0);
@@ -157,8 +157,11 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	scalar V = V_star * (1. - sum); // update the current volatile mass fraction
 
 	scalar particleNewMass = (1.0 - V)*mass0;
-
-	Info << "New Mass " << mass0 - particleNewMass << endl;
+	// if (particleNewMass > mass)
+	//   {
+	//     Info << "The new particle mass is greater than current" << endl;
+	//     particleNewMass = mass;
+	//   }
 
 	// Every species will have its own volatileData object,
 	// volatileData_ stores them, so iterate through them here
@@ -168,7 +171,6 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	    //masses for this species
 	    const scalar massVolatile0 = mass0*initialVolatileMassFractions_[i];
 	    const scalar massVolatile = mass*YGasEff[i];
-
 	    
 	    // The mass fraction of this species within the gas mass
 	    scalar speciesMassFraction = YGasEff[i]/volatileMassFraction;
@@ -181,11 +183,11 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	    // and predicting negative mass loss. This happens when they are 
 	    // nearly out of volatile matter anyways, so use the constant rate
 	    // method from the OF devolatilisation model with A0=12
-	    if (speciesMassLoss <= 0.0)
+	    if (speciesMassLoss < 0.0)
 	      {
 		// Mass transfered from the particle to the carrier gas phase
 		// on a per species basis
-		dMassDV[i] = min(massVolatile, dt * 12. * massVolatile0);
+		dMassDV[i] = min(massVolatile, dt * 30. * massVolatile0);
 		Info << "WARNING: Forced to use constant rate model " << endl;
 	      }
 	    else
@@ -202,14 +204,12 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	  }
       }
 
-    else // if there are not volatiles to begin with
+    else // if there are not volatiles to begin with, lose nothing
       {
 	dMassDV[0] = 0.0;
 	dMassDV[1] = 0.0;
 	dMassDV[2] = 0.0;
       }
-
-    Info << sum(dMassDV)  << endl;
 
     if (done && canCombust != -1)
     {

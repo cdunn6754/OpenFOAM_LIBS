@@ -78,9 +78,11 @@ inline Foam::ReactingMultiphaseParcel<ParcelType>::ReactingMultiphaseParcel
     YGas_(0),
     YLiquid_(0),
     YSolid_(0),
-    canCombust_(0),
-    integratedDaemRates_(4,0.0)
+    canCombust_(0)
+    //integratedDaemRates_(4,0.0)
 {
+  scalarField temp(4,0.0);
+  integratedDaemRates_ = temp;
 }
 
 
@@ -128,9 +130,11 @@ inline Foam::ReactingMultiphaseParcel<ParcelType>::ReactingMultiphaseParcel
     YGas_(YGas0),
     YLiquid_(YLiquid0),
     YSolid_(YSolid0),
-    canCombust_(0),
-    integratedDaemRates_(4,0.0)
+    canCombust_(0)
+//integratedDaemRates_(4,0.0)
 {
+  scalarField temp(4,0.0);
+  integratedDaemRates_ = temp;
 }
 
 
