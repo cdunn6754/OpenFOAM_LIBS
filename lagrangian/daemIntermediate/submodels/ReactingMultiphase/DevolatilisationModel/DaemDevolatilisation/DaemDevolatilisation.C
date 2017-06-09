@@ -186,7 +186,7 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 		// Mass transfered from the particle to the carrier gas phase
 		// on a per species basis
 		dMassDV[i] = min(massVolatile, dt * 12. * massVolatile0);
-		Info << "WARNING: Forced to use constant rate model" << endl;
+		Info << "WARNING: Forced to use constant rate model " << endl;
 	      }
 	    else
 	      {
