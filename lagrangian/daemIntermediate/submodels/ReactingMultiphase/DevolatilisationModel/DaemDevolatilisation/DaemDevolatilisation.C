@@ -157,11 +157,6 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	scalar V = V_star * (1. - sum); // update the current volatile mass fraction
 
 	scalar particleNewMass = (1.0 - V)*mass0;
-	// if (particleNewMass > mass)
-	//   {
-	//     Info << "The new particle mass is greater than current" << endl;
-	//     particleNewMass = mass;
-	//   }
 
 	// Every species will have its own volatileData object,
 	// volatileData_ stores them, so iterate through them here
@@ -180,15 +175,16 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 
 	    // During manual restart (e.g. setting all to IDR = 0.0)
 	    // can have problems with new particle mass being more than current mass
-	    // and predicting negative mass loss. This happens when they are 
-	    // nearly out of volatile matter anyways, so use the constant rate
-	    // method from the OF devolatilisation model with A0=12
+	    // and predicting negative mass loss. So let these particles go on without 
+	    // devoling. The rates will eventually catch up with whatever the
+	    // volatile fraction is and work as they should
+	    // The result is that some particle (potentially a lot at first)
+	    // will stop devolatilization when doing a manual restart.
 	    if (speciesMassLoss < 0.0)
 	      {
 		// Mass transfered from the particle to the carrier gas phase
 		// on a per species basis
-		dMassDV[i] = min(massVolatile, dt * 30. * massVolatile0);
-		Info << "WARNING: Forced to use constant rate model " << endl;
+		dMassDV[i] = 0.0; //min(massVolatile, dt * 30. * massVolatile0);
 	      }
 	    else
 	      {
