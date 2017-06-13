@@ -178,13 +178,13 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	    // and predicting negative mass loss. So let these particles go on without 
 	    // devoling. The rates will eventually catch up with whatever the
 	    // volatile fraction is and work as they should
-	    // The result is that some particle (potentially a lot at first)
+	    // The result is that some particles (potentially a lot at first)
 	    // will stop devolatilization when doing a manual restart.
 	    if (speciesMassLoss < 0.0)
 	      {
 		// Mass transfered from the particle to the carrier gas phase
 		// on a per species basis
-		dMassDV[i] = 0.0; //min(massVolatile, dt * 30. * massVolatile0);
+		dMassDV[i] = 0.0;
 	      }
 	    else
 	      {
