@@ -24,39 +24,32 @@ License
 Class
     Foam::functionObjects::customCloudInfo
 
-Group
-    grpLagrangianFunctionObjects
-
 Description
-    This function object outputs Lagrangian cloud information to a file.  The
-    current outputs include:
-    - total current number of parcels
-    - total current mass of parcels
+    This function object outputs Lagrangian cloud information to a file. It is best
+    with uncoupledCoalChemistryFoam or similar (e.g. uncoupledKinematicParcelFoam). It 
+    tracks all of the parcels of a particular cloud (hard-coded coalCloud1). Then the 
+    parcel variables of interest (e.g. Temp, Ygas) are written to a file for every
+    timestep. The current varibles available are T, Ygas, Ysolid, mass0. When writing 
+    the names of the variables in the dictionary write them as they appear in the 
+    normal solver output files.
 
-    Example of function object specification:
+    Example of function object specification, put this in the controlDict:
     \verbatim
-    customCloudInfo1
+    functions
     {
-        type        customCloudInfo;
-        libs ("libcloudFunctionObjects.so");
-        ...
-        clouds
-        (
-            kinematicCloud1
-            thermoCloud1
-        );
+    cloudInfo1
+        {
+          type customCloudInfo;
+          libs ("libcustomLagrangianFunctionObjects.so");
+          parcelProperties
+	    (
+	     T
+	     Ysolid
+	     Ygas
+	     );
+	 }
     }
     \endverbatim
-
-
-Usage
-    \table
-        Property     | Description             | Required    | Default value
-        type         | type name: customCloudInfo    | yes         |
-        clouds       | list of clouds names to process |yes  |
-    \endtable
-
-    The output data of each cloud is written to a file named \<cloudName\>.dat
 
 See also
     Foam::functionObject
@@ -71,6 +64,11 @@ SourceFiles
 #define functionObjects_customCloudInfo_H
 
 #include "writeFiles.H"
+
+// Clint 06-14-17
+#include "kinematicCloud.H"
+#include "basicReactingMultiphaseCloud.H"
+
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -105,6 +103,9 @@ private:
         //- Disallow default bitwise assignment
         void operator=(const customCloudInfo&);
 
+  // Clint 06-14-17
+  // Adding pointer to the cloud as a member so we can access info in all functions
+  basicReactingMultiphaseCloud* cloud;
 
 public:
 

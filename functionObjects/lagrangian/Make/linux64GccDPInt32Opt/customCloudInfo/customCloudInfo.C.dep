@@ -268,7 +268,6 @@ $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/writeFileTemplates.C \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/OFstream.H \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/kinematicCloud.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/volFieldsFwd.H \
-$(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/addToRunTimeSelectionTable.H \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/basicReactingMultiphaseCloud.H \
 $(WM_PROJECT_DIR)/src/lagrangian/basic/lnInclude/Cloud.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/cloud.H \
@@ -809,5 +808,6 @@ $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcel
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcelI.H \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcel.C \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcelIO.C \
+$(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/addToRunTimeSelectionTable.H \
 
 

@@ -24,9 +24,7 @@ License
 \*---------------------------------------------------------------------------*/
 
 #include "customCloudInfo.H"
-#include "kinematicCloud.H"
 #include "addToRunTimeSelectionTable.H" 
-#include "basicReactingMultiphaseCloud.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
@@ -50,14 +48,18 @@ namespace functionObjects
 
 void Foam::functionObjects::customCloudInfo::writeFileHeader(const label i)
 {
+  // need to know how many parcels so we can write the headers for them
+  label nParcels = cloud->nParcels();
 
-  writeHeader(files()[i], "Particle " + names()[i]);
+  writeHeader(files()[i], "Parcel " + names()[i]);
       writeCommented(files()[i], "Time");
-      writeTabbed(files()[i], "Particle1");
-      writeTabbed(files()[i], "Particle2");
-      writeTabbed(files()[i], "Particle3");
-      writeTabbed(files()[i], "Particle4");
-      writeTabbed(files()[i], "Particle5");
+      // loop through all parcels and make their column headers
+      for (int j=0; j < nParcels; j++)
+	{
+	  int parcelNumber = j + 1;
+	  files()[i]
+	    << token::TAB << "Parcel " << parcelNumber << token::TAB;
+	}
       files()[i] << endl;
 }
 
@@ -71,9 +73,17 @@ Foam::functionObjects::customCloudInfo::customCloudInfo
     const dictionary& dict
 )
 :
-    writeFiles(name, runTime, dict, name)
+  writeFiles(name, runTime, dict, name)
 {
     read(dict);
+    //const word& cloudName = names()[i];
+    const word& cloudName = "coalCloud1";
+
+    const kinematicCloud& cloud1 =
+      obr_.lookupObject<kinematicCloud>(cloudName);
+
+    // Type-cast to something we can work with
+    cloud = (basicReactingMultiphaseCloud*) &cloud1;
 }
 
 
@@ -87,7 +97,7 @@ Foam::functionObjects::customCloudInfo::~customCloudInfo()
 
 bool Foam::functionObjects::customCloudInfo::read(const dictionary& dict)
 {
-    writeFiles::resetNames(dict.lookup("clouds"));
+    writeFiles::resetNames(dict.lookup("parcelProperties"));
 
     Info<< type() << " " << name() << ": ";
     if (names().size())
@@ -116,61 +126,82 @@ bool Foam::functionObjects::customCloudInfo::execute()
 
 bool Foam::functionObjects::customCloudInfo::write()
 {
-    writeFiles::write();
+  writeFiles::write();
 
-    forAll(names(), i)
+  forAll(names(), i)
     {
-      //const word& cloudName = names()[i];
-      const word& cloudName = "coalCloud1";
+      // need to know how many parcels
+      label nParcels = cloud->nParcels();
+      
+      scalarField parcelFieldValues(nParcels,0.);
 
-        const kinematicCloud& cloud1 =
-            obr_.lookupObject<kinematicCloud>(cloudName);
-
-	
-	// Type-cast to something we can work with
-	basicReactingMultiphaseCloud* cloud = 
-	  (basicReactingMultiphaseCloud*) &cloud1;
-
-	scalarField parcelTemperatures(5,0.);
+      label idGas = cloud->composition().idGas();
+      //label idLiquid = cloud->composition().idLiquid();
+      label idSolid = cloud->composition().idSolid();
 
 
 
-	label j = 0;
-	forAllIter(basicReactingMultiphaseCloud, *cloud,  iter)
-	  {
-	    //label thisId = iter().origId();
+      label j = 0;
+      forAllIter(basicReactingMultiphaseCloud, *cloud,  iter)
+	{
 
+	  if (iter().active())
+	    {
+	      // Now we use the dumb way to get from string "fieldName" i.e.
+	      // "T" to the access function iter().T()
 
-	    if (iter().active())
-	      {
-	    	// I think the returnReduce thing is for parallel stuff
-	    	parcelTemperatures[j] = 
-	    	  returnReduce(iter().T(), sumOp<scalar>());
-	    	j++;
-	      }
-	    // we only want the first five
-	    if (j>= 5)
-	      {
-	    	break;
-	      }
+	      if (names()[i] == "T")
+		{
+		  parcelFieldValues[j] = 
+		    returnReduce(iter().T(), sumOp<scalar>());
+		}
+
+	      else if (names()[i] == "Ygas")
+		{
+		  parcelFieldValues[j] = 
+		    returnReduce(iter().Y()[idGas], sumOp<scalar>());
+		}
+
+	      else if (names()[i] == "Ysolid")
+		{
+		  parcelFieldValues[j] = 
+		    returnReduce(iter().Y()[idSolid], sumOp<scalar>());
+		}
+
+	      else if (names()[i] == "mass0")
+		{
+		  parcelFieldValues[j] = 
+		    returnReduce(iter().mass0(), sumOp<scalar>());
+		}
+
+	      j++;
+	    }
+	  // double check that we don't overrun the cloud
+	  if (j>= nParcels)
+	    {
+	      break;
+	    }
 	      
-	  }
+	}
 
 
-        if (Pstream::master())
+      if (Pstream::master())
         {
-            writeTime(files()[i]);
-            files()[i]
-                << token::TAB
-                << parcelTemperatures[0] << token::TAB
-                << parcelTemperatures[1] << token::TAB
-                << parcelTemperatures[2] << token::TAB
-                << parcelTemperatures[3] << token::TAB
-                << parcelTemperatures[4] << endl;
-        }
+	  writeTime(files()[i]);
+	  files()[i]
+	    << token::TAB;
+	  // write out the fields for every parcel
+	  for (label k = 0; k < nParcels; k++)
+	    {
+	      files()[i]
+		<< parcelFieldValues[k] << token::TAB;
+	    }
+	  files()[i]
+	    << endl;
+	}
     }
 
-    return true;
+  return true;
 }
 
 
