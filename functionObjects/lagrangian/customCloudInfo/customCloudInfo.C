@@ -50,14 +50,15 @@ namespace functionObjects
 
 void Foam::functionObjects::customCloudInfo::writeFileHeader(const label i)
 {
-    writeHeader(file(), "Particle Temperatures");
-    writeCommented(file(), "Time");
-    writeTabbed(file(), "Particle1");
-    writeTabbed(file(), "Particle2");
-    writeTabbed(file(), "Particle3");
-    writeTabbed(file(), "Particle4");
-    writeTabbed(file(), "Particle5");
-    file() << endl;
+
+  writeHeader(files()[i], "Particle " + names()[i]);
+      writeCommented(files()[i], "Time");
+      writeTabbed(files()[i], "Particle1");
+      writeTabbed(files()[i], "Particle2");
+      writeTabbed(files()[i], "Particle3");
+      writeTabbed(files()[i], "Particle4");
+      writeTabbed(files()[i], "Particle5");
+      files()[i] << endl;
 }
 
 
@@ -91,7 +92,7 @@ bool Foam::functionObjects::customCloudInfo::read(const dictionary& dict)
     Info<< type() << " " << name() << ": ";
     if (names().size())
     {
-        Info<< "applying to clouds:" << nl;
+        Info<< "applying to lagrangian fields:" << nl;
         forAll(names(), i)
         {
             Info<< "    " << names()[i] << nl;
@@ -100,7 +101,7 @@ bool Foam::functionObjects::customCloudInfo::read(const dictionary& dict)
     }
     else
     {
-        Info<< "no clouds to be processed" << nl << endl;
+        Info<< "no lagrangian fields to be processed" << nl << endl;
     }
 
     return true;
@@ -119,7 +120,8 @@ bool Foam::functionObjects::customCloudInfo::write()
 
     forAll(names(), i)
     {
-        const word& cloudName = names()[i];
+      //const word& cloudName = names()[i];
+      const word& cloudName = "coalCloud1";
 
         const kinematicCloud& cloud1 =
             obr_.lookupObject<kinematicCloud>(cloudName);
@@ -157,8 +159,8 @@ bool Foam::functionObjects::customCloudInfo::write()
 
         if (Pstream::master())
         {
-            writeTime(file(i));
-            file(i)
+            writeTime(files()[i]);
+            files()[i]
                 << token::TAB
                 << parcelTemperatures[0] << token::TAB
                 << parcelTemperatures[1] << token::TAB
