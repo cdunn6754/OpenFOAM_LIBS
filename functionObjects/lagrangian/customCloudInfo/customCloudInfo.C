@@ -174,6 +174,12 @@ bool Foam::functionObjects::customCloudInfo::write()
 		    returnReduce(iter().mass0(), sumOp<scalar>());
 		}
 
+	      else if (names()[i] == "mass")
+		{
+		  parcelFieldValues[j] = 
+		    returnReduce(iter().mass(), sumOp<scalar>());
+		}
+
 	      j++;
 	    }
 	  // double check that we don't overrun the cloud
