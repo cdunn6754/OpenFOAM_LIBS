@@ -184,7 +184,7 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	      {
 		// Mass transfered from the particle to the carrier gas phase
 		// on a per species basis
-		dMassDV[i] = 0.0;
+		dMassDV[i] = min(dt*12*massVolatile0,massVolatile);//0.0;
 	      }
 	    else
 	      {

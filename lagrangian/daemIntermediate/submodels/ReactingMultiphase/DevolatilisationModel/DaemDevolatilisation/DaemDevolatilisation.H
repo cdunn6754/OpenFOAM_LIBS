@@ -243,7 +243,6 @@ class DaemDevolatilisation
             //  threshold, combustion can occur
             const scalar residualCoeff_;
 
-
 public:
 
     //- Runtime type information
