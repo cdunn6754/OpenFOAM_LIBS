@@ -1,6 +1,6 @@
-$(OBJECTS_DIR)/customCloudInfo/customCloudInfo.C.dep: \
-customCloudInfo/customCloudInfo.C \
-customCloudInfo/customCloudInfo.H \
+$(OBJECTS_DIR)/parcelPropertyInfo/parcelPropertyInfo.C.dep: \
+parcelPropertyInfo/parcelPropertyInfo.C \
+parcelPropertyInfo/parcelPropertyInfo.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/writeFiles.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/writeFile.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/regionFunctionObject.H \

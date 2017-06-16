@@ -16,9 +16,9 @@ FoamFile
 
 functions
 {
-    customCloudInfo1
+    parcelPropertyInfo1
     {
-        type            customCloudInfo;
+        type            parcelPropertyInfo;
         libs ("libcloudFunctionObjects.so");
         enabled         true;
         writeControl   timeStep;

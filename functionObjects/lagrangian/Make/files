@@ -1,3 +1,3 @@
-customCloudInfo/customCloudInfo.C
+parcelPropertyInfo/parcelPropertyInfo.C
 
 LIB = $(FOAM_USER_LIBBIN)/libcustomLagrangianFunctionObjects

@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::functionObjects::customCloudInfo
+    Foam::functionObjects::parcelPropertyInfo
 
 Description
     This function object outputs Lagrangian cloud information to a file. It is best
@@ -39,7 +39,7 @@ Description
     {
     cloudInfo1
         {
-          type customCloudInfo;
+          type parcelPropertyInfo;
           libs ("libcustomLagrangianFunctionObjects.so");
           parcelProperties
 	    (
@@ -56,12 +56,12 @@ See also
     Foam::functionObjects::writeFiles
 
 SourceFiles
-    customCloudInfo.C
+    parcelPropertyInfo.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef functionObjects_customCloudInfo_H
-#define functionObjects_customCloudInfo_H
+#ifndef functionObjects_parcelPropertyInfo_H
+#define functionObjects_parcelPropertyInfo_H
 
 #include "writeFiles.H"
 
@@ -78,10 +78,10 @@ namespace functionObjects
 {
 
 /*---------------------------------------------------------------------------*\
-                         Class customCloudInfo Declaration
+                         Class parcelPropertyInfo Declaration
 \*---------------------------------------------------------------------------*/
 
-class customCloudInfo
+class parcelPropertyInfo
 :
     public writeFiles
 {
@@ -98,10 +98,10 @@ private:
     // Private member functions
 
         //- Disallow default bitwise copy construct
-        customCloudInfo(const customCloudInfo&);
+        parcelPropertyInfo(const parcelPropertyInfo&);
 
         //- Disallow default bitwise assignment
-        void operator=(const customCloudInfo&);
+        void operator=(const parcelPropertyInfo&);
 
   // Clint 06-14-17
   // Adding pointer to the cloud as a member so we can access info in all functions
@@ -110,13 +110,13 @@ private:
 public:
 
     //- Runtime type information
-    TypeName("customCloudInfo");
+    TypeName("parcelPropertyInfo");
 
 
     // Constructors
 
         //- Construct from Time and dictionary
-        customCloudInfo
+        parcelPropertyInfo
         (
             const word& name,
             const Time& runTime,
@@ -125,7 +125,7 @@ public:
 
 
     //- Destructor
-    virtual ~customCloudInfo();
+    virtual ~parcelPropertyInfo();
 
 
     // Member Functions

@@ -1,2 +1,2 @@
 SOURCE = \
-customCloudInfo/customCloudInfo.C 
+parcelPropertyInfo/parcelPropertyInfo.C 

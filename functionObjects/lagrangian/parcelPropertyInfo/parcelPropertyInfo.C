@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "customCloudInfo.H"
+#include "parcelPropertyInfo.H"
 #include "addToRunTimeSelectionTable.H" 
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
@@ -32,12 +32,12 @@ namespace Foam
 {
 namespace functionObjects
 {
-    defineTypeNameAndDebug(customCloudInfo, 0);
+    defineTypeNameAndDebug(parcelPropertyInfo, 0);
 
     addToRunTimeSelectionTable
     (
         functionObject,
-        customCloudInfo,
+        parcelPropertyInfo,
         dictionary
     );
 }
@@ -46,19 +46,19 @@ namespace functionObjects
 
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
 
-void Foam::functionObjects::customCloudInfo::writeFileHeader(const label i)
+void Foam::functionObjects::parcelPropertyInfo::writeFileHeader(const label i)
 {
   // need to know how many parcels so we can write the headers for them
   label nParcels = cloud->nParcels();
 
   writeHeader(files()[i], "Parcel " + names()[i]);
-      writeCommented(files()[i], "Time");
+  files()[i] <<  "Time" << token::TAB << token::TAB ;
       // loop through all parcels and make their column headers
       for (int j=0; j < nParcels; j++)
 	{
 	  int parcelNumber = j + 1;
 	  files()[i]
-	    << token::TAB << "Parcel " << parcelNumber << token::TAB;
+	    << token::TAB << "p" << parcelNumber << token::TAB << token::TAB;
 	}
       files()[i] << endl;
 }
@@ -66,7 +66,7 @@ void Foam::functionObjects::customCloudInfo::writeFileHeader(const label i)
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::functionObjects::customCloudInfo::customCloudInfo
+Foam::functionObjects::parcelPropertyInfo::parcelPropertyInfo
 (
     const word& name,
     const Time& runTime,
@@ -89,13 +89,13 @@ Foam::functionObjects::customCloudInfo::customCloudInfo
 
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
-Foam::functionObjects::customCloudInfo::~customCloudInfo()
+Foam::functionObjects::parcelPropertyInfo::~parcelPropertyInfo()
 {}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-bool Foam::functionObjects::customCloudInfo::read(const dictionary& dict)
+bool Foam::functionObjects::parcelPropertyInfo::read(const dictionary& dict)
 {
     writeFiles::resetNames(dict.lookup("parcelProperties"));
 
@@ -118,13 +118,13 @@ bool Foam::functionObjects::customCloudInfo::read(const dictionary& dict)
 }
 
 
-bool Foam::functionObjects::customCloudInfo::execute()
+bool Foam::functionObjects::parcelPropertyInfo::execute()
 {
     return true;
 }
 
 
-bool Foam::functionObjects::customCloudInfo::write()
+bool Foam::functionObjects::parcelPropertyInfo::write()
 {
   writeFiles::write();
 
