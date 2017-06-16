@@ -115,6 +115,8 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
     // we should not let that happen
     if (volatileMassFraction >= VSMALL)
       {
+
+
 	// Quadrature points and wieghts
 	scalarField quadPoints(4,0);
 	scalarField quadWeights(4,0);
@@ -130,12 +132,8 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	// Determine the sample Activation Energies from the quad points
 	scalarField Esamp = Emean + quadPoints * pow(2., 0.5) * Estd * m;
 
-	// V_star is the initial mass fraction of all volatile species in the coal
-	// or alternatively V* is V as t -> infty where V is the massfrac evolved at t
-	scalar V_star = sum(initialVolatileMassFractions_);
-
         // taking a sum over all quad points for this timestep, should start at 0
-	scalar sum = 0.;
+	scalar sum_ = 0.;
 
 	// loop through all of the quadrature points 
 	forAll(integratedDaemRates, j)
@@ -149,14 +147,21 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	      + dt * A0 * exp(-Ei/(T*(RR/1000.0)));
 	    
 	    // Sum over all of the quadrature points
-	    sum = sum + Wi * (m/pow(3.1415, 0.5)) * 
+	    sum_ = sum_ + Wi * (m/pow(3.1415, 0.5)) * 
 	      pow(2.718281, -pow(Ei - Emean, 2.)/(2.* pow(Estd, 2.)))
 	      * pow(2.718281, -integratedDaemRates[j]);
 	  }
 
-	scalar V = V_star * (1. - sum); // update the current volatile mass fraction
+	// V_star is the initial mass fraction of all volatile species in the coal
+	// or alternatively V* is V as t -> infty where V is the massfrac evolved at t
+	scalar V_star = sum(initialVolatileMassFractions_);
 
-	scalar particleNewMass = (1.0 - V)*mass0;
+	scalar V = V_star * (1. - sum_); // update the current volatile mass fraction
+
+        scalar  particleNewMass = (1.0 - V)*mass0;
+
+	scalar totalParticleMassLoss = mass - particleNewMass;
+
 
 	// Every species will have its own volatileData object,
 	// volatileData_ stores them, so iterate through them here
@@ -166,25 +171,22 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	    //masses for this species
 	    const scalar massVolatile0 = mass0*initialVolatileMassFractions_[i];
 	    const scalar massVolatile = mass*YGasEff[i];
+
 	    
 	    // The mass fraction of this species within the gas mass
 	    scalar speciesMassFraction = YGasEff[i]/volatileMassFraction;
 
 	    // The mass of this species lost during this iteration
-	    scalar speciesMassLoss = speciesMassFraction * (mass - particleNewMass);
+	    scalar speciesMassLoss = speciesMassFraction * totalParticleMassLoss;
+	    
 
-	    // During manual restart (e.g. setting all to IDR = 0.0)
-	    // can have problems with new particle mass being more than current mass
-	    // and predicting negative mass loss. So let these particles go on without 
-	    // devoling. The rates will eventually catch up with whatever the
-	    // volatile fraction is and work as they should
-	    // The result is that some particles (potentially a lot at first)
-	    // will stop devolatilization when doing a manual restart.
+	    // If from some error the massloss is negative just set it a zero
+	    // this can happend with rounding erros from in low temps
 	    if (speciesMassLoss < 0.0)
 	      {
 		// Mass transfered from the particle to the carrier gas phase
 		// on a per species basis
-		dMassDV[i] = min(dt*12*massVolatile0,massVolatile);//0.0;
+		dMassDV[i] = 0.0;
 	      }
 	    else
 	      {
