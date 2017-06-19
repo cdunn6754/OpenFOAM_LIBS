@@ -181,7 +181,7 @@ void Foam::DaemDevolatilisation<CloudType>::calculate
 	    
 
 	    // If from some error the massloss is negative just set it a zero
-	    // this can happend with rounding erros from in low temps
+	    // this can happend with rounding errors from in low temps
 	    if (speciesMassLoss < 0.0)
 	      {
 		// Mass transfered from the particle to the carrier gas phase

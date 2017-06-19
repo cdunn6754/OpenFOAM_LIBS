@@ -147,9 +147,9 @@ bool Foam::functionObjects::parcelPropertyInfo::write()
 
 	  if (iter().active())
 	    {
+	      // Could not figure out how to reflect name string to function name
 	      // Now we use the dumb way to get from string "fieldName" i.e.
 	      // "T" to the access function iter().T()
-
 	      if (names()[i] == "T")
 		{
 		  parcelFieldValues[j] = 
@@ -181,6 +181,11 @@ bool Foam::functionObjects::parcelPropertyInfo::write()
 		}
 
 	      j++;
+	    }
+
+	  else // if the parcel is no longer active
+	    {
+	      parcelFieldValues[j] = 0.0;
 	    }
 	  // double check that we don't overrun the cloud
 	  if (j>= nParcels)
