@@ -56,7 +56,7 @@ void Foam::functionObjects::parcelPropertyInfo::writeFileHeader(const label i)
       // loop through all parcels and make their column headers
       for (int j=0; j < nParcels; j++)
 	{
-	  int parcelNumber = j + 1;
+	  int parcelNumber = j;
 	  files()[i]
 	    << token::TAB << "p" << parcelNumber << token::TAB << token::TAB;
 	}
@@ -127,90 +127,117 @@ bool Foam::functionObjects::parcelPropertyInfo::execute()
 bool Foam::functionObjects::parcelPropertyInfo::write()
 {
   writeFiles::write();
+      // total number of parcels
+      label parcelCount = cloud->first()->particleCount_;
 
-  forAll(names(), i)
-    {
-      // need to know how many parcels
-      label nParcels = cloud->nParcels();
-      
-      scalarField parcelFieldValues(nParcels,0.);
-
-      label idGas = cloud->composition().idGas();
-      //label idLiquid = cloud->composition().idLiquid();
-      label idSolid = cloud->composition().idSolid();
-
-
-
-      label j = 0;
-      forAllIter(basicReactingMultiphaseCloud, *cloud,  iter)
+      // iterate through requested parcel properties (e.g. T, mass ...)
+      forAll(names(), i)
 	{
+	  // scalarField to hold the parcel property
+	  // one entry per parcel (even if they are deleted from cloud)
+	  scalarField parcelFieldValues(parcelCount,0.);
 
-	  if (iter().active())
-	    {
+	  // paired to parcelFieldValues, carries information about 
+	  // the parcels existence in the cloud
+	  scalarField parcelExistence(parcelCount,0.);
+
+	  // Stuff used for pulling composition info from parcels
+	  label idGas = cloud->composition().idGas();
+	  label idSolid = cloud->composition().idSolid();
+
+	  // Iterate through all parcels still in the cloud
+	  // any parcels already deleted from the cloud
+	  // will have their values remain at -1.0
+	  forAllIter(basicReactingMultiphaseCloud, *cloud,  iter)
+	    { 
+	      // original parcel ID, this will serve as an iterator 
+	      // through parcelFieldValues, will be unique as long
+	      // as it's run in parallel (or at least the parcels
+	      // are all  injected into the same processor)
+	      label parcelOrigId = iter().origId();
+
+
 	      // Could not figure out how to reflect name string to function name
 	      // Now we use the dumb way to get from string "fieldName" i.e.
 	      // "T" to the access function iter().T()
 	      if (names()[i] == "T")
-		{
-		  parcelFieldValues[j] = 
-		    returnReduce(iter().T(), sumOp<scalar>());
-		}
+	      	{
+	      	  parcelFieldValues[parcelOrigId] = 
+	      	    returnReduce(iter().T(), sumOp<scalar>());
+	      	}
 
 	      else if (names()[i] == "Ygas")
-		{
-		  parcelFieldValues[j] = 
-		    returnReduce(iter().Y()[idGas], sumOp<scalar>());
-		}
+	      	{
+	      	  parcelFieldValues[parcelOrigId] = 
+	      	    returnReduce(iter().Y()[idGas], sumOp<scalar>());
+	      	}
 
 	      else if (names()[i] == "Ysolid")
-		{
-		  parcelFieldValues[j] = 
-		    returnReduce(iter().Y()[idSolid], sumOp<scalar>());
-		}
+	      	{
+	      	  parcelFieldValues[parcelOrigId] = 
+	      	    returnReduce(iter().Y()[idSolid], sumOp<scalar>());
+	      	}
 
 	      else if (names()[i] == "mass0")
-		{
-		  parcelFieldValues[j] = 
-		    returnReduce(iter().mass0(), sumOp<scalar>());
-		}
+	      	{
+	      	  parcelFieldValues[parcelOrigId] = 
+	      	    returnReduce(iter().mass0(), sumOp<scalar>());
+	      	}
 
 	      else if (names()[i] == "mass")
-		{
-		  parcelFieldValues[j] = 
-		    returnReduce(iter().mass(), sumOp<scalar>());
-		}
+	      	{
+	      	  parcelFieldValues[parcelOrigId] = 
+	      	    returnReduce(iter().mass(), sumOp<scalar>());
+	      	}
 
-	      j++;
-	    }
+	      else if (names()[i] == "Yash")
+	      	{
+	      	  parcelFieldValues[parcelOrigId] = 
+	      	    returnReduce(iter().YSolid()[1]*iter().Y()[idSolid], 
+				 sumOp<scalar>());
+	      	}
 
-	  else // if the parcel is no longer active
-	    {
-	      parcelFieldValues[j] = 0.0;
-	    }
-	  // double check that we don't overrun the cloud
-	  if (j>= nParcels)
-	    {
-	      break;
-	    }
+	      else if (names()[i] == "YC")
+	      	{
+	      	  parcelFieldValues[parcelOrigId] = 
+	      	    returnReduce(iter().YSolid()[0]*iter().Y()[idSolid],
+				 sumOp<scalar>());
+	      	}
+
+	      // If we are in the loop the parcel still exists
+	      parcelExistence[parcelOrigId] = 1.0;
 	      
-	}
-
-
-      if (Pstream::master())
-        {
-	  writeTime(files()[i]);
-	  files()[i]
-	    << token::TAB;
-	  // write out the fields for every parcel
-	  for (label k = 0; k < nParcels; k++)
-	    {
-	      files()[i]
-		<< parcelFieldValues[k] << token::TAB;
 	    }
-	  files()[i]
-	    << endl;
+
+
+	  if (Pstream::master())
+	    {
+	      writeTime(files()[i]);
+	      files()[i]
+		<< token::TAB;
+	      // write out the fields for every parcel
+	      for (label k = 0; k < parcelCount; k++)
+		{
+		  if (parcelExistence[k] == 1)
+		    {
+		      files()[i]
+			<< 
+			parcelFieldValues[k]
+			<< token::TAB;
+		    }
+		  else // if the parcel is deleted, write NaN
+		    {
+		      files()[i]
+			<< 
+			"NaN"
+			<< token::TAB;
+		    }
+		  
+		}
+	      files()[i]
+		<< endl;
+	    }
 	}
-    }
 
   return true;
 }
