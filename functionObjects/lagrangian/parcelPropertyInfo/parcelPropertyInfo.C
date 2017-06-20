@@ -205,7 +205,7 @@ bool Foam::functionObjects::parcelPropertyInfo::write()
 	      	}
 
 	      // if we are in here than the parcel exists
-	      parcelExistence[parcelOrigId] = 1.0;
+	      parcelExistence[parcelOrigId] = 1;
 	      
 	    }
 
