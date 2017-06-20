@@ -204,8 +204,7 @@ bool Foam::functionObjects::parcelPropertyInfo::write()
 				 sumOp<scalar>());
 	      	}
 
-	      // If we are in the loop the parcel still exists
-	      parcelExistence[parcelOrigId] = 1.0;
+	      Info << "Solid fraction: " << iter().Y()[idSolid] << endl; 
 	      
 	    }
 
