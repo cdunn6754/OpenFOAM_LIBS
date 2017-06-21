@@ -24,13 +24,13 @@ License
 \*---------------------------------------------------------------------------*/
 
 #include "coalCloud.H"
-#include "makeCoalParcelSurfaceReactionModels.H"
+#include "makeCoalParcelSmithIntrinsicSurfaceReactionModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    makeCoalParcelSurfaceReactionModels(coalCloud);
+    makeCoalParcelSmithIntrinsicSurfaceReactionModel(coalCloud);
 }
 
 

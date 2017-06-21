@@ -33,7 +33,7 @@ License
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#define makeCoalParcelSurfaceReactionModels(CloudType)                         \
+#define makeCoalParcelSmithIntrinsicSurfaceReactionModel(CloudType)         \
     makeSurfaceReactionModelType(smithIntrinsicRate, CloudType);          
 
 

@@ -801,18 +801,8 @@ $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcel
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcelI.H \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcel.C \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcelIO.C \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/makeCoalParcelSurfaceReactionModels.H \
-$(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/NoSurfaceReaction.H \
-$(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/NoSurfaceReaction.C \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationDiffusionLimitedRate.H \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationDiffusionLimitedRate.C \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationIntrinsicRate.H \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationIntrinsicRate.C \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationKineticDiffusionLimitedRate.H \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationKineticDiffusionLimitedRate.C \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationHurtMitchell.H \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationHurtMitchell.C \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationMurphyShaddix.H \
-$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationMurphyShaddix.C \
+lnInclude/makeCoalParcelSmithIntrinsicSurfaceReactionModel.H \
+lnInclude/smithIntrinsicRate.H \
+lnInclude/smithIntrinsicRate.C \
 
 
