@@ -186,9 +186,6 @@ Foam::scalar Foam::smithIntrinsicRate<CloudType>::calculate
     const scalar phi =
       max(0.5*d*sqrt(Sb_*rhop*(Ag_*1000.)*ki*pc/(De*rhoc)), ROOTVSMALL);
 
-    Info << "Is this the pressure? " << pc 
-	 << " and RR is (8000?): " << RR <<  endl;
-
     // Effectiveness factor []
     const scalar eta = max(3.0/sqr(phi)*(phi/tanh(phi) - 1.0), 0.0);
 
