@@ -65,8 +65,8 @@ class smithIntrinsicRate
             //- Stoichiometry of reaction []
             const scalar Sb_;
 
-            //- Mass diffusion limited rate constant
-            const scalar C1_;
+            //- Mass diffusion limited rate constant [kg/m2sPa]
+            const scalar Cdiff_;
 
             //- Mean pore radius [m]
             const scalar rMean_;
@@ -74,17 +74,24 @@ class smithIntrinsicRate
             //- Char porosity [] = 1 - rho_apparent/rho_true
             const scalar theta_;
 
-            //- Pre-exponential factor
+            //- Pre-exponential factor [kg/m2sPa]
             const scalar Ai_;
 
-            //- Activation energy
+            //- Activation energy [kJ/mol]
             const scalar Ei_;
 
-            //- Char specific internal area [m2/kg]
+            //- Char specific internal area [m2/g]
             const scalar Ag_;
 
             //- Pore tortuosity []; default to sqrt(2)
-            const scalar tau_;
+            const scalar zeta_;
+
+  // Clint 06-21-17
+  // Oxygen diffusion constant parameter [m2/s]
+  const scalar D0_;
+
+  // Knudsen diffusion constant parameter [kg*m/K0.5*kmol0.5*s]
+  const scalar Ckn_;
 
 
         // Addressing
