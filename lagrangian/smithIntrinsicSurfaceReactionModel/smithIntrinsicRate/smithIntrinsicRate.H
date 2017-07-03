@@ -25,11 +25,20 @@ Class
     Foam::smithIntrinsicRate
 
 Description
-    Intrinsic char surface reaction mndel
+    Adapted from openFoam COxidationIntrinsicRate model. It now matches the 
+    intrinsic model "from smith" as detailed in 
+    
+    Michael Stollinger, Bertrand Naud, Dirk Roekaerts, Nijso Beishizen, and
+    Stefan Heinz. Pdf modeling and simulations of pulverized coal combustion
+    - part 2 applcation. Combustion and Flame, 160:396–410, 2012.
 
-        C(s) + Sb*O2 -> CO2
-
-    where Sb is the stoichiometry of the reaction
+    There are two issues currently (07-02-17)
+    - Stoellinger paper calls for mole fraction in the main equation, here we
+        we use the mass fraction of oxygen
+    - I had trouble tracking down some of the constant's units. So currently 
+        it doenst work out. But that could be fixed if the consants's
+	units are correct. In any case I used the numbers from Stoellinger's
+	fortran implementation so it is a least the same as that.
 
 \*---------------------------------------------------------------------------*/
 
