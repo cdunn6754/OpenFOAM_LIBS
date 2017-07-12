@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -21,24 +21,45 @@ License
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
+Class
+    Foam::basicReactingMultiphaseCloud
+
+Description
+    Cloud class to introduce multi-phase reacting parcels
+
 \*---------------------------------------------------------------------------*/
 
-#ifndef makeReactingMultiphaseParcelCompositionModels_H
-#define makeReactingMultiphaseParcelCompositionModels_H
+#ifndef basicNotionalCloud_H
+#define basicNotionalCloud_H
+
+#include "Cloud.H"
+#include "KinematicCloud.H"
+#include "ThermoCloud.H"
+#include "ReactingCloud.H"
+#include "ReactingMultiphaseCloud.H"
+#include "basicNotionalParcel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "NoComposition.H"
-#include "SingleMixtureFraction.H"
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#define makeReactingMultiphaseParcelCompositionModels(CloudType)               \
-                                                                               \
-    makeCompositionModel(CloudType);                                           \
-    makeCompositionModelType(NoComposition, CloudType);                        \
-    makeCompositionModelType(SingleMixtureFraction, CloudType);
-
+namespace Foam
+{
+    typedef ReactingMultiphaseCloud
+    <
+        ReactingCloud
+        <
+            ThermoCloud
+            <
+                KinematicCloud
+                <
+                    Cloud
+                    <
+                        basicNotionalParcel
+                    >
+                >
+            >
+        >
+    > basicNotionalCloud;
+}
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

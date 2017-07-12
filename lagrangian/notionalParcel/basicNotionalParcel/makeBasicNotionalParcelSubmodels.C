@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "basicReactingMultiphaseCloud.H"
+#include "basicNotionalCloud.H"
 
 #include "makeParcelCloudFunctionObjects.H"
 
@@ -48,37 +48,37 @@ License
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-makeParcelCloudFunctionObjects(basicReactingMultiphaseCloud);
+makeParcelCloudFunctionObjects(basicNotionalCloud);
 
 // Kinematic sub-models
-makeThermoParcelForces(basicReactingMultiphaseCloud);
-makeParcelDispersionModels(basicReactingMultiphaseCloud);
-makeReactingMultiphaseParcelInjectionModels(basicReactingMultiphaseCloud);
-makeParcelPatchInteractionModels(basicReactingMultiphaseCloud);
+makeThermoParcelForces(basicNotionalCloud);
+makeParcelDispersionModels(basicNotionalCloud);
+makeReactingMultiphaseParcelInjectionModels(basicNotionalCloud);
+makeParcelPatchInteractionModels(basicNotionalCloud);
 makeReactingMultiphaseParcelStochasticCollisionModels
 (
-    basicReactingMultiphaseCloud
+    basicNotionalCloud
 );
-makeReactingParcelSurfaceFilmModels(basicReactingMultiphaseCloud);
+makeReactingParcelSurfaceFilmModels(basicNotionalCloud);
 
 // Thermo sub-models
-makeParcelHeatTransferModels(basicReactingMultiphaseCloud);
+makeParcelHeatTransferModels(basicNotionalCloud);
 
 // Reacting sub-models
 makeReactingMultiphaseParcelCompositionModels
 (
-    basicReactingMultiphaseCloud
+    basicNotionalCloud
 );
-makeReactingParcelPhaseChangeModels(basicReactingMultiphaseCloud);
+makeReactingParcelPhaseChangeModels(basicNotionalCloud);
 
 // Reacting multiphase sub-models
 makeReactingMultiphaseParcelDevolatilisationModels
 (
-    basicReactingMultiphaseCloud
+    basicNotionalCloud
 );
 makeReactingMultiphaseParcelSurfaceReactionModels
 (
-    basicReactingMultiphaseCloud
+    basicNotionalCloud
 );
 
 

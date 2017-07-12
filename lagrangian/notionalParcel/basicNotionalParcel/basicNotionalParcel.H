@@ -25,7 +25,7 @@ Class
     Foam::basicNotionalParcel
 
 Description
-    Definition of basic reacting parcel
+    Definition of basic notional parcel
 
 SourceFiles
     basicNotionalParcel.C

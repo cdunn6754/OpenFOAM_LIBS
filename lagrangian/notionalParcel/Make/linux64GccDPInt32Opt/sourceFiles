@@ -1,2 +1,3 @@
 SOURCE = \
-basicNotionalParcel/defineBasicNotionalParcel.C 
+basicNotionalParcel/defineBasicNotionalParcel.C \
+basicNotionalParcel/makeBasicNotionalParcelSubmodels.C 
