@@ -30,44 +30,6 @@ License
 
 // * * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * //
 
-template<class CloudType>
-void Foam::NotionalCloud<CloudType>::setModels()
-{
-    devolatilisationModel_.reset
-    (
-        DevolatilisationModel<NotionalCloud<CloudType>>::New
-        (
-            this->subModelProperties(),
-            *this
-        ).ptr()
-    );
-
-    surfaceReactionModel_.reset
-    (
-        SurfaceReactionModel<NotionalCloud<CloudType>>::New
-        (
-            this->subModelProperties(),
-            *this
-        ).ptr()
-    );
-}
-
-
-template<class CloudType>
-void Foam::NotionalCloud<CloudType>::cloudReset
-(
-    NotionalCloud<CloudType>& c
-)
-{
-    CloudType::cloudReset(c);
-
-    devolatilisationModel_.reset(c.devolatilisationModel_.ptr());
-    surfaceReactionModel_.reset(c.surfaceReactionModel_.ptr());
-
-    dMassDevolatilisation_ = c.dMassDevolatilisation_;
-    dMassSurfaceReaction_ = c.dMassSurfaceReaction_;
-}
-
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
@@ -84,17 +46,10 @@ Foam::NotionalCloud<CloudType>::NotionalCloud
 :
     CloudType(cloudName, rho, U, g, thermo, false),
     notionalCloud(),
-    cloudCopyPtr_(NULL),
-    constProps_(this->particleProperties()),
-    devolatilisationModel_(NULL),
-    surfaceReactionModel_(NULL),
-    dMassDevolatilisation_(0.0),
-    dMassSurfaceReaction_(0.0)
+    cloudCopyPtr_(NULL)
 {
     if (this->solution().active())
     {
-        setModels();
-
         if (readFields)
         {
             parcelType::readFields(*this, this->composition());
@@ -103,7 +58,7 @@ Foam::NotionalCloud<CloudType>::NotionalCloud
 
     if (this->solution().resetSourcesOnStartup())
     {
-        resetSourceTerms();
+      //resetSourceTerms();
     }
 }
 
@@ -117,12 +72,7 @@ Foam::NotionalCloud<CloudType>::NotionalCloud
 :
     CloudType(c, name),
     notionalCloud(),
-    cloudCopyPtr_(NULL),
-    constProps_(c.constProps_),
-    devolatilisationModel_(c.devolatilisationModel_->clone()),
-    surfaceReactionModel_(c.surfaceReactionModel_->clone()),
-    dMassDevolatilisation_(c.dMassDevolatilisation_),
-    dMassSurfaceReaction_(c.dMassSurfaceReaction_)
+    cloudCopyPtr_(NULL)
 {}
 
 
@@ -136,12 +86,7 @@ Foam::NotionalCloud<CloudType>::NotionalCloud
 :
     CloudType(mesh, name, c),
     notionalCloud(),
-    cloudCopyPtr_(NULL),
-    constProps_(),
-    devolatilisationModel_(NULL),
-    surfaceReactionModel_(NULL),
-    dMassDevolatilisation_(0.0),
-    dMassSurfaceReaction_(0.0)
+    cloudCopyPtr_(NULL)
 {}
 
 
@@ -154,89 +99,7 @@ Foam::NotionalCloud<CloudType>::~NotionalCloud()
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-template<class CloudType>
-void Foam::NotionalCloud<CloudType>::setParcelThermoProperties
-(
-    parcelType& parcel,
-    const scalar lagrangianDt
-)
-{
-    CloudType::setParcelThermoProperties(parcel, lagrangianDt);
 
-    label idGas = this->composition().idGas();
-    label idLiquid = this->composition().idLiquid();
-    label idSolid = this->composition().idSolid();
-
-    parcel.YGas() = this->composition().Y0(idGas);
-    parcel.YLiquid() = this->composition().Y0(idLiquid);
-    parcel.YSolid() = this->composition().Y0(idSolid);
-}
-
-
-template<class CloudType>
-void Foam::NotionalCloud<CloudType>::checkParcelProperties
-(
-    parcelType& parcel,
-    const scalar lagrangianDt,
-    const bool fullyDescribed
-)
-{
-    CloudType::checkParcelProperties(parcel, lagrangianDt, fullyDescribed);
-
-    if (fullyDescribed)
-    {
-        label idGas = this->composition().idGas();
-        label idLiquid = this->composition().idLiquid();
-        label idSolid = this->composition().idSolid();
-
-        this->checkSuppliedComposition
-        (
-            parcel.YGas(),
-            this->composition().Y0(idGas),
-            "YGas"
-        );
-        this->checkSuppliedComposition
-        (
-            parcel.YLiquid(),
-            this->composition().Y0(idLiquid),
-            "YLiquid"
-        );
-        this->checkSuppliedComposition
-        (
-            parcel.YSolid(),
-            this->composition().Y0(idSolid),
-            "YSolid"
-        );
-    }
-}
-
-
-template<class CloudType>
-void Foam::NotionalCloud<CloudType>::storeState()
-{
-    cloudCopyPtr_.reset
-    (
-        static_cast<NotionalCloud<CloudType>*>
-        (
-            clone(this->name() + "Copy").ptr()
-        )
-    );
-}
-
-
-template<class CloudType>
-void Foam::NotionalCloud<CloudType>::restoreState()
-{
-    cloudReset(cloudCopyPtr_());
-    cloudCopyPtr_.clear();
-}
-
-
-template<class CloudType>
-void Foam::NotionalCloud<CloudType>::resetSourceTerms()
-{
-    CloudType::resetSourceTerms();
-}
 
 
 template<class CloudType>
@@ -268,15 +131,6 @@ void Foam::NotionalCloud<CloudType>::autoMap
     this->updateMesh();
 }
 
-
-template<class CloudType>
-void Foam::NotionalCloud<CloudType>::info()
-{
-    CloudType::info();
-
-    this->devolatilisation().info(Info);
-    this->surfaceReaction().info(Info);
-}
 
 
 template<class CloudType>

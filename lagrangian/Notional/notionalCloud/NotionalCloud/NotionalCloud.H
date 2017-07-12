@@ -48,14 +48,6 @@ SourceFiles
 namespace Foam
 {
 
-// Forward declaration of classes
-
-template<class CloudType>
-class DevolatilisationModel;
-
-template<class CloudType>
-class SurfaceReactionModel;
-
 /*---------------------------------------------------------------------------*\
                    Class NotionalCloud Declaration
 \*---------------------------------------------------------------------------*/
@@ -101,49 +93,15 @@ protected:
 
     // Protected data
 
-        //- Parcel constant properties
-        typename parcelType::constantProperties constProps_;
 
 
         // References to the cloud sub-models
 
-            //- Devolatilisation model
-            autoPtr
-            <
-                DevolatilisationModel<NotionalCloud<CloudType>>
-            >
-            devolatilisationModel_;
-
-            //- Surface reaction model
-            autoPtr
-            <
-                SurfaceReactionModel<NotionalCloud<CloudType>>
-            >
-            surfaceReactionModel_;
-
-
         // Check
-
-            //- Total mass transferred to continuous phase via devolatilisation
-            scalar dMassDevolatilisation_;
-
-            //- Total mass transferred to continuous phase via surface
-            //  reactions
-            scalar dMassSurfaceReaction_;
 
 
     // Protected Member Functions
 
-        // Initialisation
-
-            //- Set cloud sub-models
-            void setModels();
-
-
-        // Cloud evolution functions
-
-            //- Reset state of cloud
-            void cloudReset(NotionalCloud<CloudType>& c);
 
 
 public:
@@ -207,70 +165,12 @@ public:
             //- Return a reference to the cloud copy
             inline const NotionalCloud& cloudCopy() const;
 
-            //- Return the constant properties
-            inline const typename parcelType::constantProperties&
-                constProps() const;
-
-            //- Return access to the constant properties
-            inline typename parcelType::constantProperties& constProps();
-
 
             // Sub-models
-
-                //- Return const access to devolatilisation model
-                inline const DevolatilisationModel
-                <
-                    NotionalCloud<CloudType>
-                >&
-                devolatilisation() const;
-
-                //- Return reference to devolatilisation model
-                inline DevolatilisationModel
-                <
-                    NotionalCloud<CloudType>
-                >&
-                devolatilisation();
-
-                //- Return const access to reacting surface reaction model
-                inline const SurfaceReactionModel
-                <
-                    NotionalCloud<CloudType>
-                >&
-                surfaceReaction() const;
-
-                //- Return reference to reacting surface reaction model
-                inline SurfaceReactionModel
-                <
-                    NotionalCloud<CloudType>
-                >&
-                surfaceReaction();
 
 
         // Cloud evolution functions
 
-            //- Set parcel thermo properties
-            void setParcelThermoProperties
-            (
-                parcelType& parcel,
-                const scalar lagrangianDt
-            );
-
-            //- Check parcel properties
-            void checkParcelProperties
-            (
-                parcelType& parcel,
-                const scalar lagrangianDt,
-                const bool fullyDescribed
-            );
-
-            //- Store the current cloud state
-            void storeState();
-
-            //- Reset the current cloud to the previously stored state
-            void restoreState();
-
-            //- Reset the cloud source terms
-            void resetSourceTerms();
 
             //- Evolve the cloud
             void evolve();
@@ -285,8 +185,6 @@ public:
 
         // I-O
 
-            //- Print cloud information
-            void info();
 
             //- Write the field data for the cloud
             virtual void writeFields() const;
