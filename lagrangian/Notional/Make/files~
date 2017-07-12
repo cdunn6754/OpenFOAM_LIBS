@@ -1,0 +1,8 @@
+
+basicNotionalParcel/defineBasicNotionalParcel.C
+basicNotionalParcel/makeBasicNotionalParcelSubmodels.C
+
+
+notionalCloud/notionalCloud.C
+
+LIB = $(FOAM_USER_LIBBIN)/libNotional
