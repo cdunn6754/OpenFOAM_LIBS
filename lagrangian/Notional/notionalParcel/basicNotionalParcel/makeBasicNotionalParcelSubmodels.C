@@ -47,7 +47,6 @@ License
 #include "makeReactingMultiphaseParcelSurfaceReactionModels.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
 makeParcelCloudFunctionObjects(basicNotionalCloud);
 
 // Kinematic sub-models
@@ -80,6 +79,32 @@ makeReactingMultiphaseParcelSurfaceReactionModels
 (
     basicNotionalCloud
 );
+
+
+// Turbulent stuff 07-13-17:
+#include "basicNotionalCloud.H"
+
+#include "makeParcelTurbulenceDispersionModels.H"
+#include "makeThermoParcelTurbulenceForces.H"
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+namespace Foam
+{
+    makeThermoParcelTurbulenceForces(basicNotionalCloud);
+    makeParcelTurbulenceDispersionModels(basicNotionalCloud);
+}
+
+
+// Coal parcel (just surface reaction) stuff:
+#include "makeCoalParcelSurfaceReactionModels.H"
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+namespace Foam
+{
+    makeCoalParcelSurfaceReactionModels(basicNotionalCloud);
+}
 
 
 // ************************************************************************* //

@@ -1,4 +1,4 @@
 SOURCE = \
+notionalCloud/notionalCloud/notionalCloud.C \
 notionalParcel/basicNotionalParcel/defineBasicNotionalParcel.C \
-notionalParcel/basicNotionalParcel/makeBasicNotionalParcelSubmodels.C \
-notionalCloud/notionalCloud/notionalCloud.C 
+notionalParcel/basicNotionalParcel/makeBasicNotionalParcelSubmodels.C 
