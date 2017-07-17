@@ -1,4 +1,5 @@
 SOURCE = \
+templateRMParcel/basicTemplateRMParcel/defineBasicTemplateRMParcel.C \
 notionalCloud/notionalCloud/notionalCloud.C \
 notionalParcel/basicNotionalParcel/defineBasicNotionalParcel.C \
 notionalParcel/basicNotionalParcel/makeBasicNotionalParcelSubmodels.C 

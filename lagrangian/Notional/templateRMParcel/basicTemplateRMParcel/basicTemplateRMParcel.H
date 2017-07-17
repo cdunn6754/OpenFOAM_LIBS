@@ -28,30 +28,26 @@ Description
     Definition of basic notional parcel
 
 SourceFiles
-    basicNotionalParcel.C
-    basicNotionalParcelIO.C
+    basicTemplateRMParcel.C
+    basicTemplateRMParcelIO.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef basicNotionalParcel_H
-#define basicNotionalParcel_H
+#ifndef basicTemplateRMParcel_H
+#define basicTemplateRMParcel_H
 
 #include "contiguous.H"
 #include "particle.H"
 #include "KinematicParcel.H"
 #include "ThermoParcel.H"
 #include "ReactingParcel.H"
-#include "NotionalParcel.H"
-#include "ReactingMultiphaseParcel.H"
 #include "TemplateRMParcel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    typedef NotionalParcel
-    <
-        TemplateRMParcel
+    typedef TemplateRMParcel
       <
             ReactingParcel
             <
@@ -63,11 +59,10 @@ namespace Foam
 		    >
 		>
             >
-      >
-    > basicNotionalParcel;
+    > basicTemplateRMParcel;
 
     template<>
-    inline bool contiguous<basicNotionalParcel>()
+    inline bool contiguous<basicTemplateRMParcel>()
     {
         return false;
     }

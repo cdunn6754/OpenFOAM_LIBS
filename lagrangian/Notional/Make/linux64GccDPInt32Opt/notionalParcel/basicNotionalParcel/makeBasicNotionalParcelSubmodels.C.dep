@@ -805,6 +805,10 @@ $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcel
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcelI.H \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcel.C \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcelIO.C \
+lnInclude/TemplateRMParcel.H \
+lnInclude/TemplateRMParcelI.H \
+lnInclude/TemplateRMParcel.C \
+lnInclude/TemplateRMParcelIO.C \
 lnInclude/NotionalCloud.H \
 lnInclude/notionalCloud.H \
 lnInclude/NotionalCloudI.H \

@@ -1,6 +1,6 @@
-$(OBJECTS_DIR)/notionalParcel/basicNotionalParcel/defineBasicNotionalParcel.C.dep: \
-notionalParcel/basicNotionalParcel/defineBasicNotionalParcel.C \
-notionalParcel/basicNotionalParcel/basicNotionalParcel.H \
+$(OBJECTS_DIR)/templateRMParcel/basicTemplateRMParcel/defineBasicTemplateRMParcel.C.dep: \
+templateRMParcel/basicTemplateRMParcel/defineBasicTemplateRMParcel.C \
+templateRMParcel/basicTemplateRMParcel/basicTemplateRMParcel.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/contiguous.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/int.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/int32.H \
@@ -655,14 +655,6 @@ $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/PhaseChangeModel.H \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/PhaseChangeModel.C \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/PhaseChangeModelNew.C \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingParcelIO.C \
-lnInclude/NotionalParcel.H \
-lnInclude/NotionalParcelI.H \
-lnInclude/NotionalParcel.C \
-lnInclude/NotionalParcelIO.C \
-$(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcel.H \
-$(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcelI.H \
-$(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcel.C \
-$(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/ReactingMultiphaseParcelIO.C \
 lnInclude/TemplateRMParcel.H \
 lnInclude/TemplateRMParcelI.H \
 lnInclude/TemplateRMParcel.C \

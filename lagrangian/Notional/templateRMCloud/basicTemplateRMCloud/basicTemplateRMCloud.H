@@ -22,57 +22,45 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::basicNotionalParcel
+    Foam::basicTemplateRMCloud
 
 Description
-    Definition of basic notional parcel
-
-SourceFiles
-    basicNotionalParcel.C
-    basicNotionalParcelIO.C
+    Cloud class to introduce multi-phase reacting parcels
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef basicNotionalParcel_H
-#define basicNotionalParcel_H
+#ifndef basicTemplateRMCloud_H
+#define basicTemplateRMCloud_H
 
-#include "contiguous.H"
-#include "particle.H"
-#include "KinematicParcel.H"
-#include "ThermoParcel.H"
-#include "ReactingParcel.H"
-#include "NotionalParcel.H"
-#include "ReactingMultiphaseParcel.H"
-#include "TemplateRMParcel.H"
+#include "Cloud.H"
+#include "KinematicCloud.H"
+#include "ThermoCloud.H"
+#include "ReactingCloud.H"
+#include "ReactingMultiphaseCloud.H"
+#include "basicTemplateRMParcel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    typedef NotionalParcel
+  typedef 
+    ReactingMultiphaseCloud
     <
-        TemplateRMParcel
+      ReactingCloud
       <
-            ReactingParcel
-            <
-                ThermoParcel
-                <
-                    KinematicParcel
-                    <
-                        particle
-		    >
-		>
-            >
-      >
-    > basicNotionalParcel;
-
-    template<>
-    inline bool contiguous<basicNotionalParcel>()
-    {
-        return false;
-    }
+	ThermoCloud
+	<
+	  KinematicCloud
+	  <
+	    Cloud
+	    <
+	      basicTemplateRMParcel
+	      >
+	    >
+	  >
+        >
+    > basicTemplateRMCloud;
 }
-
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

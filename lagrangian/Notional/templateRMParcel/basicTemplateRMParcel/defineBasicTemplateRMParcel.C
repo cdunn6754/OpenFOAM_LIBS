@@ -21,61 +21,18 @@ License
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
-Class
-    Foam::basicNotionalParcel
-
-Description
-    Definition of basic notional parcel
-
-SourceFiles
-    basicNotionalParcel.C
-    basicNotionalParcelIO.C
-
 \*---------------------------------------------------------------------------*/
 
-#ifndef basicNotionalParcel_H
-#define basicNotionalParcel_H
-
-#include "contiguous.H"
-#include "particle.H"
-#include "KinematicParcel.H"
-#include "ThermoParcel.H"
-#include "ReactingParcel.H"
-#include "NotionalParcel.H"
-#include "ReactingMultiphaseParcel.H"
-#include "TemplateRMParcel.H"
+#include "basicTemplateRMParcel.H"
+#include "Cloud.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    typedef NotionalParcel
-    <
-        TemplateRMParcel
-      <
-            ReactingParcel
-            <
-                ThermoParcel
-                <
-                    KinematicParcel
-                    <
-                        particle
-		    >
-		>
-            >
-      >
-    > basicNotionalParcel;
-
-    template<>
-    inline bool contiguous<basicNotionalParcel>()
-    {
-        return false;
-    }
+    defineTemplateTypeNameAndDebug(basicTemplateRMParcel, 0);
+    defineTemplateTypeNameAndDebug(Cloud<basicTemplateRMParcel>, 0);
 }
 
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#endif
 
 // ************************************************************************* //
