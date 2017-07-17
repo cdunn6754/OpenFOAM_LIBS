@@ -65,11 +65,11 @@ inline Foam::NotionalParcel<ParcelType>::NotionalParcel
     const label tetPtI
 )
 :
-    ParcelType(mesh, position, celli, tetFacei, tetPtI),
-    YGas_(0),
-    YLiquid_(0),
-    YSolid_(0),
-    canCombust_(0)
+    ParcelType(mesh, position, celli, tetFacei, tetPtI)
+    // YGas_(0),
+    // YLiquid_(0),
+    // YSolid_(0),
+    // canCombust_(0)
 {}
 
 
@@ -112,12 +112,15 @@ inline Foam::NotionalParcel<ParcelType>::NotionalParcel
         angularMomentum0,
         torque0,
         Y0,
+	YGas0,
+	YLiquid0,
+	YSolid0,
         constProps
-    ),
-    YGas_(YGas0),
-    YLiquid_(YLiquid0),
-    YSolid_(YSolid0),
-    canCombust_(0)
+    )
+    // YGas_(YGas0),
+    // YLiquid_(YLiquid0),
+    // YSolid_(YSolid0),
+    // canCombust_(0)
 {}
 
 

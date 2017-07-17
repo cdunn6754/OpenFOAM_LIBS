@@ -49,30 +49,30 @@ Foam::NotionalParcel<ParcelType>::NotionalParcel
     bool readFields
 )
 :
-    ParcelType(mesh, is, readFields),
-    YGas_(0),
-    YLiquid_(0),
-    YSolid_(0),
-    canCombust_(0)
+    ParcelType(mesh, is, readFields)
+    // YGas_(0),
+    // YLiquid_(0),
+    // YSolid_(0),
+    // canCombust_(0)
 {
-    if (readFields)
-    {
-        DynamicList<scalar> Yg;
-        DynamicList<scalar> Yl;
-        DynamicList<scalar> Ys;
+    // if (readFields)
+    // {
+    //     DynamicList<scalar> Yg;
+    //     DynamicList<scalar> Yl;
+    //     DynamicList<scalar> Ys;
 
-        is >> Yg >> Yl >> Ys;
+    //     is >> Yg >> Yl >> Ys;
 
-        YGas_.transfer(Yg);
-        YLiquid_.transfer(Yl);
-        YSolid_.transfer(Ys);
+    //     YGas_.transfer(Yg);
+    //     YLiquid_.transfer(Yl);
+    //     YSolid_.transfer(Ys);
 
-        // scale the mass fractions
-        const scalarField& YMix = this->Y_;
-        YGas_ /= YMix[GAS] + ROOTVSMALL;
-        YLiquid_ /= YMix[LIQ] + ROOTVSMALL;
-        YSolid_ /= YMix[SLD] + ROOTVSMALL;
-    }
+    //     // scale the mass fractions
+    //     const scalarField& YMix = this->Y_;
+    //     YGas_ /= YMix[GAS] + ROOTVSMALL;
+    //     YLiquid_ /= YMix[LIQ] + ROOTVSMALL;
+    //     YSolid_ /= YMix[SLD] + ROOTVSMALL;
+    // }
 
     // Check state of Istream
     is.check
