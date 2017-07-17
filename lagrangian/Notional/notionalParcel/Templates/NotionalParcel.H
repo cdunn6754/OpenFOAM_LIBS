@@ -111,50 +111,50 @@ private:
 
     // Private Member Functions
 
-        //- Return the mixture effective specific heat capacity
-        template<class TrackData>
-        scalar CpEff
-        (
-            TrackData& td,
-            const scalar p,
-            const scalar T,
-            const label idG,
-            const label idL,
-            const label idS
-        ) const;
+        // //- Return the mixture effective specific heat capacity
+        // template<class TrackData>
+        // scalar CpEff
+        // (
+        //     TrackData& td,
+        //     const scalar p,
+        //     const scalar T,
+        //     const label idG,
+        //     const label idL,
+        //     const label idS
+        // ) const;
 
-        //- Return the mixture effective sensible enthalpy
-        template<class TrackData>
-        scalar HsEff
-        (
-            TrackData& td,
-            const scalar p,
-            const scalar T,
-            const label idG,
-            const label idL,
-            const label idS
-        ) const;
+        // //- Return the mixture effective sensible enthalpy
+        // template<class TrackData>
+        // scalar HsEff
+        // (
+        //     TrackData& td,
+        //     const scalar p,
+        //     const scalar T,
+        //     const label idG,
+        //     const label idL,
+        //     const label idS
+        // ) const;
 
-        //- Return the mixture effective latent heat
-        template<class TrackData>
-        scalar LEff
-        (
-            TrackData& td,
-            const scalar p,
-            const scalar T,
-            const label idG,
-            const label idL,
-            const label idS
-        ) const;
+        // //- Return the mixture effective latent heat
+        // template<class TrackData>
+        // scalar LEff
+        // (
+        //     TrackData& td,
+        //     const scalar p,
+        //     const scalar T,
+        //     const label idG,
+        //     const label idL,
+        //     const label idS
+        // ) const;
 
-        //- Update the mass fractions (Y, YGas, YLiquid, YSolid)
-        scalar updateMassFractions
-        (
-            const scalar mass0,
-            const scalarField& dMassGas,
-            const scalarField& dMassLiquid,
-            const scalarField& dMassSolid
-        );
+        // //- Update the mass fractions (Y, YGas, YLiquid, YSolid)
+        // scalar updateMassFractions
+        // (
+        //     const scalar mass0,
+        //     const scalarField& dMassGas,
+        //     const scalarField& dMassLiquid,
+        //     const scalarField& dMassSolid
+        // );
 
 
 protected:
@@ -164,13 +164,13 @@ protected:
         // Parcel properties
 
             //- Mass fractions of gases []
-            scalarField YGas_;
+            // scalarField YGas_;
 
             //- Mass fractions of liquids []
-            scalarField YLiquid_;
+            // scalarField YLiquid_;
 
             //- Mass fractions of solids []
-            scalarField YSolid_;
+            // scalarField YSolid_;
 
             //- Flag to identify if the particle can devolatilise and combust
             //  Combustion possible only after volatile content falls below
@@ -178,7 +178,7 @@ protected:
             //  0 = can devolatilise, cannot combust but can change
             //  1 = can devolatilise, can combust
             // -1 = cannot devolatilise or combust, and cannot change
-            label canCombust_;
+            // label canCombust_;
 
 
     // Protected Member Functions
@@ -362,34 +362,34 @@ public:
 
     // Member Functions
 
-        // Access
+        // // Access
 
-            //- Return const access to mass fractions of gases
-            inline const scalarField& YGas() const;
+        //     //- Return const access to mass fractions of gases
+        //     inline const scalarField& YGas() const;
 
-            //- Return const access to mass fractions of liquids
-            inline const scalarField& YLiquid() const;
+        //     //- Return const access to mass fractions of liquids
+        //     inline const scalarField& YLiquid() const;
 
-            //- Return const access to mass fractions of solids
-            inline const scalarField& YSolid() const;
+        //     //- Return const access to mass fractions of solids
+        //     inline const scalarField& YSolid() const;
 
-            //- Return const access to the canCombust flag
-            inline label canCombust() const;
+        //     //- Return const access to the canCombust flag
+        //     inline label canCombust() const;
 
 
-        // Edit
+        // // Edit
 
-            //- Return access to mass fractions of gases
-            inline scalarField& YGas();
+        //     //- Return access to mass fractions of gases
+        //     inline scalarField& YGas();
 
-            //- Return access to mass fractions of liquids
-            inline scalarField& YLiquid();
+        //     //- Return access to mass fractions of liquids
+        //     inline scalarField& YLiquid();
 
-            //- Return access to mass fractions of solids
-            inline scalarField& YSolid();
+        //     //- Return access to mass fractions of solids
+        //     inline scalarField& YSolid();
 
-            //- Return access to the canCombust flag
-            inline label& canCombust();
+        //     //- Return access to the canCombust flag
+        //     inline label& canCombust();
 
 
         // Main calculation loop
@@ -412,7 +412,7 @@ public:
                 const label celli
             );
 
-            //- Update parcel properties over the time interval
+            //Update parcel properties over the time interval
             template<class TrackData>
             void calc
             (

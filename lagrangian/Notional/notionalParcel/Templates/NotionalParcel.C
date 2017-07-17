@@ -42,89 +42,89 @@ const Foam::label Foam::NotionalParcel<ParcelType>::SLD(2);
 
 // * * * * * * * * * * * *  Private Member Functions * * * * * * * * * * * * //
 
-template<class ParcelType>
-template<class TrackData>
-Foam::scalar Foam::NotionalParcel<ParcelType>::CpEff
-(
-    TrackData& td,
-    const scalar p,
-    const scalar T,
-    const label idG,
-    const label idL,
-    const label idS
-) const
-{
-    return
-        this->Y_[GAS]*td.cloud().composition().Cp(idG, YGas_, p, T)
-      + this->Y_[LIQ]*td.cloud().composition().Cp(idL, YLiquid_, p, T)
-      + this->Y_[SLD]*td.cloud().composition().Cp(idS, YSolid_, p, T);
-}
+// template<class ParcelType>
+// template<class TrackData>
+// Foam::scalar Foam::NotionalParcel<ParcelType>::CpEff
+// (
+//     TrackData& td,
+//     const scalar p,
+//     const scalar T,
+//     const label idG,
+//     const label idL,
+//     const label idS
+// ) const
+// {
+//     return
+//         this->Y_[GAS]*td.cloud().composition().Cp(idG, YGas_, p, T)
+//       + this->Y_[LIQ]*td.cloud().composition().Cp(idL, YLiquid_, p, T)
+//       + this->Y_[SLD]*td.cloud().composition().Cp(idS, YSolid_, p, T);
+// }
 
 
-template<class ParcelType>
-template<class TrackData>
-Foam::scalar Foam::NotionalParcel<ParcelType>::HsEff
-(
-    TrackData& td,
-    const scalar p,
-    const scalar T,
-    const label idG,
-    const label idL,
-    const label idS
-) const
-{
-    return
-        this->Y_[GAS]*td.cloud().composition().Hs(idG, YGas_, p, T)
-      + this->Y_[LIQ]*td.cloud().composition().Hs(idL, YLiquid_, p, T)
-      + this->Y_[SLD]*td.cloud().composition().Hs(idS, YSolid_, p, T);
-}
+// template<class ParcelType>
+// template<class TrackData>
+// Foam::scalar Foam::NotionalParcel<ParcelType>::HsEff
+// (
+//     TrackData& td,
+//     const scalar p,
+//     const scalar T,
+//     const label idG,
+//     const label idL,
+//     const label idS
+// ) const
+// {
+//     return
+//         this->Y_[GAS]*td.cloud().composition().Hs(idG, YGas_, p, T)
+//       + this->Y_[LIQ]*td.cloud().composition().Hs(idL, YLiquid_, p, T)
+//       + this->Y_[SLD]*td.cloud().composition().Hs(idS, YSolid_, p, T);
+// }
 
 
-template<class ParcelType>
-template<class TrackData>
-Foam::scalar Foam::NotionalParcel<ParcelType>::LEff
-(
-    TrackData& td,
-    const scalar p,
-    const scalar T,
-    const label idG,
-    const label idL,
-    const label idS
-) const
-{
-    return
-        this->Y_[GAS]*td.cloud().composition().L(idG, YGas_, p, T)
-      + this->Y_[LIQ]*td.cloud().composition().L(idL, YLiquid_, p, T)
-      + this->Y_[SLD]*td.cloud().composition().L(idS, YSolid_, p, T);
-}
+// template<class ParcelType>
+// template<class TrackData>
+// Foam::scalar Foam::NotionalParcel<ParcelType>::LEff
+// (
+//     TrackData& td,
+//     const scalar p,
+//     const scalar T,
+//     const label idG,
+//     const label idL,
+//     const label idS
+// ) const
+// {
+//     return
+//         this->Y_[GAS]*td.cloud().composition().L(idG, YGas_, p, T)
+//       + this->Y_[LIQ]*td.cloud().composition().L(idL, YLiquid_, p, T)
+//       + this->Y_[SLD]*td.cloud().composition().L(idS, YSolid_, p, T);
+// }
 
 
-template<class ParcelType>
-Foam::scalar Foam::NotionalParcel<ParcelType>::updateMassFractions
-(
-    const scalar mass0,
-    const scalarField& dMassGas,
-    const scalarField& dMassLiquid,
-    const scalarField& dMassSolid
-)
-{
-    scalarField& YMix = this->Y_;
+// template<class ParcelType>
+// Foam::scalar Foam::NotionalParcel<ParcelType>::updateMassFractions
+// (
+//     const scalar mass0,
+//     const scalarField& dMassGas,
+//     const scalarField& dMassLiquid,
+//     const scalarField& dMassSolid
+// )
+// {
+//     scalarField& YMix = this->Y_;
 
-    scalar massGas =
-        this->updateMassFraction(mass0*YMix[GAS], dMassGas, YGas_);
-    scalar massLiquid =
-        this->updateMassFraction(mass0*YMix[LIQ], dMassLiquid, YLiquid_);
-    scalar massSolid =
-        this->updateMassFraction(mass0*YMix[SLD], dMassSolid, YSolid_);
+//     scalar massGas =
+//         this->updateMassFraction(mass0*YMix[GAS], dMassGas, YGas_);
+//     scalar massLiquid =
+//         this->updateMassFraction(mass0*YMix[LIQ], dMassLiquid, YLiquid_);
+//     scalar massSolid =
+//         this->updateMassFraction(mass0*YMix[SLD], dMassSolid, YSolid_);
 
-    scalar massNew = max(massGas + massLiquid + massSolid, ROOTVSMALL);
+//     scalar massNew = max(massGas + massLiquid + massSolid, ROOTVSMALL);
 
-    YMix[GAS] = massGas/massNew;
-    YMix[LIQ] = massLiquid/massNew;
-    YMix[SLD] = 1.0 - YMix[GAS] - YMix[LIQ];
+//     YMix[GAS] = massGas/massNew;
+//     YMix[LIQ] = massLiquid/massNew;
+//     YMix[SLD] = 1.0 - YMix[GAS] - YMix[LIQ];
 
-    return massNew;
-}
+//     return massNew;
+// }
 
 
 // * * * * * * * * * * *  Protected Member Functions * * * * * * * * * * * * //
@@ -186,6 +186,14 @@ void Foam::NotionalParcel<ParcelType>::calc
     const label idL = composition.idLiquid();
     const label idS = composition.idSolid();
 
+    // From RM parcel
+    scalarField YLiquid0 = this->YLiquid_;
+    scalarField YSolid0 = this->YSolid_;
+    scalarField YGas0 = this->YGas_;
+    label canCombust0 = this->canCombust_;
+    
+    
+
 
     // Calc surface values
     scalar Ts, rhos, mus, Prs, kappas;
@@ -222,7 +230,7 @@ void Foam::NotionalParcel<ParcelType>::calc
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     // Mass transfer due to phase change
-    scalarField dMassPC(YLiquid_.size(), 0.0);
+    scalarField dMassPC(YLiquid0.size(), 0.0);
 
     // Molar flux of species emitted from the particle (kmol/m^2/s)
     scalar Ne = 0.0;
@@ -248,7 +256,7 @@ void Foam::NotionalParcel<ParcelType>::calc
         mass0,
         idL,
         YMix[LIQ],
-        YLiquid_,
+        YLiquid0,
         dMassPC,
         Sh,
         Ne,
@@ -261,10 +269,10 @@ void Foam::NotionalParcel<ParcelType>::calc
     // ~~~~~~~~~~~~~~~~
 
     // Mass transfer due to devolatilisation
-    scalarField dMassDV(YGas_.size(), 0.0);
+    scalarField dMassDV(YGas0.size(), 0.0);
 
     // Calc mass and enthalpy transfer due to devolatilisation
-    calcDevolatilisation
+    ParcelType::calcDevolatilisation
     (
         td,
         dt,
@@ -274,10 +282,10 @@ void Foam::NotionalParcel<ParcelType>::calc
         T0,
         mass0,
         this->mass0_,
-        YMix[GAS]*YGas_,
-        YMix[LIQ]*YLiquid_,
-        YMix[SLD]*YSolid_,
-        canCombust_,
+        YMix[GAS]*YGas0,
+        YMix[LIQ]*YLiquid0,
+        YMix[SLD]*YSolid0,
+        canCombust0,
         dMassDV,
         Sh,
         Ne,
@@ -289,9 +297,9 @@ void Foam::NotionalParcel<ParcelType>::calc
     // ~~~~~~~~~~~~~~~~~
 
     // Change in carrier phase composition due to surface reactions
-    scalarField dMassSRGas(YGas_.size(), 0.0);
-    scalarField dMassSRLiquid(YLiquid_.size(), 0.0);
-    scalarField dMassSRSolid(YSolid_.size(), 0.0);
+    scalarField dMassSRGas(YGas0.size(), 0.0);
+    scalarField dMassSRLiquid(YLiquid0.size(), 0.0);
+    scalarField dMassSRSolid(YSolid0.size(), 0.0);
     scalarField dMassSRCarrier(composition.carrier().species().size(), 0.0);
 
     // Calc mass and enthalpy transfer due to surface reactions
@@ -303,12 +311,12 @@ void Foam::NotionalParcel<ParcelType>::calc
         d0,
         T0,
         mass0,
-        canCombust_,
+        canCombust0,
         Ne,
         YMix,
-        YGas_,
-        YLiquid_,
-        YSolid_,
+        YGas0,
+        YLiquid0,
+        YSolid0,
         dMassSRGas,
         dMassSRLiquid,
         dMassSRSolid,
@@ -325,9 +333,9 @@ void Foam::NotionalParcel<ParcelType>::calc
     scalarField dMassLiquid(dMassPC + dMassSRLiquid);
     scalarField dMassSolid(dMassSRSolid);
     scalar mass1 =
-        updateMassFractions(mass0, dMassGas, dMassLiquid, dMassSolid);
+        this->updateMassFractions(mass0, dMassGas, dMassLiquid, dMassSolid);
 
-    this->Cp_ = CpEff(td, pc, T0, idG, idL, idS);
+    this->Cp_ = this->CpEff(td, pc, T0, idG, idL, idS);
 
     // Update particle density or diameter
     if (td.cloud().constProps().constantVolume())
@@ -349,15 +357,15 @@ void Foam::NotionalParcel<ParcelType>::calc
             scalar dm = np0*mass0;
 
             // Absorb parcel into carrier phase
-            forAll(YGas_, i)
+            forAll(YGas0, i)
             {
                 label gid = composition.localToCarrierId(GAS, i);
-                td.cloud().rhoTrans(gid)[celli] += dm*YMix[GAS]*YGas_[i];
+                td.cloud().rhoTrans(gid)[celli] += dm*YMix[GAS]*YGas0[i];
             }
-            forAll(YLiquid_, i)
+            forAll(YLiquid0, i)
             {
                 label gid = composition.localToCarrierId(LIQ, i);
-                td.cloud().rhoTrans(gid)[celli] += dm*YMix[LIQ]*YLiquid_[i];
+                td.cloud().rhoTrans(gid)[celli] += dm*YMix[LIQ]*YLiquid0[i];
             }
 
             // No mapping between solid components and carrier phase
@@ -371,7 +379,7 @@ void Foam::NotionalParcel<ParcelType>::calc
 
             td.cloud().UTrans()[celli] += dm*U0;
 
-            td.cloud().hsTrans()[celli] += dm*HsEff(td, pc, T0, idG, idL, idS);
+            td.cloud().hsTrans()[celli] += dm*this->HsEff(td, pc, T0, idG, idL, idS);
 
             td.cloud().phaseChange().addToPhaseChangeMass(np0*mass1);
         }
@@ -407,7 +415,7 @@ void Foam::NotionalParcel<ParcelType>::calc
         );
 
 
-    this->Cp_ = CpEff(td, pc, this->T_, idG, idL, idS);
+    this->Cp_ = this->CpEff(td, pc, this->T_, idG, idL, idS);
 
 
     // Motion
@@ -424,7 +432,7 @@ void Foam::NotionalParcel<ParcelType>::calc
     if (td.cloud().solution().coupled())
     {
         // Transfer mass lost to carrier mass, momentum and enthalpy sources
-        forAll(YGas_, i)
+        forAll(YGas0, i)
         {
             scalar dm = np0*dMassGas[i];
             label gid = composition.localToCarrierId(GAS, i);
@@ -433,7 +441,7 @@ void Foam::NotionalParcel<ParcelType>::calc
             td.cloud().UTrans()[celli] += dm*U0;
             td.cloud().hsTrans()[celli] += dm*hs;
         }
-        forAll(YLiquid_, i)
+        forAll(YLiquid0, i)
         {
             scalar dm = np0*dMassLiquid[i];
             label gid = composition.localToCarrierId(LIQ, i);
@@ -486,8 +494,8 @@ void Foam::NotionalParcel<ParcelType>::calc
 }
 
 // Clint 07-11-17
-  // New calcVelocity function for notional parcels. So here we will 
-  // have some stochastic differential equation to update the U_p with
+// New calcVelocity function for notional parcels. So here we will 
+// have some stochastic differential equation to update the U_p with
 // template<class ParcelType>
 // template<class TrackData>
 // const Foam::vector Foam::NotionalParcel<ParcelType>::calcVelocity

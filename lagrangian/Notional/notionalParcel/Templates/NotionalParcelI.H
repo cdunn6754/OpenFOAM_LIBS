@@ -164,64 +164,64 @@ inline Foam::NotionalParcel<ParcelType>::NotionalParcel
 
 // * * * * * * * * * * ThermoParcel Member Functions * * * * * * * * * * * * //
 
-template<class ParcelType>
-inline const Foam::scalarField& Foam::NotionalParcel<ParcelType>::
-YGas() const
-{
-    return YGas_;
-}
+// template<class ParcelType>
+// inline const Foam::scalarField& Foam::NotionalParcel<ParcelType>::
+// YGas() const
+// {
+//     return YGas_;
+// }
 
 
-template<class ParcelType>
-inline const Foam::scalarField& Foam::NotionalParcel<ParcelType>::
-YLiquid() const
-{
-    return YLiquid_;
-}
+// template<class ParcelType>
+// inline const Foam::scalarField& Foam::NotionalParcel<ParcelType>::
+// YLiquid() const
+// {
+//     return YLiquid_;
+// }
 
 
-template<class ParcelType>
-inline const Foam::scalarField& Foam::NotionalParcel<ParcelType>::
-YSolid() const
-{
-    return YSolid_;
-}
+// template<class ParcelType>
+// inline const Foam::scalarField& Foam::NotionalParcel<ParcelType>::
+// YSolid() const
+// {
+//     return YSolid_;
+// }
 
 
-template<class ParcelType>
-inline Foam::label
-Foam::NotionalParcel<ParcelType>::canCombust() const
-{
-    return canCombust_;
-}
+// template<class ParcelType>
+// inline Foam::label
+// Foam::NotionalParcel<ParcelType>::canCombust() const
+// {
+//     return canCombust_;
+// }
 
 
-template<class ParcelType>
-inline Foam::scalarField& Foam::NotionalParcel<ParcelType>::YGas()
-{
-    return YGas_;
-}
+// template<class ParcelType>
+// inline Foam::scalarField& Foam::NotionalParcel<ParcelType>::YGas()
+// {
+//     return YGas_;
+// }
 
 
-template<class ParcelType>
-inline Foam::scalarField& Foam::NotionalParcel<ParcelType>::YLiquid()
-{
-    return YLiquid_;
-}
+// template<class ParcelType>
+// inline Foam::scalarField& Foam::NotionalParcel<ParcelType>::YLiquid()
+// {
+//     return YLiquid_;
+// }
 
 
-template<class ParcelType>
-inline Foam::scalarField& Foam::NotionalParcel<ParcelType>::YSolid()
-{
-    return YSolid_;
-}
+// template<class ParcelType>
+// inline Foam::scalarField& Foam::NotionalParcel<ParcelType>::YSolid()
+// {
+//     return YSolid_;
+// }
 
 
-template<class ParcelType>
-inline Foam::label& Foam::NotionalParcel<ParcelType>::canCombust()
-{
-    return canCombust_;
-}
+// template<class ParcelType>
+// inline Foam::label& Foam::NotionalParcel<ParcelType>::canCombust()
+// {
+//     return canCombust_;
+// }
 
 
 // ************************************************************************* //

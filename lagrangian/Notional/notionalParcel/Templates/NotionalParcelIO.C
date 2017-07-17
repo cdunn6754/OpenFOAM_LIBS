@@ -115,96 +115,96 @@ void Foam::NotionalParcel<ParcelType>::readFields
 
     ParcelType::readFields(c, compModel);
 
-    // Get names and sizes for each Y...
-    const label idGas = compModel.idGas();
-    const wordList& gasNames = compModel.componentNames(idGas);
-    const label idLiquid = compModel.idLiquid();
-    const wordList& liquidNames = compModel.componentNames(idLiquid);
-    const label idSolid = compModel.idSolid();
-    const wordList& solidNames = compModel.componentNames(idSolid);
-    const wordList& stateLabels = compModel.stateLabels();
+    // // Get names and sizes for each Y...
+    // const label idGas = compModel.idGas();
+    // const wordList& gasNames = compModel.componentNames(idGas);
+    // const label idLiquid = compModel.idLiquid();
+    // const wordList& liquidNames = compModel.componentNames(idLiquid);
+    // const label idSolid = compModel.idSolid();
+    // const wordList& solidNames = compModel.componentNames(idSolid);
+    // const wordList& stateLabels = compModel.stateLabels();
 
-    // Set storage for each Y... for each parcel
-    forAllIter(typename Cloud<NotionalParcel<ParcelType>>, c, iter)
-    {
-        NotionalParcel<ParcelType>& p = iter();
-        p.YGas_.setSize(gasNames.size(), 0.0);
-        p.YLiquid_.setSize(liquidNames.size(), 0.0);
-        p.YSolid_.setSize(solidNames.size(), 0.0);
-    }
+    // // Set storage for each Y... for each parcel
+    // forAllIter(typename Cloud<NotionalParcel<ParcelType>>, c, iter)
+    // {
+    //     NotionalParcel<ParcelType>& p = iter();
+    //     p.YGas_.setSize(gasNames.size(), 0.0);
+    //     p.YLiquid_.setSize(liquidNames.size(), 0.0);
+    //     p.YSolid_.setSize(solidNames.size(), 0.0);
+    // }
 
-    // Populate YGas for each parcel
-    forAll(gasNames, j)
-    {
-        IOField<scalar> YGas
-        (
-            c.fieldIOobject
-            (
-                "Y" + gasNames[j] + stateLabels[idGas],
-                IOobject::MUST_READ
-            )
-        );
+    // // Populate YGas for each parcel
+    // forAll(gasNames, j)
+    // {
+    //     IOField<scalar> YGas
+    //     (
+    //         c.fieldIOobject
+    //         (
+    //             "Y" + gasNames[j] + stateLabels[idGas],
+    //             IOobject::MUST_READ
+    //         )
+    //     );
 
-        label i = 0;
-        forAllIter
-        (
-            typename Cloud<NotionalParcel<ParcelType>>,
-            c,
-            iter
-        )
-        {
-            NotionalParcel<ParcelType>& p = iter();
-            p.YGas_[j] = YGas[i++]/(p.Y()[GAS] + ROOTVSMALL);
-        }
-    }
-    // Populate YLiquid for each parcel
-    forAll(liquidNames, j)
-    {
-        IOField<scalar> YLiquid
-        (
-            c.fieldIOobject
-            (
-                "Y" + liquidNames[j] + stateLabels[idLiquid],
-                 IOobject::MUST_READ
-            )
-        );
+    //     label i = 0;
+    //     forAllIter
+    //     (
+    //         typename Cloud<NotionalParcel<ParcelType>>,
+    //         c,
+    //         iter
+    //     )
+    //     {
+    //         NotionalParcel<ParcelType>& p = iter();
+    //         p.YGas_[j] = YGas[i++]/(p.Y()[GAS] + ROOTVSMALL);
+    //     }
+    // }
+    // // Populate YLiquid for each parcel
+    // forAll(liquidNames, j)
+    // {
+    //     IOField<scalar> YLiquid
+    //     (
+    //         c.fieldIOobject
+    //         (
+    //             "Y" + liquidNames[j] + stateLabels[idLiquid],
+    //              IOobject::MUST_READ
+    //         )
+    //     );
 
-        label i = 0;
-        forAllIter
-        (
-            typename Cloud<NotionalParcel<ParcelType>>,
-            c,
-            iter
-        )
-        {
-            NotionalParcel<ParcelType>& p = iter();
-            p.YLiquid_[j] = YLiquid[i++]/(p.Y()[LIQ] + ROOTVSMALL);
-        }
-    }
-    // Populate YSolid for each parcel
-    forAll(solidNames, j)
-    {
-        IOField<scalar> YSolid
-        (
-            c.fieldIOobject
-            (
-                "Y" + solidNames[j] + stateLabels[idSolid],
-                IOobject::MUST_READ
-            )
-        );
+    //     label i = 0;
+    //     forAllIter
+    //     (
+    //         typename Cloud<NotionalParcel<ParcelType>>,
+    //         c,
+    //         iter
+    //     )
+    //     {
+    //         NotionalParcel<ParcelType>& p = iter();
+    //         p.YLiquid_[j] = YLiquid[i++]/(p.Y()[LIQ] + ROOTVSMALL);
+    //     }
+    // }
+    // // Populate YSolid for each parcel
+    // forAll(solidNames, j)
+    // {
+    //     IOField<scalar> YSolid
+    //     (
+    //         c.fieldIOobject
+    //         (
+    //             "Y" + solidNames[j] + stateLabels[idSolid],
+    //             IOobject::MUST_READ
+    //         )
+    //     );
 
-        label i = 0;
-        forAllIter
-        (
-            typename Cloud<NotionalParcel<ParcelType>>,
-            c,
-            iter
-        )
-        {
-            NotionalParcel<ParcelType>& p = iter();
-            p.YSolid_[j] = YSolid[i++]/(p.Y()[SLD] + ROOTVSMALL);
-        }
-    }
+    //     label i = 0;
+    //     forAllIter
+    //     (
+    //         typename Cloud<NotionalParcel<ParcelType>>,
+    //         c,
+    //         iter
+    //     )
+    //     {
+    //         NotionalParcel<ParcelType>& p = iter();
+    //         p.YSolid_[j] = YSolid[i++]/(p.Y()[SLD] + ROOTVSMALL);
+    //     }
+    // }
 }
 
 
@@ -224,106 +224,107 @@ void Foam::NotionalParcel<ParcelType>::writeFields
     const CompositionType& compModel
 )
 {
+  Info << "\n\nWe are using this one\n\n" << endl;
     ParcelType::writeFields(c, compModel);
 
-    label np = c.size();
+    // label np = c.size();
 
-    // Write the composition fractions
-    if (np > 0)
-    {
-        const wordList& stateLabels = compModel.stateLabels();
+    // // Write the composition fractions
+    // if (np > 0)
+    // {
+    //     const wordList& stateLabels = compModel.stateLabels();
 
-        const label idGas = compModel.idGas();
-        const wordList& gasNames = compModel.componentNames(idGas);
-        forAll(gasNames, j)
-        {
-            IOField<scalar> YGas
-            (
-                c.fieldIOobject
-                (
-                    "Y" + gasNames[j] + stateLabels[idGas],
-                    IOobject::NO_READ
-                ),
-                np
-            );
+    //     const label idGas = compModel.idGas();
+    //     const wordList& gasNames = compModel.componentNames(idGas);
+    //     forAll(gasNames, j)
+    //     {
+    //         IOField<scalar> YGas
+    //         (
+    //             c.fieldIOobject
+    //             (
+    //                 "Y" + gasNames[j] + stateLabels[idGas],
+    //                 IOobject::NO_READ
+    //             ),
+    //             np
+    //         );
 
-            label i = 0;
-            forAllConstIter
-            (
-                typename Cloud<NotionalParcel<ParcelType>>,
-                c,
-                iter
-            )
-            {
-                const NotionalParcel<ParcelType>& p0 = iter();
-                YGas[i++] = p0.YGas()[j]*p0.Y()[GAS];
-            }
+    //         label i = 0;
+    //         forAllConstIter
+    //         (
+    //             typename Cloud<NotionalParcel<ParcelType>>,
+    //             c,
+    //             iter
+    //         )
+    //         {
+    //             const NotionalParcel<ParcelType>& p0 = iter();
+    //             YGas[i++] = p0.YGas()[j]*p0.Y()[GAS];
+    //         }
 
-            YGas.write();
-        }
+    //         YGas.write();
+    //     }
 
-        const label idLiquid = compModel.idLiquid();
-        const wordList& liquidNames = compModel.componentNames(idLiquid);
-        forAll(liquidNames, j)
-        {
-            IOField<scalar> YLiquid
-            (
-                c.fieldIOobject
-                (
-                    "Y" + liquidNames[j] + stateLabels[idLiquid],
-                    IOobject::NO_READ
-                ),
-                np
-            );
+    //     const label idLiquid = compModel.idLiquid();
+    //     const wordList& liquidNames = compModel.componentNames(idLiquid);
+    //     forAll(liquidNames, j)
+    //     {
+    //         IOField<scalar> YLiquid
+    //         (
+    //             c.fieldIOobject
+    //             (
+    //                 "Y" + liquidNames[j] + stateLabels[idLiquid],
+    //                 IOobject::NO_READ
+    //             ),
+    //             np
+    //         );
 
-            label i = 0;
-            forAllConstIter
-            (
-                typename Cloud<NotionalParcel<ParcelType>>,
-                c,
-                iter
-            )
-            {
-                const NotionalParcel<ParcelType>& p0 = iter();
-                YLiquid[i++] = p0.YLiquid()[j]*p0.Y()[LIQ];
-            }
+    //         label i = 0;
+    //         forAllConstIter
+    //         (
+    //             typename Cloud<NotionalParcel<ParcelType>>,
+    //             c,
+    //             iter
+    //         )
+    //         {
+    //             const NotionalParcel<ParcelType>& p0 = iter();
+    //             YLiquid[i++] = p0.YLiquid()[j]*p0.Y()[LIQ];
+    //         }
 
-            YLiquid.write();
-        }
+    //         YLiquid.write();
+    //     }
 
-        const label idSolid = compModel.idSolid();
-        const wordList& solidNames = compModel.componentNames(idSolid);
-        forAll(solidNames, j)
-        {
-            IOField<scalar> YSolid
-            (
-                c.fieldIOobject
-                (
-                    "Y" + solidNames[j] + stateLabels[idSolid],
-                    IOobject::NO_READ
-                ),
-                np
-            );
+    //     const label idSolid = compModel.idSolid();
+    //     const wordList& solidNames = compModel.componentNames(idSolid);
+    //     forAll(solidNames, j)
+    //     {
+    //         IOField<scalar> YSolid
+    //         (
+    //             c.fieldIOobject
+    //             (
+    //                 "Y" + solidNames[j] + stateLabels[idSolid],
+    //                 IOobject::NO_READ
+    //             ),
+    //             np
+    //         );
 
-            label i = 0;
-            forAllConstIter
-            (
-                typename Cloud<NotionalParcel<ParcelType>>,
-                c,
-                iter
-            )
-            {
-                const NotionalParcel<ParcelType>& p0 = iter();
-                YSolid[i++] = p0.YSolid()[j]*p0.Y()[SLD];
-            }
+    //         label i = 0;
+    //         forAllConstIter
+    //         (
+    //             typename Cloud<NotionalParcel<ParcelType>>,
+    //             c,
+    //             iter
+    //         )
+    //         {
+    //             const NotionalParcel<ParcelType>& p0 = iter();
+    //             YSolid[i++] = p0.YSolid()[j]*p0.Y()[SLD];
+    //         }
 
-            YSolid.write();
-        }
-    }
+    //         YSolid.write();
+    //     }
+    // }
 }
 
 
-// * * * * * * * * * * * * * * * IOstream Operators  * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * Iostream Operators  * * * * * * * * * * * * //
 
 template<class ParcelType>
 Foam::Ostream& Foam::operator<<
@@ -332,21 +333,21 @@ Foam::Ostream& Foam::operator<<
     const NotionalParcel<ParcelType>& p
 )
 {
-    scalarField YGasLoc(p.YGas()*p.Y()[0]);
-    scalarField YLiquidLoc(p.YLiquid()*p.Y()[1]);
-    scalarField YSolidLoc(p.YSolid()*p.Y()[2]);
-    if (os.format() == IOstream::ASCII)
-    {
-        os  << static_cast<const ParcelType&>(p)
-            << token::SPACE << YGasLoc
-            << token::SPACE << YLiquidLoc
-            << token::SPACE << YSolidLoc;
-    }
-    else
-    {
-        os  << static_cast<const ParcelType&>(p);
-        os  << YGasLoc << YLiquidLoc << YSolidLoc;
-    }
+    // scalarField YGasLoc(p.YGas()*p.Y()[0]);
+    // scalarField YLiquidLoc(p.YLiquid()*p.Y()[1]);
+    // scalarField YSolidLoc(p.YSolid()*p.Y()[2]);
+    // if (os.format() == IOstream::ASCII)
+    // {
+    //     os  << static_cast<const ParcelType&>(p)
+    //         << token::SPACE << YGasLoc
+    //         << token::SPACE << YLiquidLoc
+    //         << token::SPACE << YSolidLoc;
+    // }
+    // else
+    // {
+    //     os  << static_cast<const ParcelType&>(p);
+    //     os  << YGasLoc << YLiquidLoc << YSolidLoc;
+    // }
 
     // Check state of Ostream
     os.check
