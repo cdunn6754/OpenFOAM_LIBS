@@ -698,11 +698,11 @@ Foam::NotionalParcel<ParcelType>::NotionalParcel
     const NotionalParcel<ParcelType>& p
 )
 :
-    ParcelType(p),
-    YGas_(p.YGas_),
-    YLiquid_(p.YLiquid_),
-    YSolid_(p.YSolid_),
-    canCombust_(p.canCombust_)
+    ParcelType(p)
+    // YGas_(p.YGas_),
+    // YLiquid_(p.YLiquid_),
+    // YSolid_(p.YSolid_),
+    // canCombust_(p.canCombust_)
 {}
 
 
@@ -713,11 +713,11 @@ Foam::NotionalParcel<ParcelType>::NotionalParcel
     const polyMesh& mesh
 )
 :
-    ParcelType(p, mesh),
-    YGas_(p.YGas_),
-    YLiquid_(p.YLiquid_),
-    YSolid_(p.YSolid_),
-    canCombust_(p.canCombust_)
+    ParcelType(p, mesh)
+    // YGas_(p.YGas_),
+    // YLiquid_(p.YLiquid_),
+    // YSolid_(p.YSolid_),
+    // canCombust_(p.canCombust_)
 {}
 
 
