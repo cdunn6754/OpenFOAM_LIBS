@@ -165,6 +165,7 @@ void Foam::NotionalParcel<ParcelType>::calc
     const label celli
 )
 {
+
     typedef typename TrackData::cloudType::reactingCloudType reactingCloudType;
     const CompositionModel<reactingCloudType>& composition =
         td.cloud().composition();
@@ -272,7 +273,7 @@ void Foam::NotionalParcel<ParcelType>::calc
     scalarField dMassDV(YGas0.size(), 0.0);
 
     // Calc mass and enthalpy transfer due to devolatilisation
-    ParcelType::calcDevolatilisation
+    this->calcDevolatilisation
     (
         td,
         dt,
@@ -303,7 +304,7 @@ void Foam::NotionalParcel<ParcelType>::calc
     scalarField dMassSRCarrier(composition.carrier().species().size(), 0.0);
 
     // Calc mass and enthalpy transfer due to surface reactions
-    calcSurfaceReactions
+    this->calcSurfaceReactions
     (
         td,
         dt,
@@ -518,184 +519,184 @@ void Foam::NotionalParcel<ParcelType>::calc
 // }
 
 
-template<class ParcelType>
-template<class TrackData>
-void Foam::NotionalParcel<ParcelType>::calcDevolatilisation
-(
-    TrackData& td,
-    const scalar dt,
-    const scalar age,
-    const scalar Ts,
-    const scalar d,
-    const scalar T,
-    const scalar mass,
-    const scalar mass0,
-    const scalarField& YGasEff,
-    const scalarField& YLiquidEff,
-    const scalarField& YSolidEff,
-    label& canCombust,
-    scalarField& dMassDV,
-    scalar& Sh,
-    scalar& N,
-    scalar& NCpW,
-    scalarField& Cs
-) const
-{
-    // Check that model is active
-    if (!td.cloud().devolatilisation().active())
-    {
-        return;
-    }
+// template<class ParcelType>
+// template<class TrackData>
+// void Foam::NotionalParcel<ParcelType>::calcDevolatilisation
+// (
+//     TrackData& td,
+//     const scalar dt,
+//     const scalar age,
+//     const scalar Ts,
+//     const scalar d,
+//     const scalar T,
+//     const scalar mass,
+//     const scalar mass0,
+//     const scalarField& YGasEff,
+//     const scalarField& YLiquidEff,
+//     const scalarField& YSolidEff,
+//     label& canCombust,
+//     scalarField& dMassDV,
+//     scalar& Sh,
+//     scalar& N,
+//     scalar& NCpW,
+//     scalarField& Cs
+// ) const
+// {
+//     // Check that model is active
+//     if (!td.cloud().devolatilisation().active())
+//     {
+//         return;
+//     }
 
-    // Initialise demand-driven constants
-    (void)td.cloud().constProps().TDevol();
-    (void)td.cloud().constProps().LDevol();
+//     // Initialise demand-driven constants
+//     (void)td.cloud().constProps().TDevol();
+//     (void)td.cloud().constProps().LDevol();
 
-    // Check that the parcel temperature is within necessary limits for
-    // devolatilisation to occur
-    if (T < td.cloud().constProps().TDevol() || canCombust == -1)
-    {
-        return;
-    }
+//     // Check that the parcel temperature is within necessary limits for
+//     // devolatilisation to occur
+//     if (T < td.cloud().constProps().TDevol() || canCombust == -1)
+//     {
+//         return;
+//     }
 
-    typedef typename TrackData::cloudType::reactingCloudType reactingCloudType;
-    const CompositionModel<reactingCloudType>& composition =
-        td.cloud().composition();
-
-
-    // Total mass of volatiles evolved
-    td.cloud().devolatilisation().calculate
-    (
-        dt,
-        age,
-        mass0,
-        mass,
-        T,
-        YGasEff,
-        YLiquidEff,
-        YSolidEff,
-        canCombust,
-        dMassDV
-    );
-
-    scalar dMassTot = sum(dMassDV);
-
-    td.cloud().devolatilisation().addToDevolatilisationMass
-    (
-        this->nParticle_*dMassTot
-    );
-
-    Sh -= dMassTot*td.cloud().constProps().LDevol()/dt;
-
-    // Update molar emissions
-    if (td.cloud().heatTransfer().BirdCorrection())
-    {
-        // Molar average molecular weight of carrier mix
-        const scalar Wc =
-            max(SMALL, this->rhoc_*RR*this->Tc_/this->pc_);
-
-        // Note: hardcoded gaseous diffusivities for now
-        // TODO: add to carrier thermo
-        const scalar beta = sqr(cbrt(15.0) + cbrt(15.0));
-
-        forAll(dMassDV, i)
-        {
-            const label id = composition.localToCarrierId(GAS, i);
-            const scalar Cp = composition.carrier().Cp(id, this->pc_, Ts);
-            const scalar W = composition.carrier().W(id);
-            const scalar Ni = dMassDV[i]/(this->areaS(d)*dt*W);
-
-            // Dab calc'd using API vapour mass diffusivity function
-            const scalar Dab =
-                3.6059e-3*(pow(1.8*Ts, 1.75))
-               *sqrt(1.0/W + 1.0/Wc)
-               /(this->pc_*beta);
-
-            N += Ni;
-            NCpW += Ni*Cp*W;
-            Cs[id] += Ni*d/(2.0*Dab);
-        }
-    }
-}
+//     typedef typename TrackData::cloudType::reactingCloudType reactingCloudType;
+//     const CompositionModel<reactingCloudType>& composition =
+//         td.cloud().composition();
 
 
-template<class ParcelType>
-template<class TrackData>
-void Foam::NotionalParcel<ParcelType>::calcSurfaceReactions
-(
-    TrackData& td,
-    const scalar dt,
-    const label celli,
-    const scalar d,
-    const scalar T,
-    const scalar mass,
-    const label canCombust,
-    const scalar N,
-    const scalarField& YMix,
-    const scalarField& YGas,
-    const scalarField& YLiquid,
-    const scalarField& YSolid,
-    scalarField& dMassSRGas,
-    scalarField& dMassSRLiquid,
-    scalarField& dMassSRSolid,
-    scalarField& dMassSRCarrier,
-    scalar& Sh,
-    scalar& dhsTrans
-) const
-{
-    // Check that model is active
-    if (!td.cloud().surfaceReaction().active())
-    {
-        return;
-    }
+//     // Total mass of volatiles evolved
+//     td.cloud().devolatilisation().calculate
+//     (
+//         dt,
+//         age,
+//         mass0,
+//         mass,
+//         T,
+//         YGasEff,
+//         YLiquidEff,
+//         YSolidEff,
+//         canCombust,
+//         dMassDV
+//     );
 
-    // Initialise demand-driven constants
-    (void)td.cloud().constProps().hRetentionCoeff();
-    (void)td.cloud().constProps().TMax();
+//     scalar dMassTot = sum(dMassDV);
 
-    // Check that model is active
-    if (canCombust != 1)
-    {
-        return;
-    }
+//     td.cloud().devolatilisation().addToDevolatilisationMass
+//     (
+//         this->nParticle_*dMassTot
+//     );
+
+//     Sh -= dMassTot*td.cloud().constProps().LDevol()/dt;
+
+//     // Update molar emissions
+//     if (td.cloud().heatTransfer().BirdCorrection())
+//     {
+//         // Molar average molecular weight of carrier mix
+//         const scalar Wc =
+//             max(SMALL, this->rhoc_*RR*this->Tc_/this->pc_);
+
+//         // Note: hardcoded gaseous diffusivities for now
+//         // TODO: add to carrier thermo
+//         const scalar beta = sqr(cbrt(15.0) + cbrt(15.0));
+
+//         forAll(dMassDV, i)
+//         {
+//             const label id = composition.localToCarrierId(GAS, i);
+//             const scalar Cp = composition.carrier().Cp(id, this->pc_, Ts);
+//             const scalar W = composition.carrier().W(id);
+//             const scalar Ni = dMassDV[i]/(this->areaS(d)*dt*W);
+
+//             // Dab calc'd using API vapour mass diffusivity function
+//             const scalar Dab =
+//                 3.6059e-3*(pow(1.8*Ts, 1.75))
+//                *sqrt(1.0/W + 1.0/Wc)
+//                /(this->pc_*beta);
+
+//             N += Ni;
+//             NCpW += Ni*Cp*W;
+//             Cs[id] += Ni*d/(2.0*Dab);
+//         }
+//     }
+// }
 
 
-    // Update surface reactions
-    const scalar hReaction = td.cloud().surfaceReaction().calculate
-    (
-        dt,
-        celli,
-        d,
-        T,
-        this->Tc_,
-        this->pc_,
-        this->rhoc_,
-        mass,
-        YGas,
-        YLiquid,
-        YSolid,
-        YMix,
-        N,
-        dMassSRGas,
-        dMassSRLiquid,
-        dMassSRSolid,
-        dMassSRCarrier
-    );
+// template<class ParcelType>
+// template<class TrackData>
+// void Foam::NotionalParcel<ParcelType>::calcSurfaceReactions
+// (
+//     TrackData& td,
+//     const scalar dt,
+//     const label celli,
+//     const scalar d,
+//     const scalar T,
+//     const scalar mass,
+//     const label canCombust,
+//     const scalar N,
+//     const scalarField& YMix,
+//     const scalarField& YGas,
+//     const scalarField& YLiquid,
+//     const scalarField& YSolid,
+//     scalarField& dMassSRGas,
+//     scalarField& dMassSRLiquid,
+//     scalarField& dMassSRSolid,
+//     scalarField& dMassSRCarrier,
+//     scalar& Sh,
+//     scalar& dhsTrans
+// ) const
+// {
+//     // Check that model is active
+//     if (!td.cloud().surfaceReaction().active())
+//     {
+//         return;
+//     }
 
-    td.cloud().surfaceReaction().addToSurfaceReactionMass
-    (
-        this->nParticle_
-       *(sum(dMassSRGas) + sum(dMassSRLiquid) + sum(dMassSRSolid))
-    );
+//     // Initialise demand-driven constants
+//     (void)td.cloud().constProps().hRetentionCoeff();
+//     (void)td.cloud().constProps().TMax();
 
-    const scalar xsi = min(T/td.cloud().constProps().TMax(), 1.0);
-    const scalar coeff =
-        (1.0 - xsi*xsi)*td.cloud().constProps().hRetentionCoeff();
+//     // Check that model is active
+//     if (canCombust != 1)
+//     {
+//         return;
+//     }
 
-    Sh += coeff*hReaction/dt;
 
-    dhsTrans += (1.0 - coeff)*hReaction;
-}
+//     // Update surface reactions
+//     const scalar hReaction = td.cloud().surfaceReaction().calculate
+//     (
+//         dt,
+//         celli,
+//         d,
+//         T,
+//         this->Tc_,
+//         this->pc_,
+//         this->rhoc_,
+//         mass,
+//         YGas,
+//         YLiquid,
+//         YSolid,
+//         YMix,
+//         N,
+//         dMassSRGas,
+//         dMassSRLiquid,
+//         dMassSRSolid,
+//         dMassSRCarrier
+//     );
+
+//     td.cloud().surfaceReaction().addToSurfaceReactionMass
+//     (
+//         this->nParticle_
+//        *(sum(dMassSRGas) + sum(dMassSRLiquid) + sum(dMassSRSolid))
+//     );
+
+//     const scalar xsi = min(T/td.cloud().constProps().TMax(), 1.0);
+//     const scalar coeff =
+//         (1.0 - xsi*xsi)*td.cloud().constProps().hRetentionCoeff();
+
+//     Sh += coeff*hReaction/dt;
+
+//     dhsTrans += (1.0 - coeff)*hReaction;
+// }
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //

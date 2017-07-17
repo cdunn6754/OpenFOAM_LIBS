@@ -202,52 +202,52 @@ protected:
 
 
 
-        //- Calculate Devolatilisation
-        template<class TrackData>
-        void calcDevolatilisation
-        (
-            TrackData& td,
-            const scalar dt,           // timestep
-            const scalar age,          // age
-            const scalar Ts,           // surface temperature
-            const scalar d,            // diameter
-            const scalar T,            // temperature
-            const scalar mass,         // mass
-            const scalar mass0,        // mass (initial on injection)
-            const scalarField& YGasEff,// gas component mass fractions
-            const scalarField& YLiquidEff,// liquid component mass fractions
-            const scalarField& YSolidEff,// solid component mass fractions
-            label& canCombust,          // 'can combust' flag
-            scalarField& dMassDV,      // mass transfer - local to particle
-            scalar& Sh,                // explicit particle enthalpy source
-            scalar& N,                 // flux of species emitted from particle
-            scalar& NCpW,              // sum of N*Cp*W of emission species
-            scalarField& Cs            // carrier conc. of emission species
-        ) const;
+        // //- Calculate Devolatilisation
+        // template<class TrackData>
+        // void calcDevolatilisation
+        // (
+        //     TrackData& td,
+        //     const scalar dt,           // timestep
+        //     const scalar age,          // age
+        //     const scalar Ts,           // surface temperature
+        //     const scalar d,            // diameter
+        //     const scalar T,            // temperature
+        //     const scalar mass,         // mass
+        //     const scalar mass0,        // mass (initial on injection)
+        //     const scalarField& YGasEff,// gas component mass fractions
+        //     const scalarField& YLiquidEff,// liquid component mass fractions
+        //     const scalarField& YSolidEff,// solid component mass fractions
+        //     label& canCombust,          // 'can combust' flag
+        //     scalarField& dMassDV,      // mass transfer - local to particle
+        //     scalar& Sh,                // explicit particle enthalpy source
+        //     scalar& N,                 // flux of species emitted from particle
+        //     scalar& NCpW,              // sum of N*Cp*W of emission species
+        //     scalarField& Cs            // carrier conc. of emission species
+        // ) const;
 
-        //- Calculate surface reactions
-        template<class TrackData>
-        void calcSurfaceReactions
-        (
-            TrackData& td,
-            const scalar dt,           // timestep
-            const label celli,         // owner cell
-            const scalar d,            // diameter
-            const scalar T,            // temperature
-            const scalar mass,         // mass
-            const label canCombust,     // 'can combust' flag
-            const scalar N,            // flux of species emitted from particle
-            const scalarField& YMix,   // mixture mass fractions
-            const scalarField& YGas,   // gas-phase mass fractions
-            const scalarField& YLiquid,// liquid-phase mass fractions
-            const scalarField& YSolid, // solid-phase mass fractions
-            scalarField& dMassSRGas,   // gas-phase mass transfer - local
-            scalarField& dMassSRLiquid,// liquid-phase mass transfer - local
-            scalarField& dMassSRSolid, // solid-phase mass transfer - local
-            scalarField& dMassSRCarrier, // carrier phase mass transfer
-            scalar& Sh,                // explicit particle enthalpy source
-            scalar& dhsTrans           // sensible enthalpy transfer to carrier
-        ) const;
+        // //- Calculate surface reactions
+        // template<class TrackData>
+        // void calcSurfaceReactions
+        // (
+        //     TrackData& td,
+        //     const scalar dt,           // timestep
+        //     const label celli,         // owner cell
+        //     const scalar d,            // diameter
+        //     const scalar T,            // temperature
+        //     const scalar mass,         // mass
+        //     const label canCombust,     // 'can combust' flag
+        //     const scalar N,            // flux of species emitted from particle
+        //     const scalarField& YMix,   // mixture mass fractions
+        //     const scalarField& YGas,   // gas-phase mass fractions
+        //     const scalarField& YLiquid,// liquid-phase mass fractions
+        //     const scalarField& YSolid, // solid-phase mass fractions
+        //     scalarField& dMassSRGas,   // gas-phase mass transfer - local
+        //     scalarField& dMassSRLiquid,// liquid-phase mass transfer - local
+        //     scalarField& dMassSRSolid, // solid-phase mass transfer - local
+        //     scalarField& dMassSRCarrier, // carrier phase mass transfer
+        //     scalar& Sh,                // explicit particle enthalpy source
+        //     scalar& dhsTrans           // sensible enthalpy transfer to carrier
+        // ) const;
 
 
 public:
