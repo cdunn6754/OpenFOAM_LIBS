@@ -29,10 +29,7 @@ template<class ParcelType>
 inline Foam::NotionalParcel<ParcelType>::constantProperties::
 constantProperties()
 :
-    ParcelType::constantProperties(),
-    TDevol_(this->dict_, 0.0),
-    LDevol_(this->dict_, 0.0),
-    hRetentionCoeff_(this->dict_, 0.0)
+    ParcelType::constantProperties()
 {}
 
 
@@ -43,10 +40,7 @@ constantProperties
     const constantProperties& cp
 )
 :
-    ParcelType::constantProperties(cp),
-    TDevol_(cp.TDevol_),
-    LDevol_(cp.LDevol_),
-    hRetentionCoeff_(cp.hRetentionCoeff_)
+    ParcelType::constantProperties(cp)
 {}
 
 
@@ -57,10 +51,7 @@ constantProperties
     const dictionary& parentDict
 )
 :
-    ParcelType::constantProperties(parentDict),
-    TDevol_(this->dict_, "TDevol"),
-    LDevol_(this->dict_, "LDevol"),
-    hRetentionCoeff_(this->dict_, "hRetentionCoeff")
+    ParcelType::constantProperties(parentDict)
 {}
 
 
@@ -132,38 +123,40 @@ inline Foam::NotionalParcel<ParcelType>::NotionalParcel
 
 // * * * * * * * * * constantProperties Member Functions * * * * * * * * * * //
 
-template<class ParcelType>
-inline Foam::scalar
-Foam::NotionalParcel<ParcelType>::constantProperties::TDevol() const
-{
-    return TDevol_.value();
-}
+// clint 07-17-17 not needed anymore they are already defined in RMparcel
+
+// template<class ParcelType>
+// inline Foam::scalar
+// Foam::NotionalParcel<ParcelType>::constantProperties::TDevol() const
+// {
+//     return TDevol_.value();
+// }
 
 
-template<class ParcelType>
-inline Foam::scalar
-Foam::NotionalParcel<ParcelType>::constantProperties::LDevol() const
-{
-    return LDevol_.value();
-}
+// template<class ParcelType>
+// inline Foam::scalar
+// Foam::NotionalParcel<ParcelType>::constantProperties::LDevol() const
+// {
+//     return LDevol_.value();
+// }
 
 
-template<class ParcelType>
-inline Foam::scalar
-Foam::NotionalParcel<ParcelType>::constantProperties::
-hRetentionCoeff() const
-{
-    scalar value = hRetentionCoeff_.value();
+// template<class ParcelType>
+// inline Foam::scalar
+// Foam::NotionalParcel<ParcelType>::constantProperties::
+// hRetentionCoeff() const
+// {
+//     scalar value = hRetentionCoeff_.value();
 
-    if ((value < 0) || (value > 1))
-    {
-        FatalErrorInFunction
-            << "hRetentionCoeff must be in the range 0 to 1" << nl
-            << exit(FatalError) << endl;
-    }
+//     if ((value < 0) || (value > 1))
+//     {
+//         FatalErrorInFunction
+//             << "hRetentionCoeff must be in the range 0 to 1" << nl
+//             << exit(FatalError) << endl;
+//     }
 
-    return value;
-}
+//     return value;
+// }
 
 
 // * * * * * * * * * * ThermoParcel Member Functions * * * * * * * * * * * * //

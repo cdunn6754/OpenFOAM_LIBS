@@ -88,17 +88,6 @@ public:
     {
         // Private data
 
-            //- Devolatilisation activation temperature [K]
-            demandDrivenEntry<scalar> TDevol_;
-
-            //- Latent heat of devolatilisation [J/kg]
-            demandDrivenEntry<scalar> LDevol_;
-
-            //- Fraction of enthalpy retained by parcel due to surface
-            //  reactions
-            demandDrivenEntry<scalar> hRetentionCoeff_;
-
-
     public:
 
         // Constructors
@@ -115,15 +104,6 @@ public:
 
         // Access
 
-            //- Return const access to the devolatilisation temperature
-            inline scalar TDevol() const;
-
-            //- Return const access to the latent heat of devolatilisation
-            inline scalar LDevol() const;
-
-            //- Return const access to the fraction of enthalpy retained by
-            //  parcel due to surface reactions
-            inline scalar hRetentionCoeff() const;
     };
 
 
