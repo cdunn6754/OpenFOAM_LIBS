@@ -193,8 +193,6 @@ void Foam::NotionalParcel<ParcelType>::calc
     scalarField YGas0 = this->YGas_;
     label canCombust0 = this->canCombust_;
     
-    
-
 
     // Calc surface values
     scalar Ts, rhos, mus, Prs, kappas;
@@ -497,26 +495,27 @@ void Foam::NotionalParcel<ParcelType>::calc
 // Clint 07-11-17
 // New calcVelocity function for notional parcels. So here we will 
 // have some stochastic differential equation to update the U_p with
-// template<class ParcelType>
-// template<class TrackData>
-// const Foam::vector Foam::NotionalParcel<ParcelType>::calcVelocity
-// (
-//     TrackData& td,
-//     const scalar dt,
-//     const label celli,
-//     const scalar Re,
-//     const scalar mu,
-//     const scalar mass,
-//     const vector& Su,
-//     vector& dUTrans,
-//     scalar& Spu
-// ) const
-// {
-//   Spu = 0.;
-//   vector Unew(10.0, 0.0, 0.0);
-//   Info << "\n\n\nWe made it into the new calcVelocity\n\n\n" << endl;
-//   return Unew;
-// }
+template<class ParcelType>
+template<class TrackData>
+const Foam::vector Foam::NotionalParcel<ParcelType>::calcVelocity
+(
+    TrackData& td,
+    const scalar dt,
+    const label celli,
+    const scalar Re,
+    const scalar mu,
+    const scalar mass,
+    const vector& Su,
+    vector& dUTrans,
+    scalar& Spu
+) const
+{
+  vector U0 = this->U_;
+  scalar W1 = td.cloud().rndGen().template GaussNormal<scalar>() *dt;
+  scalar W2 = td.cloud().rndGen().template GaussNormal<scalar>() *dt;
+  vector Unew(W1, W2, 0.0);
+  return Unew + U0;
+}
 
 
 // template<class ParcelType>

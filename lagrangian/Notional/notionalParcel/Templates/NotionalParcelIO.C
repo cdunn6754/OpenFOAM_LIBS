@@ -224,7 +224,6 @@ void Foam::NotionalParcel<ParcelType>::writeFields
     const CompositionType& compModel
 )
 {
-  Info << "\n\nWe are using this one\n\n" << endl;
     ParcelType::writeFields(c, compModel);
 
     // label np = c.size();

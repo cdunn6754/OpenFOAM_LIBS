@@ -161,6 +161,8 @@ protected:
 
     // Protected data
 
+
+
         // Parcel properties
 
             //- Mass fractions of gases []
@@ -186,19 +188,19 @@ protected:
   // Clint 07-11-17
   // New calcVelocity function for notional parcels. So here we will 
   // have some stochastic differential equation to update the U_p with
-  // template<class TrackData>
-  // const vector calcVelocity
-  // (
-  //  TrackData& td,
-  //  const scalar dt,           // timestep
-  //  const label celli,         // owner cell
-  //  const scalar Re,           // Reynolds number
-  //  const scalar mu,           // local carrier viscosity
-  //  const scalar mass,         // mass
-  //  const vector& Su,          // explicit particle momentum source
-  //  vector& dUTrans,           // momentum transfer to carrier
-  //  scalar& Spu                // linearised drag coefficient
-  //  ) const;
+  template<class TrackData>
+  const vector calcVelocity
+  (
+   TrackData& td,
+   const scalar dt,           // timestep
+   const label celli,         // owner cell
+   const scalar Re,           // Reynolds number
+   const scalar mu,           // local carrier viscosity
+   const scalar mass,         // mass
+   const vector& Su,          // explicit particle momentum source
+   vector& dUTrans,           // momentum transfer to carrier
+   scalar& Spu                // linearised drag coefficient
+   ) const;
 
 
 
