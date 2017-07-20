@@ -17,37 +17,31 @@ $(BASECLOUDS)/reactingMultiphaseCloud/reactingMultiphaseCloud.C
 /* kinematic parcel sub-models */
 KINEMATICPARCEL=$(DERIVEDPARCELS)/basicKinematicParcel
 $(KINEMATICPARCEL)/defineBasicKinematicParcel.C
-$(KINEMATICPARCEL)/makeBasicKinematicParcelSubmodels.C
 
 
 /* kinematic colliding parcel sub-models */
 KINEMATICCOLLIDINGPARCEL=$(DERIVEDPARCELS)/basicKinematicCollidingParcel
 $(KINEMATICCOLLIDINGPARCEL)/defineBasicKinematicCollidingParcel.C
-$(KINEMATICCOLLIDINGPARCEL)/makeBasicKinematicCollidingParcelSubmodels.C
 
 
 /* thermo parcel sub-models */
 THERMOPARCEL=$(DERIVEDPARCELS)/basicThermoParcel
 $(THERMOPARCEL)/defineBasicThermoParcel.C
-$(THERMOPARCEL)/makeBasicThermoParcelSubmodels.C
 
 
 /* reacting parcel sub-models */
 REACTINGPARCEL=$(DERIVEDPARCELS)/basicReactingParcel
 $(REACTINGPARCEL)/defineBasicReactingParcel.C
-$(REACTINGPARCEL)/makeBasicReactingParcelSubmodels.C
 
 
 /* reacting multiphase parcel sub-models */
 REACTINGMPPARCEL=$(DERIVEDPARCELS)/basicReactingMultiphaseParcel
 $(REACTINGMPPARCEL)/defineBasicReactingMultiphaseParcel.C
-$(REACTINGMPPARCEL)/makeBasicReactingMultiphaseParcelSubmodels.C
-
+parcels/makeDaemModel/makeDaemSubmodels.C
 
 /* kinematic MPPIC parcel sub-models */
 KINEMATICMPPICPARCEL=$(DERIVEDPARCELS)/basicKinematicMPPICParcel
 $(KINEMATICMPPICPARCEL)/defineBasicKinematicMPPICParcel.C
-$(KINEMATICMPPICPARCEL)/makeBasicKinematicMPPICParcelSubmodels.C
 
 
 /* bolt-on models */
@@ -99,7 +93,7 @@ $(MPPICTIMESCALE)/isotropic/isotropic.C
 
 
 /* integration schemes */
-IntegrationScheme/makeIntegrationSchemes.C
+
 
 
 /* phase properties */
@@ -113,7 +107,7 @@ clouds/Templates/KinematicCloud/cloudSolution/cloudSolution.C
 
 
 /* averaging methods */
-submodels/MPPIC/AveragingMethods/makeAveragingMethods.C
+
 
 
 LIB = $(FOAM_USER_LIBBIN)/libDaemLagrangianIntermediate

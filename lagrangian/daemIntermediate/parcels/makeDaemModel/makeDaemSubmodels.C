@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -23,25 +23,18 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef makeReactingMultiphaseParcelCompositionModels_H
-#define makeReactingMultiphaseParcelCompositionModels_H
+#include "basicReactingMultiphaseCloud.H"
 
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#include "NoComposition.H"
-#include "SingleMixtureFraction.H"
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#define makeReactingMultiphaseParcelCompositionModels(CloudType)               \
-                                                                               \
-    makeCompositionModel(CloudType);                                           \
-    makeCompositionModelType(NoComposition, CloudType);                        \
-    makeCompositionModelType(SingleMixtureFraction, CloudType);
+#include "makeDaemDevolatilsationModel.H"
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#endif
+
+makeDaemDevolatilisationModel
+(
+    basicReactingMultiphaseCloud
+);
+
 
 // ************************************************************************* //

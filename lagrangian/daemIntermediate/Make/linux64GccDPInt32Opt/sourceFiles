@@ -4,17 +4,12 @@ $(BASECLOUDS)/thermoCloud/thermoCloud.C \
 $(BASECLOUDS)/reactingCloud/reactingCloud.C \
 $(BASECLOUDS)/reactingMultiphaseCloud/reactingMultiphaseCloud.C \
 $(KINEMATICPARCEL)/defineBasicKinematicParcel.C \
-$(KINEMATICPARCEL)/makeBasicKinematicParcelSubmodels.C \
 $(KINEMATICCOLLIDINGPARCEL)/defineBasicKinematicCollidingParcel.C \
-$(KINEMATICCOLLIDINGPARCEL)/makeBasicKinematicCollidingParcelSubmodels.C \
 $(THERMOPARCEL)/defineBasicThermoParcel.C \
-$(THERMOPARCEL)/makeBasicThermoParcelSubmodels.C \
 $(REACTINGPARCEL)/defineBasicReactingParcel.C \
-$(REACTINGPARCEL)/makeBasicReactingParcelSubmodels.C \
 $(REACTINGMPPARCEL)/defineBasicReactingMultiphaseParcel.C \
-$(REACTINGMPPARCEL)/makeBasicReactingMultiphaseParcelSubmodels.C \
+parcels/makeDaemModel/makeDaemSubmodels.C \
 $(KINEMATICMPPICPARCEL)/defineBasicKinematicMPPICParcel.C \
-$(KINEMATICMPPICPARCEL)/makeBasicKinematicMPPICParcelSubmodels.C \
 $(RADIATION)/absorptionEmission/cloudAbsorptionEmission/cloudAbsorptionEmission.C \
 $(RADIATION)/scatter/cloudScatter/cloudScatter.C \
 submodels/Kinematic/PatchInteractionModel/LocalInteraction/patchInteractionData.C \
@@ -44,9 +39,7 @@ $(MPPICTIMESCALE)/TimeScaleModel/TimeScaleModel.C \
 $(MPPICTIMESCALE)/equilibrium/equilibrium.C \
 $(MPPICTIMESCALE)/nonEquilibrium/nonEquilibrium.C \
 $(MPPICTIMESCALE)/isotropic/isotropic.C \
-IntegrationScheme/makeIntegrationSchemes.C \
 phaseProperties/phaseProperties/phaseProperties.C \
 phaseProperties/phaseProperties/phasePropertiesIO.C \
 phaseProperties/phasePropertiesList/phasePropertiesList.C \
-clouds/Templates/KinematicCloud/cloudSolution/cloudSolution.C \
-submodels/MPPIC/AveragingMethods/makeAveragingMethods.C 
+clouds/Templates/KinematicCloud/cloudSolution/cloudSolution.C 

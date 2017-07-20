@@ -23,39 +23,17 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef makeThermoParcelForces_H
-#define makeThermoParcelForces_H
+#ifndef makeDAEMDevolatilisationModels_H
+#define makeDAEMDevolatilisationModels_H
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "SphereDragForce.H"
-#include "NonSphereDragForce.H"
-
-#include "SaffmanMeiLiftForce.H"
-#include "TomiyamaLiftForce.H"
-
-#include "GravityForce.H"
-#include "NonInertialFrameForce.H"
-#include "ParamagneticForce.H"
-#include "PressureGradientForce.H"
-#include "SRFForce.H"
-#include "VirtualMassForce.H"
+#include "DaemDevolatilisation.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#define makeThermoParcelForces(CloudType)                                      \
-                                                                               \
-    makeParticleForceModel(CloudType);                                         \
-    makeParticleForceModelType(SphereDragForce, CloudType);                    \
-    makeParticleForceModelType(NonSphereDragForce, CloudType);                 \
-    makeParticleForceModelType(SaffmanMeiLiftForce, CloudType);                \
-    makeParticleForceModelType(TomiyamaLiftForce, CloudType);                  \
-    makeParticleForceModelType(GravityForce, CloudType);                       \
-    makeParticleForceModelType(NonInertialFrameForce, CloudType);              \
-    makeParticleForceModelType(ParamagneticForce, CloudType);                  \
-    makeParticleForceModelType(PressureGradientForce, CloudType);              \
-    makeParticleForceModelType(SRFForce, CloudType);                           \
-    makeParticleForceModelType(VirtualMassForce, CloudType);
+#define makeDaemDevolatilisationModel(CloudType)          \
+    makeDevolatilisationModelType(DaemDevolatilisation, CloudType);
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
