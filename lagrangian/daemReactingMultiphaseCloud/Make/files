@@ -1,0 +1,5 @@
+
+/* Cloud base classes */
+daemReactingMultiphaseCloud.C
+
+LIB = $(FOAM_USER_LIBBIN)/libDaemReactingMultiphaseCloud
