@@ -1,3 +1,0 @@
-SOURCE = \
-basicDaemReactingMultiphaseParcel/defineBasicDaemReactingMultiphaseParcel.C \
-basicDaemReactingMultiphaseParcel/makeBasicDaemReactingMultiphaseParcelSubmodels.C 
