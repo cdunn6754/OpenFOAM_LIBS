@@ -72,7 +72,7 @@ Foam::DaemDevolatilisationModel<CloudType>::~DaemDevolatilisationModel()
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class CloudType>
-void Foam::DaemDevolatilisationModel<CloudType>::addToDaemDevolatilisationMass
+void Foam::DaemDevolatilisationModel<CloudType>::addToDevolatilisationMass
 (
     const scalar dMass
 )

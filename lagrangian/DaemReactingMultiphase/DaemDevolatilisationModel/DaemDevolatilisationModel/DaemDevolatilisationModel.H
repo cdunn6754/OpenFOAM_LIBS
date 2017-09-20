@@ -133,7 +133,7 @@ public:
         ) const = 0;
 
         //- Add to devolatilisation mass
-        void addToDaemDevolatilisationMass(const scalar dMass);
+        void addToDevolatilisationMass(const scalar dMass);
 
 
         // I-O

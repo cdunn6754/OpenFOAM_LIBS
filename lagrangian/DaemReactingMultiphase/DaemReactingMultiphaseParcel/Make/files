@@ -1,7 +1,0 @@
-basicDaemReactingMultiphaseParcel/defineBasicDaemReactingMultiphaseParcel.C
-
-basicDaemReactingMultiphaseParcel/makeBasicDaemReactingMultiphaseParcelSubmodels.C
-
-
-
-LIB = $(FOAM_USER_LIBBIN)/libDaemReactingMultiphaseParcel
