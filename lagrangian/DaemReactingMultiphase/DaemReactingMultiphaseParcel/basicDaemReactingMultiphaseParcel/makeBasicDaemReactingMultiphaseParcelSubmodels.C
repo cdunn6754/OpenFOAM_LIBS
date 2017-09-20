@@ -48,6 +48,10 @@ License
 
 // Stuff added 09-18-17 to get the turbulence stuff too
 #include "makeParcelTurbulenceDispersionModels.H"
+// More added to incorporate the smithIntrinsic surface reaction model we wrote
+#include "makeCoalParcelSmithIntrinsicSurfaceReactionModel.H"
+
+
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -86,6 +90,9 @@ makeReactingMultiphaseParcelSurfaceReactionModels
 
 // Daem dispersion
 makeParcelTurbulenceDispersionModels(basicDaemReactingMultiphaseCloud);
+
+// smithIntrinsic
+makeCoalParcelSmithIntrinsicSurfaceReactionModel(basicDaemReactingMultiphaseCloud);
 
 
 // ************************************************************************* //

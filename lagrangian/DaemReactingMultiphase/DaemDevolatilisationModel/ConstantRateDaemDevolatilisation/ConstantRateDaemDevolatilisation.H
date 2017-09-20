@@ -70,7 +70,7 @@ class ConstantRateDaemDevolatilisation
 public:
 
     //- Runtime type information
-    TypeName("constantRateDaemDevolatilisation");
+    TypeName("constantRateDevolatilisation");
 
 
     // Constructors

@@ -246,7 +246,7 @@ class DaemDaemDevolatilisation
 public:
 
     //- Runtime type information
-    TypeName("DaemDaemDevolatilisation");
+    TypeName("DaemDevolatilisation");
 
 
     // Constructors

@@ -991,5 +991,8 @@ $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/constants.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/fundamentalConstants.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/universalConstants.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/atomicConstants.H \
+/home/cdunn3/OpenFOAM/cdunn3-4.1/src/lagrangian/smithIntrinsicSurfaceReactionModel/lnInclude/makeCoalParcelSmithIntrinsicSurfaceReactionModel.H \
+/home/cdunn3/OpenFOAM/cdunn3-4.1/src/lagrangian/smithIntrinsicSurfaceReactionModel/lnInclude/smithIntrinsicRate.H \
+/home/cdunn3/OpenFOAM/cdunn3-4.1/src/lagrangian/smithIntrinsicSurfaceReactionModel/lnInclude/smithIntrinsicRate.C \
 
 

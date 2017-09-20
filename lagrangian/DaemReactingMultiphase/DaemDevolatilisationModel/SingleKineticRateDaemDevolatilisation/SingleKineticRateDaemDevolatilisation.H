@@ -191,7 +191,7 @@ class SingleKineticRateDaemDevolatilisation
 public:
 
     //- Runtime type information
-    TypeName("singleKineticRateDaemDevolatilisation");
+    TypeName("singleKineticRateDevolatilisation");
 
 
     // Constructors
