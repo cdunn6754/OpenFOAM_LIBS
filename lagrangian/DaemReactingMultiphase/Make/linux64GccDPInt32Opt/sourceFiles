@@ -1,4 +1,5 @@
 SOURCE = \
 DaemReactingMultiphaseCloud/baseClasses/daemReactingMultiphaseCloud.C \
 DaemReactingMultiphaseParcel/basicDaemReactingMultiphaseParcel/defineBasicDaemReactingMultiphaseParcel.C \
-DaemReactingMultiphaseParcel/basicDaemReactingMultiphaseParcel/makeBasicDaemReactingMultiphaseParcelSubmodels.C 
+DaemReactingMultiphaseParcel/basicDaemReactingMultiphaseParcel/makeBasicDaemReactingMultiphaseParcelSubmodels.C \
+DaemCoalCombustion/coalParcel/makeCoalParcelSubmodels.C 

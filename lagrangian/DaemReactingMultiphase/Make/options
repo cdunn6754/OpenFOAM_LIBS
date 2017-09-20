@@ -1,5 +1,6 @@
 EXE_INC = \
 	-I/home/cdunn3/OpenFOAM/cdunn3-4.1/src/lagrangian/smithIntrinsicSurfaceReactionModel/lnInclude \
+	-I$(LIB_SRC)/lagrangian/coalCombustion/lnInclude \
     -I$(LIB_SRC)/lagrangian/basic/lnInclude \
     -I$(LIB_SRC)/lagrangian/intermediate/lnInclude \
     -I$(LIB_SRC)/lagrangian/turbulence/lnInclude \
