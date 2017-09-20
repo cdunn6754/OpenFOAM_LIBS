@@ -46,6 +46,9 @@ License
 #include "makeReactingMultiphaseParcelDaemDevolatilisationModels.H"
 #include "makeReactingMultiphaseParcelSurfaceReactionModels.H"
 
+// Stuff added 09-18-17 to get the turbulence stuff too
+#include "makeParcelTurbulenceDispersionModels.H"
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 makeParcelCloudFunctionObjects(basicDaemReactingMultiphaseCloud);
@@ -80,6 +83,9 @@ makeReactingMultiphaseParcelSurfaceReactionModels
 (
     basicDaemReactingMultiphaseCloud
 );
+
+// Daem dispersion
+makeParcelTurbulenceDispersionModels(basicDaemReactingMultiphaseCloud);
 
 
 // ************************************************************************* //

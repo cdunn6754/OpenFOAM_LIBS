@@ -978,5 +978,18 @@ lnInclude/DaemDaemDevolatilisation.C \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/makeReactingMultiphaseParcelSurfaceReactionModels.H \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/NoSurfaceReaction.H \
 $(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/NoSurfaceReaction.C \
+$(WM_PROJECT_DIR)/src/lagrangian/turbulence/lnInclude/makeParcelTurbulenceDispersionModels.H \
+$(WM_PROJECT_DIR)/src/lagrangian/turbulence/lnInclude/GradientDispersionRAS.H \
+$(WM_PROJECT_DIR)/src/lagrangian/turbulence/lnInclude/DispersionRASModel.H \
+$(WM_PROJECT_DIR)/src/lagrangian/turbulence/lnInclude/DispersionRASModel.C \
+$(WM_PROJECT_DIR)/src/TurbulenceModels/turbulenceModels/lnInclude/turbulenceModel.H \
+$(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/nearWallDist.H \
+$(WM_PROJECT_DIR)/src/lagrangian/turbulence/lnInclude/GradientDispersionRAS.C \
+$(WM_PROJECT_DIR)/src/lagrangian/turbulence/lnInclude/StochasticDispersionRAS.H \
+$(WM_PROJECT_DIR)/src/lagrangian/turbulence/lnInclude/StochasticDispersionRAS.C \
+$(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/constants.H \
+$(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/fundamentalConstants.H \
+$(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/universalConstants.H \
+$(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/atomicConstants.H \
 
 
