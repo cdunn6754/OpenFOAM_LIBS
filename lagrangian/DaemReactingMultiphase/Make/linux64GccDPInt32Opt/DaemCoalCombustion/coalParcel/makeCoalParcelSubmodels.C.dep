@@ -801,5 +801,18 @@ lnInclude/DaemReactingMultiphaseParcel.H \
 lnInclude/DaemReactingMultiphaseParcelI.H \
 lnInclude/DaemReactingMultiphaseParcel.C \
 lnInclude/DaemReactingMultiphaseParcelIO.C \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/makeCoalParcelSurfaceReactionModels.H \
+$(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/NoSurfaceReaction.H \
+$(WM_PROJECT_DIR)/src/lagrangian/intermediate/lnInclude/NoSurfaceReaction.C \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationDiffusionLimitedRate.H \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationDiffusionLimitedRate.C \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationIntrinsicRate.H \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationIntrinsicRate.C \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationKineticDiffusionLimitedRate.H \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationKineticDiffusionLimitedRate.C \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationHurtMitchell.H \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationHurtMitchell.C \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationMurphyShaddix.H \
+$(WM_PROJECT_DIR)/src/lagrangian/coalCombustion/lnInclude/COxidationMurphyShaddix.C \
 
 
