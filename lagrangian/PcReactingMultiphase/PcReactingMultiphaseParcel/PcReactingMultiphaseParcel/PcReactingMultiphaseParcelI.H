@@ -243,7 +243,7 @@ inline Foam::label& Foam::PcReactingMultiphaseParcel<ParcelType>::canCombust()
 }
 
 template<class ParcelType>
-inline const Foam::scalarField& 
+inline Foam::scalarField& 
 Foam::PcReactingMultiphaseParcel<ParcelType>::tarFields()
 {
   return tarFields_;

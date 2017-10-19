@@ -1,13 +1,13 @@
 
 /* Cloud  base classes stuff */
-DaemReactingMultiphaseCloud/baseClasses/daemReactingMultiphaseCloud.C
+PcReactingMultiphaseCloud/baseClasses/pcReactingMultiphaseCloud.C
 
 /* Parcel Stuff */
-DaemReactingMultiphaseParcel/basicDaemReactingMultiphaseParcel/defineBasicDaemReactingMultiphaseParcel.C
-DaemReactingMultiphaseParcel/basicDaemReactingMultiphaseParcel/makeBasicDaemReactingMultiphaseParcelSubmodels.C
+PcReactingMultiphaseParcel/basicPcReactingMultiphaseParcel/defineBasicPcReactingMultiphaseParcel.C
+PcReactingMultiphaseParcel/basicPcReactingMultiphaseParcel/makeBasicPcReactingMultiphaseParcelSubmodels.C
 
 /* Make coal cloud and parcel objects */
-DaemCoalCombustion/coalParcel/makeCoalParcelSubmodels.C
+PcCoalCombustion/coalParcel/makeCoalParcelSubmodels.C
 
 
-LIB = $(FOAM_USER_LIBBIN)/libDaemReactingMultiphase
+LIB = $(FOAM_USER_LIBBIN)/libPcReactingMultiphase

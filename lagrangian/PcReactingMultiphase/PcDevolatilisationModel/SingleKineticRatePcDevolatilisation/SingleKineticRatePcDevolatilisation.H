@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::SingleKineticRateDaemDevolatilisation
+    Foam::SingleKineticRatePcDevolatilisation
 
 Description
     Single kinetic rate devolatisation model.
@@ -40,7 +40,7 @@ Description
 
     Usage:
 
-        SingleKineticRateDaemDevolatilisationCoeffs
+        SingleKineticRatePcDevolatilisationCoeffs
         {
             volatileData
             (
@@ -53,23 +53,23 @@ Description
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef SingleKineticRateDaemDevolatilisation_H
-#define SingleKineticRateDaemDevolatilisation_H
+#ifndef SingleKineticRatePcDevolatilisation_H
+#define SingleKineticRatePcDevolatilisation_H
 
-#include "DaemDevolatilisationModel.H"
+#include "PcDevolatilisationModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
 /*---------------------------------------------------------------------------*\
-              Class SingleKineticRateDaemDevolatilisation Declaration
+              Class SingleKineticRatePcDevolatilisation Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class CloudType>
-class SingleKineticRateDaemDevolatilisation
+class SingleKineticRatePcDevolatilisation
 :
-    public DaemDevolatilisationModel<CloudType>
+    public PcDevolatilisationModel<CloudType>
 {
     // Helper class to store specie-local volatile data
     class volatileData
@@ -197,30 +197,30 @@ public:
     // Constructors
 
         //- Construct from dictionary
-        SingleKineticRateDaemDevolatilisation
+        SingleKineticRatePcDevolatilisation
         (
             const dictionary& dict,
             CloudType& owner
         );
 
         //- Construct copy
-        SingleKineticRateDaemDevolatilisation
+        SingleKineticRatePcDevolatilisation
         (
-            const SingleKineticRateDaemDevolatilisation<CloudType>& dm
+            const SingleKineticRatePcDevolatilisation<CloudType>& dm
         );
 
         //- Construct and return a clone
-        virtual autoPtr<DaemDevolatilisationModel<CloudType>> clone() const
+        virtual autoPtr<PcDevolatilisationModel<CloudType>> clone() const
         {
-            return autoPtr<DaemDevolatilisationModel<CloudType>>
+            return autoPtr<PcDevolatilisationModel<CloudType>>
             (
-                new SingleKineticRateDaemDevolatilisation<CloudType>(*this)
+                new SingleKineticRatePcDevolatilisation<CloudType>(*this)
             );
         }
 
 
     //- Destructor
-    virtual ~SingleKineticRateDaemDevolatilisation();
+    virtual ~SingleKineticRatePcDevolatilisation();
 
 
     // Member Functions
@@ -238,7 +238,7 @@ public:
             const scalarField& YSolidEff,
             label& canCombust,
             scalarField& dMassDV,
-	    scalarField& integratedDaemRates
+	    scalarField& tarFields
         ) const;
 };
 
@@ -250,7 +250,7 @@ public:
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #ifdef NoRepository
-    #include "SingleKineticRateDaemDevolatilisation.C"
+    #include "SingleKineticRatePcDevolatilisation.C"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

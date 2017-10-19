@@ -23,14 +23,14 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "DaemCoalCloud.H"
+#include "PcCoalCloud.H"
 #include "makeCoalParcelSurfaceReactionModels.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    makeCoalParcelSurfaceReactionModels(DaemCoalCloud);
+    makeCoalParcelSurfaceReactionModels(PcCoalCloud);
 }
 
 

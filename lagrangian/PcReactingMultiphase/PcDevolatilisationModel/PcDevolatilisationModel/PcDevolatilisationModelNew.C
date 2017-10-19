@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -21,48 +21,39 @@ License
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
-Class
-    Foam::coalCloud
-
-Description
-    Cloud class to introduce coal parcels, with DAEM qualities.
-
 \*---------------------------------------------------------------------------*/
 
-#ifndef DaemCoalCloud_H
-#define DaemCoalCloud_H
-
-#include "Cloud.H"
-#include "KinematicCloud.H"
-#include "ThermoCloud.H"
-#include "ReactingCloud.H"
-#include "DaemReactingMultiphaseCloud.H"
-#include "DaemCoalParcel.H"
+#include "PcDevolatilisationModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-namespace Foam
+template<class CloudType>
+Foam::autoPtr<Foam::PcDevolatilisationModel<CloudType>>
+Foam::PcDevolatilisationModel<CloudType>::New
+(
+    const dictionary& dict,
+    CloudType& owner
+)
 {
-    typedef DaemReactingMultiphaseCloud
-    <
-        ReactingCloud
-        <
-            ThermoCloud
-            <
-                KinematicCloud
-                <
-                    Cloud
-                    <
-                        DaemCoalParcel
-                    >
-                >
-            >
-        >
-    > DaemCoalCloud;
+    const word modelType(dict.lookup("devolatilisationModel"));
+
+    Info<< "Selecting devolatilisation model " << modelType << endl;
+
+    typename dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(modelType);
+
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    {
+        FatalErrorInFunction
+            << "Unknown devolatilisation model type "
+            << modelType << nl << nl
+            << "Valid devolatilisation model types are:" << nl
+            << dictionaryConstructorTablePtr_->sortedToc()
+            << exit(FatalError);
+    }
+
+    return autoPtr<PcDevolatilisationModel<CloudType>>(cstrIter()(dict, owner));
 }
 
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#endif
 
 // ************************************************************************* //

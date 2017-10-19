@@ -1,0 +1,5 @@
+SOURCE = \
+PcReactingMultiphaseCloud/baseClasses/pcReactingMultiphaseCloud.C \
+PcReactingMultiphaseParcel/basicPcReactingMultiphaseParcel/defineBasicPcReactingMultiphaseParcel.C \
+PcReactingMultiphaseParcel/basicPcReactingMultiphaseParcel/makeBasicPcReactingMultiphaseParcelSubmodels.C \
+PcCoalCombustion/coalParcel/makeCoalParcelSubmodels.C 

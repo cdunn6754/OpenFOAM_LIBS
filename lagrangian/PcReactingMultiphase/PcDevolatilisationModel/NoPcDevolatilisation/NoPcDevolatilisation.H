@@ -22,83 +22,64 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::ConstantRateDaemDevolatilisation
+    Foam::NoPcDevolatilisation
 
 Description
-    Constant rate devolatisation model
-    - need to set vapourisation temperature to 600 K
+    Dummy devolatilisation model for 'none'
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef ConstantRateDaemDevolatilisation_H
-#define ConstantRateDaemDevolatilisation_H
+#ifndef NoPcDevolatilisation_H
+#define NoPcDevolatilisation_H
 
-#include "DaemDevolatilisationModel.H"
+#include "PcDevolatilisationModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
 /*---------------------------------------------------------------------------*\
-                 Class ConstantRateDaemDevolatilisation Declaration
+                     Class NoPcDevolatilisation Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class CloudType>
-class ConstantRateDaemDevolatilisation
+class NoPcDevolatilisation
 :
-    public DaemDevolatilisationModel<CloudType>
+    public PcDevolatilisationModel<CloudType>
 {
-    // Private data
-
-        // Model constants
-
-            //- List of volatile data - (name A0)
-            List<Tuple2<word, scalar>> volatileData_;
-
-            //- List of initial volatile mass fractions
-            List<scalar> YVolatile0_;
-
-            //- Mapping between local and cloud gaseous species
-            List<label> volatileToGasMap_;
-
-            //- Volatile residual coefficient (0-1)
-            //  When the fraction of volatiles are depleted below this
-            //  threshold, combustion can occur
-            const scalar residualCoeff_;
-
 
 public:
 
     //- Runtime type information
-    TypeName("constantRateDevolatilisation");
+    TypeName("none");
 
 
     // Constructors
 
         //- Construct from dictionary
-        ConstantRateDaemDevolatilisation(const dictionary& dict, CloudType& owner);
+        NoPcDevolatilisation(const dictionary&, CloudType& owner);
 
         //- Construct copy
-        ConstantRateDaemDevolatilisation
-        (
-            const ConstantRateDaemDevolatilisation<CloudType>& dm
-        );
+        NoPcDevolatilisation(const NoPcDevolatilisation<CloudType>& dm);
 
         //- Construct and return a clone
-        virtual autoPtr<DaemDevolatilisationModel<CloudType>> clone() const
+        virtual autoPtr<PcDevolatilisationModel<CloudType>> clone() const
         {
-            return autoPtr<DaemDevolatilisationModel<CloudType>>
+            return autoPtr<PcDevolatilisationModel<CloudType>>
             (
-                new ConstantRateDaemDevolatilisation<CloudType>(*this)
+                new NoPcDevolatilisation<CloudType>(*this)
             );
         }
 
 
     //- Destructor
-    virtual ~ConstantRateDaemDevolatilisation();
+    virtual ~NoPcDevolatilisation();
 
 
     // Member Functions
+
+        //- Flag to indicate whether model activates devolatilisation model
+        virtual bool active() const;
 
         //- Update model
         virtual void calculate
@@ -113,7 +94,7 @@ public:
             const scalarField& YSolidEff,
             label& canCombust,
             scalarField& dMassDV,
-	    scalarField& integratedDaemRates
+	    scalarField& tarfields
         ) const;
 };
 
@@ -125,7 +106,7 @@ public:
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #ifdef NoRepository
-    #include "ConstantRateDaemDevolatilisation.C"
+    #include "NoPcDevolatilisation.C"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

@@ -22,19 +22,19 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::DaemDevolatilisationModel
+    Foam::PcDevolatilisationModel
 
 Description
     Templated devolatilisation model class
 
 SourceFiles
-    DaemDevolatilisationModel.C
-    DaemDevolatilisationModelNew.C
+    PcDevolatilisationModel.C
+    PcDevolatilisationModelNew.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef DaemDevolatilisationModel_H
-#define DaemDevolatilisationModel_H
+#ifndef PcDevolatilisationModel_H
+#define PcDevolatilisationModel_H
 
 #include "IOdictionary.H"
 #include "autoPtr.H"
@@ -47,11 +47,11 @@ namespace Foam
 {
 
 /*---------------------------------------------------------------------------*\
-                    Class DaemDevolatilisationModel Declaration
+                    Class PcDevolatilisationModel Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class CloudType>
-class DaemDevolatilisationModel
+class PcDevolatilisationModel
 :
     public CloudSubModelBase<CloudType>
 {
@@ -72,7 +72,7 @@ public:
     declareRunTimeSelectionTable
     (
         autoPtr,
-        DaemDevolatilisationModel,
+        PcDevolatilisationModel,
         dictionary,
         (
             const dictionary& dict,
@@ -85,10 +85,10 @@ public:
     // Constructors
 
         //- Construct null from owner
-        DaemDevolatilisationModel(CloudType& owner);
+        PcDevolatilisationModel(CloudType& owner);
 
         //- Construct from dictionary
-        DaemDevolatilisationModel
+        PcDevolatilisationModel
         (
             const dictionary& dict,
             CloudType& owner,
@@ -96,18 +96,18 @@ public:
         );
 
         //- Construct copy
-        DaemDevolatilisationModel(const DaemDevolatilisationModel<CloudType>& dm);
+        PcDevolatilisationModel(const PcDevolatilisationModel<CloudType>& dm);
 
         //- Construct and return a clone
-        virtual autoPtr<DaemDevolatilisationModel<CloudType>> clone() const = 0;
+        virtual autoPtr<PcDevolatilisationModel<CloudType>> clone() const = 0;
 
 
     //- Destructor
-    virtual ~DaemDevolatilisationModel();
+    virtual ~PcDevolatilisationModel();
 
 
     //- Selector
-    static autoPtr<DaemDevolatilisationModel<CloudType>> New
+    static autoPtr<PcDevolatilisationModel<CloudType>> New
     (
         const dictionary& dict,
         CloudType& owner
@@ -129,7 +129,7 @@ public:
             const scalarField& YSolidEff,
             label& canCombust,
             scalarField& dMassDV,
-	    scalarField& integratedDaemRates
+	    scalarField& tarFields
         ) const = 0;
 
         //- Add to devolatilisation mass
@@ -149,42 +149,42 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#define makeDaemDevolatilisationModel(CloudType)                                   \
+#define makePcDevolatilisationModel(CloudType)                                   \
                                                                                \
-    typedef Foam::CloudType::daemReactingMultiphaseCloudType                   \
-        daemReactingMultiphaseCloudType;                                       \
+    typedef Foam::CloudType::pcReactingMultiphaseCloudType                   \
+        pcReactingMultiphaseCloudType;                                       \
     defineNamedTemplateTypeNameAndDebug                                        \
     (                                                                          \
-        Foam::DaemDevolatilisationModel<daemReactingMultiphaseCloudType>,      \
+        Foam::PcDevolatilisationModel<pcReactingMultiphaseCloudType>,      \
         0                                                                      \
     );                                                                         \
     namespace Foam                                                             \
     {                                                                          \
         defineTemplateRunTimeSelectionTable                                    \
         (                                                                      \
-            DaemDevolatilisationModel<daemReactingMultiphaseCloudType>,        \
+            PcDevolatilisationModel<pcReactingMultiphaseCloudType>,        \
             dictionary                                                         \
         );                                                                     \
     }
 
 
-#define makeDaemDevolatilisationModelType(SS, CloudType)                       \
+#define makePcDevolatilisationModelType(SS, CloudType)                       \
                                                                                \
-    typedef Foam::CloudType::daemReactingMultiphaseCloudType                   \
-        daemReactingMultiphaseCloudType;                                       \
+    typedef Foam::CloudType::pcReactingMultiphaseCloudType                   \
+        pcReactingMultiphaseCloudType;                                       \
     defineNamedTemplateTypeNameAndDebug                                        \
-        (Foam::SS<daemReactingMultiphaseCloudType>, 0);                        \
+        (Foam::SS<pcReactingMultiphaseCloudType>, 0);                        \
                                                                                \
-    Foam::DaemDevolatilisationModel<daemReactingMultiphaseCloudType>::         \
+    Foam::PcDevolatilisationModel<pcReactingMultiphaseCloudType>::         \
         adddictionaryConstructorToTable                                        \
-        <Foam::SS<daemReactingMultiphaseCloudType>>                            \
-        add##SS##CloudType##daemReactingMultiphaseCloudType##ConstructorToTable_;
+        <Foam::SS<pcReactingMultiphaseCloudType>>                            \
+        add##SS##CloudType##pcreactingMultiphaseCloudType##ConstructorToTable_;
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #ifdef NoRepository
-    #include "DaemDevolatilisationModel.C"
+    #include "PcDevolatilisationModel.C"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

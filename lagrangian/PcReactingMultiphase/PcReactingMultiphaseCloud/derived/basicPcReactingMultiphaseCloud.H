@@ -29,8 +29,8 @@ Description
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef basicDaemReactingMultiphaseCloud_H
-#define basicDaemReactingMultiphaseCloud_H
+#ifndef basicPcReactingMultiphaseCloud_H
+#define basicPcReactingMultiphaseCloud_H
 
 #include "Cloud.H"
 #include "KinematicCloud.H"

@@ -23,18 +23,19 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "ConstantRateDaemDevolatilisation.H"
+#include "SingleKineticRatePcDevolatilisation.H"
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class CloudType>
-Foam::ConstantRateDaemDevolatilisation<CloudType>::ConstantRateDaemDevolatilisation
+Foam::SingleKineticRatePcDevolatilisation<CloudType>::
+SingleKineticRatePcDevolatilisation
 (
     const dictionary& dict,
     CloudType& owner
 )
 :
-    DaemDevolatilisationModel<CloudType>(dict, owner, typeName),
+    PcDevolatilisationModel<CloudType>(dict, owner, typeName),
     volatileData_(this->coeffDict().lookup("volatileData")),
     YVolatile0_(volatileData_.size()),
     volatileToGasMap_(volatileData_.size()),
@@ -43,7 +44,7 @@ Foam::ConstantRateDaemDevolatilisation<CloudType>::ConstantRateDaemDevolatilisat
     if (volatileData_.empty())
     {
         WarningInFunction
-            << "DaemDevolatilisation model selected, but no volatiles defined"
+            << "PcDevolatilisation model selected, but no volatiles defined"
             << nl << endl;
     }
     else
@@ -56,7 +57,7 @@ Foam::ConstantRateDaemDevolatilisation<CloudType>::ConstantRateDaemDevolatilisat
         const scalarField& YGas = owner.composition().Y0(idGas);
         forAll(volatileData_, i)
         {
-            const word& specieName = volatileData_[i].first();
+            const word& specieName = volatileData_[i].name();
             const label id = owner.composition().localId(idGas, specieName);
             volatileToGasMap_[i] = id;
             YVolatile0_[i] = YGasTot*YGas[id];
@@ -69,12 +70,13 @@ Foam::ConstantRateDaemDevolatilisation<CloudType>::ConstantRateDaemDevolatilisat
 
 
 template<class CloudType>
-Foam::ConstantRateDaemDevolatilisation<CloudType>::ConstantRateDaemDevolatilisation
+Foam::SingleKineticRatePcDevolatilisation<CloudType>::
+SingleKineticRatePcDevolatilisation
 (
-    const ConstantRateDaemDevolatilisation<CloudType>& dm
+    const SingleKineticRatePcDevolatilisation<CloudType>& dm
 )
 :
-    DaemDevolatilisationModel<CloudType>(dm),
+    PcDevolatilisationModel<CloudType>(dm),
     volatileData_(dm.volatileData_),
     YVolatile0_(dm.YVolatile0_),
     volatileToGasMap_(dm.volatileToGasMap_),
@@ -85,14 +87,15 @@ Foam::ConstantRateDaemDevolatilisation<CloudType>::ConstantRateDaemDevolatilisat
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
 template<class CloudType>
-Foam::ConstantRateDaemDevolatilisation<CloudType>::~ConstantRateDaemDevolatilisation()
+Foam::SingleKineticRatePcDevolatilisation<CloudType>::
+~SingleKineticRatePcDevolatilisation()
 {}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class CloudType>
-void Foam::ConstantRateDaemDevolatilisation<CloudType>::calculate
+void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
 (
     const scalar dt,
     const scalar age,
@@ -104,7 +107,7 @@ void Foam::ConstantRateDaemDevolatilisation<CloudType>::calculate
     const scalarField& YSolidEff,
     label& canCombust,
     scalarField& dMassDV,
-    scalarField& integratedDaemRates
+    scalarField& tarFields
 ) const
 {
     bool done = true;
@@ -118,10 +121,14 @@ void Foam::ConstantRateDaemDevolatilisation<CloudType>::calculate
         done = done && (massVolatile <= residualCoeff_*massVolatile0);
 
         // Model coefficients
-        const scalar A0 = volatileData_[i].second();
+        const scalar A1 = volatileData_[i].A1();
+        const scalar E = volatileData_[i].E();
+
+        // Kinetic rate
+        const scalar kappa = A1*exp(-E/(RR*T));
 
         // Mass transferred from particle to carrier gas phase
-        dMassDV[id] = min(dt*A0*massVolatile0, massVolatile);
+        dMassDV[id] = min(dt*kappa*massVolatile, massVolatile);
     }
 
     if (done && canCombust != -1)

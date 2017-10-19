@@ -22,30 +22,30 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::DaemCoalParcel
+    Foam::PcCoalParcel
 
 Description
-    Definition of coal parcel, with daem functionality
+    Definition of coal parcel, with Pc functionality
 
 SourceFiles
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef DaemCoalParcel_H
-#define DaemCoalParcel_H
+#ifndef PcCoalParcel_H
+#define PcCoalParcel_H
 
 #include "contiguous.H"
 #include "particle.H"
 #include "KinematicParcel.H"
 #include "ThermoParcel.H"
 #include "ReactingParcel.H"
-#include "DaemReactingMultiphaseParcel.H"
+#include "PcReactingMultiphaseParcel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    typedef DaemReactingMultiphaseParcel
+    typedef PcReactingMultiphaseParcel
     <
         ReactingParcel
         <
@@ -57,10 +57,10 @@ namespace Foam
                 >
             >
         >
-    > DaemCoalParcel;
+    > PcCoalParcel;
 
     template<>
-    inline bool contiguous<DaemCoalParcel>()
+    inline bool contiguous<PcCoalParcel>()
     {
         return false;
     }

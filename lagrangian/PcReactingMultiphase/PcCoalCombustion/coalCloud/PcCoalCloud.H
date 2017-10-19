@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -21,39 +21,48 @@ License
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
+Class
+    Foam::coalCloud
+
+Description
+    Cloud class to introduce coal parcels, with Pc qualities.
+
 \*---------------------------------------------------------------------------*/
 
-#include "DaemDevolatilisationModel.H"
+#ifndef DaemCoalCloud_H
+#define DaemCoalCloud_H
+
+#include "Cloud.H"
+#include "KinematicCloud.H"
+#include "ThermoCloud.H"
+#include "ReactingCloud.H"
+#include "PcReactingMultiphaseCloud.H"
+#include "PcCoalParcel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-template<class CloudType>
-Foam::autoPtr<Foam::DaemDevolatilisationModel<CloudType>>
-Foam::DaemDevolatilisationModel<CloudType>::New
-(
-    const dictionary& dict,
-    CloudType& owner
-)
+namespace Foam
 {
-    const word modelType(dict.lookup("devolatilisationModel"));
-
-    Info<< "Selecting devolatilisation model " << modelType << endl;
-
-    typename dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(modelType);
-
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
-    {
-        FatalErrorInFunction
-            << "Unknown devolatilisation model type "
-            << modelType << nl << nl
-            << "Valid devolatilisation model types are:" << nl
-            << dictionaryConstructorTablePtr_->sortedToc()
-            << exit(FatalError);
-    }
-
-    return autoPtr<DaemDevolatilisationModel<CloudType>>(cstrIter()(dict, owner));
+    typedef PcReactingMultiphaseCloud
+    <
+        ReactingCloud
+        <
+            ThermoCloud
+            <
+                KinematicCloud
+                <
+                    Cloud
+                    <
+                        PcCoalParcel
+                    >
+                >
+            >
+        >
+    > PcCoalCloud;
 }
 
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#endif
 
 // ************************************************************************* //

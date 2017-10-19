@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -23,82 +23,66 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "DaemDevolatilisationModel.H"
+#include "NoPcDevolatilisation.H"
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class CloudType>
-Foam::DaemDevolatilisationModel<CloudType>::DaemDevolatilisationModel
+Foam::NoPcDevolatilisation<CloudType>::NoPcDevolatilisation
 (
+    const dictionary&,
     CloudType& owner
 )
 :
-    CloudSubModelBase<CloudType>(owner),
-    dMass_(0.0)
+    PcDevolatilisationModel<CloudType>(owner)
 {}
 
 
 template<class CloudType>
-Foam::DaemDevolatilisationModel<CloudType>::DaemDevolatilisationModel
+Foam::NoPcDevolatilisation<CloudType>::NoPcDevolatilisation
 (
-    const dictionary& dict,
-    CloudType& owner,
-    const word& type
+    const NoPcDevolatilisation<CloudType>& dm
 )
 :
-    CloudSubModelBase<CloudType>(owner, dict, typeName, type),
-    dMass_(0.0)
-{}
-
-
-template<class CloudType>
-Foam::DaemDevolatilisationModel<CloudType>::DaemDevolatilisationModel
-(
-    const DaemDevolatilisationModel<CloudType>& dm
-)
-:
-    CloudSubModelBase<CloudType>(dm),
-    dMass_(dm.dMass_)
+    PcDevolatilisationModel<CloudType>(dm.owner_)
 {}
 
 
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
 template<class CloudType>
-Foam::DaemDevolatilisationModel<CloudType>::~DaemDevolatilisationModel()
+Foam::NoPcDevolatilisation<CloudType>::~NoPcDevolatilisation()
 {}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class CloudType>
-void Foam::DaemDevolatilisationModel<CloudType>::addToDevolatilisationMass
-(
-    const scalar dMass
-)
+bool Foam::NoPcDevolatilisation<CloudType>::active() const
 {
-    dMass_ += dMass;
+    return false;
 }
 
 
 template<class CloudType>
-void Foam::DaemDevolatilisationModel<CloudType>::info(Ostream& os)
+void Foam::NoPcDevolatilisation<CloudType>::calculate
+(
+    const scalar,
+    const scalar,
+    const scalar,
+    const scalar,
+    const scalar,
+    const scalarField&,
+    const scalarField&,
+    const scalarField&,
+    label& canCombust,
+    scalarField&,
+    scalarField&
+) const
 {
-    const scalar mass0 = this->template getBaseProperty<scalar>("mass");
-    const scalar massTotal = mass0 + returnReduce(dMass_, sumOp<scalar>());
-
-    Info<< "    Mass transfer devolatilisation  = " << massTotal << nl;
-
-    if (this->writeTime())
-    {
-        this->setBaseProperty("mass", massTotal);
-        dMass_ = 0.0;
-    }
+    // Model does not stop combustion taking place
+    canCombust = true;
 }
 
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#include "DaemDevolatilisationModelNew.C"
 
 // ************************************************************************* //

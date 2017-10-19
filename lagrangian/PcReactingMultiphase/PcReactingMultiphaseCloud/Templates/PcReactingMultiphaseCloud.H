@@ -41,7 +41,7 @@ SourceFiles
 #ifndef PcReactingMultiphaseCloud_H
 #define PcReactingMultiphaseCloud_H
 
-#include "psReactingMultiphaseCloud.H"
+#include "pcReactingMultiphaseCloud.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
