@@ -1,0 +1,10 @@
+
+/* Cloud  base classes stuff */
+DaemReactingMultiphaseCloud/baseClasses/daemReactingMultiphaseCloud.C
+
+/* Parcel Stuff */
+basicDaemReactingMultiphaseParcel/defineBasicDaemReactingMultiphaseParcel.C
+basicDaemReactingMultiphaseParcel/makeBasicDaemReactingMultiphaseParcelSubmodels.C
+
+
+LIB = $(FOAM_USER_LIBBIN)/libDaemReactingMultiphase
