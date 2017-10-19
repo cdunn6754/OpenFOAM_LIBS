@@ -26,8 +26,8 @@ License
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class CloudType>
-inline const Foam::DaemReactingMultiphaseCloud<CloudType>&
-Foam::DaemReactingMultiphaseCloud<CloudType>::cloudCopy() const
+inline const Foam::PcReactingMultiphaseCloud<CloudType>&
+Foam::PcReactingMultiphaseCloud<CloudType>::cloudCopy() const
 {
     return cloudCopyPtr_();
 }
@@ -35,7 +35,7 @@ Foam::DaemReactingMultiphaseCloud<CloudType>::cloudCopy() const
 
 template<class CloudType>
 inline const typename CloudType::particleType::constantProperties&
-Foam::DaemReactingMultiphaseCloud<CloudType>::constProps() const
+Foam::PcReactingMultiphaseCloud<CloudType>::constProps() const
 {
     return constProps_;
 }
@@ -43,29 +43,29 @@ Foam::DaemReactingMultiphaseCloud<CloudType>::constProps() const
 
 template<class CloudType>
 inline typename CloudType::particleType::constantProperties&
-Foam::DaemReactingMultiphaseCloud<CloudType>::constProps()
+Foam::PcReactingMultiphaseCloud<CloudType>::constProps()
 {
     return constProps_;
 }
 
 
 template<class CloudType>
-inline const Foam::DaemDevolatilisationModel
+inline const Foam::PcDevolatilisationModel
 <
-    Foam::DaemReactingMultiphaseCloud<CloudType>
+    Foam::PcReactingMultiphaseCloud<CloudType>
 >&
-Foam::DaemReactingMultiphaseCloud<CloudType>::devolatilisation() const
+Foam::PcReactingMultiphaseCloud<CloudType>::devolatilisation() const
 {
     return devolatilisationModel_;
 }
 
 
 template<class CloudType>
-inline Foam::DaemDevolatilisationModel
+inline Foam::PcDevolatilisationModel
 <
-    Foam::DaemReactingMultiphaseCloud<CloudType>
+    Foam::PcReactingMultiphaseCloud<CloudType>
 >&
-Foam::DaemReactingMultiphaseCloud<CloudType>::devolatilisation()
+Foam::PcReactingMultiphaseCloud<CloudType>::devolatilisation()
 {
     return devolatilisationModel_();
 }
@@ -74,9 +74,9 @@ Foam::DaemReactingMultiphaseCloud<CloudType>::devolatilisation()
 template<class CloudType>
 inline const Foam::SurfaceReactionModel
 <
-    Foam::DaemReactingMultiphaseCloud<CloudType>
+    Foam::PcReactingMultiphaseCloud<CloudType>
 >&
-Foam::DaemReactingMultiphaseCloud<CloudType>::surfaceReaction() const
+Foam::PcReactingMultiphaseCloud<CloudType>::surfaceReaction() const
 {
     return surfaceReactionModel_;
 }
@@ -85,9 +85,9 @@ Foam::DaemReactingMultiphaseCloud<CloudType>::surfaceReaction() const
 template<class CloudType>
 inline Foam::SurfaceReactionModel
 <
-    Foam::DaemReactingMultiphaseCloud<CloudType>
+    Foam::PcReactingMultiphaseCloud<CloudType>
 >&
-Foam::DaemReactingMultiphaseCloud<CloudType>::surfaceReaction()
+Foam::PcReactingMultiphaseCloud<CloudType>::surfaceReaction()
 {
     return surfaceReactionModel_();
 }

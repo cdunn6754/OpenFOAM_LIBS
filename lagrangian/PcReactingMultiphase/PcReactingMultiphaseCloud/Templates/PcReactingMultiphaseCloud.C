@@ -23,19 +23,19 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "DaemReactingMultiphaseCloud.H"
+#include "PcReactingMultiphaseCloud.H"
 
-#include "DaemDevolatilisationModel.H"
+#include "PcDevolatilisationModel.H"
 #include "SurfaceReactionModel.H"
 
 // * * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * //
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::setModels()
+void Foam::PcReactingMultiphaseCloud<CloudType>::setModels()
 {
     devolatilisationModel_.reset
     (
-        DaemDevolatilisationModel<DaemReactingMultiphaseCloud<CloudType>>::New
+        PcDevolatilisationModel<PcReactingMultiphaseCloud<CloudType>>::New
         (
             this->subModelProperties(),
             *this
@@ -44,7 +44,7 @@ void Foam::DaemReactingMultiphaseCloud<CloudType>::setModels()
 
     surfaceReactionModel_.reset
     (
-        SurfaceReactionModel<DaemReactingMultiphaseCloud<CloudType>>::New
+        SurfaceReactionModel<PcReactingMultiphaseCloud<CloudType>>::New
         (
             this->subModelProperties(),
             *this
@@ -54,9 +54,9 @@ void Foam::DaemReactingMultiphaseCloud<CloudType>::setModels()
 
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::cloudReset
+void Foam::PcReactingMultiphaseCloud<CloudType>::cloudReset
 (
-    DaemReactingMultiphaseCloud<CloudType>& c
+    PcReactingMultiphaseCloud<CloudType>& c
 )
 {
     CloudType::cloudReset(c);
@@ -72,7 +72,7 @@ void Foam::DaemReactingMultiphaseCloud<CloudType>::cloudReset
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class CloudType>
-Foam::DaemReactingMultiphaseCloud<CloudType>::DaemReactingMultiphaseCloud
+Foam::PcReactingMultiphaseCloud<CloudType>::PcReactingMultiphaseCloud
 (
     const word& cloudName,
     const volScalarField& rho,
@@ -83,7 +83,7 @@ Foam::DaemReactingMultiphaseCloud<CloudType>::DaemReactingMultiphaseCloud
 )
 :
     CloudType(cloudName, rho, U, g, thermo, false),
-    daemReactingMultiphaseCloud(),
+    pcReactingMultiphaseCloud(),
     cloudCopyPtr_(NULL),
     constProps_(this->particleProperties()),
     devolatilisationModel_(NULL),
@@ -109,14 +109,14 @@ Foam::DaemReactingMultiphaseCloud<CloudType>::DaemReactingMultiphaseCloud
 
 
 template<class CloudType>
-Foam::DaemReactingMultiphaseCloud<CloudType>::DaemReactingMultiphaseCloud
+Foam::PcReactingMultiphaseCloud<CloudType>::PcReactingMultiphaseCloud
 (
-    DaemReactingMultiphaseCloud<CloudType>& c,
+    PcReactingMultiphaseCloud<CloudType>& c,
     const word& name
 )
 :
     CloudType(c, name),
-    daemReactingMultiphaseCloud(),
+    pcReactingMultiphaseCloud(),
     cloudCopyPtr_(NULL),
     constProps_(c.constProps_),
     devolatilisationModel_(c.devolatilisationModel_->clone()),
@@ -127,15 +127,15 @@ Foam::DaemReactingMultiphaseCloud<CloudType>::DaemReactingMultiphaseCloud
 
 
 template<class CloudType>
-Foam::DaemReactingMultiphaseCloud<CloudType>::DaemReactingMultiphaseCloud
+Foam::PcReactingMultiphaseCloud<CloudType>::PcReactingMultiphaseCloud
 (
     const fvMesh& mesh,
     const word& name,
-    const DaemReactingMultiphaseCloud<CloudType>& c
+    const PcReactingMultiphaseCloud<CloudType>& c
 )
 :
     CloudType(mesh, name, c),
-    daemReactingMultiphaseCloud(),
+    pcReactingMultiphaseCloud(),
     cloudCopyPtr_(NULL),
     constProps_(),
     devolatilisationModel_(NULL),
@@ -148,14 +148,14 @@ Foam::DaemReactingMultiphaseCloud<CloudType>::DaemReactingMultiphaseCloud
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
 template<class CloudType>
-Foam::DaemReactingMultiphaseCloud<CloudType>::~DaemReactingMultiphaseCloud()
+Foam::PcReactingMultiphaseCloud<CloudType>::~PcReactingMultiphaseCloud()
 {}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::setParcelThermoProperties
+void Foam::PcReactingMultiphaseCloud<CloudType>::setParcelThermoProperties
 (
     parcelType& parcel,
     const scalar lagrangianDt
@@ -174,7 +174,7 @@ void Foam::DaemReactingMultiphaseCloud<CloudType>::setParcelThermoProperties
 
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::checkParcelProperties
+void Foam::PcReactingMultiphaseCloud<CloudType>::checkParcelProperties
 (
     parcelType& parcel,
     const scalar lagrangianDt,
@@ -212,11 +212,11 @@ void Foam::DaemReactingMultiphaseCloud<CloudType>::checkParcelProperties
 
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::storeState()
+void Foam::PcReactingMultiphaseCloud<CloudType>::storeState()
 {
     cloudCopyPtr_.reset
     (
-        static_cast<DaemReactingMultiphaseCloud<CloudType>*>
+        static_cast<PcReactingMultiphaseCloud<CloudType>*>
         (
             clone(this->name() + "Copy").ptr()
         )
@@ -225,7 +225,7 @@ void Foam::DaemReactingMultiphaseCloud<CloudType>::storeState()
 
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::restoreState()
+void Foam::PcReactingMultiphaseCloud<CloudType>::restoreState()
 {
     cloudReset(cloudCopyPtr_());
     cloudCopyPtr_.clear();
@@ -233,19 +233,19 @@ void Foam::DaemReactingMultiphaseCloud<CloudType>::restoreState()
 
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::resetSourceTerms()
+void Foam::PcReactingMultiphaseCloud<CloudType>::resetSourceTerms()
 {
     CloudType::resetSourceTerms();
 }
 
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::evolve()
+void Foam::PcReactingMultiphaseCloud<CloudType>::evolve()
 {
     if (this->solution().canEvolve())
     {
         typename parcelType::template
-            TrackingData<DaemReactingMultiphaseCloud<CloudType>> td(*this);
+            TrackingData<PcReactingMultiphaseCloud<CloudType>> td(*this);
 
         this->solve(td);
     }
@@ -253,12 +253,12 @@ void Foam::DaemReactingMultiphaseCloud<CloudType>::evolve()
 
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::autoMap
+void Foam::PcReactingMultiphaseCloud<CloudType>::autoMap
 (
     const mapPolyMesh& mapper
 )
 {
-    typedef typename particle::TrackingData<DaemReactingMultiphaseCloud<CloudType>>
+    typedef typename particle::TrackingData<PcReactingMultiphaseCloud<CloudType>>
         tdType;
 
     tdType td(*this);
@@ -270,7 +270,7 @@ void Foam::DaemReactingMultiphaseCloud<CloudType>::autoMap
 
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::info()
+void Foam::PcReactingMultiphaseCloud<CloudType>::info()
 {
     CloudType::info();
 
@@ -280,7 +280,7 @@ void Foam::DaemReactingMultiphaseCloud<CloudType>::info()
 
 
 template<class CloudType>
-void Foam::DaemReactingMultiphaseCloud<CloudType>::writeFields() const
+void Foam::PcReactingMultiphaseCloud<CloudType>::writeFields() const
 {
     if (this->size())
     {

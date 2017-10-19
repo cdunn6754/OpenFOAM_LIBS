@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -23,16 +23,26 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "basicDaemReactingMultiphaseParcel.H"
-#include "Cloud.H"
+#include "pcReactingMultiphaseCloud.H"
 
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    defineTemplateTypeNameAndDebug(basicDaemReactingMultiphaseParcel, 0);
-    defineTemplateTypeNameAndDebug(Cloud<basicDaemReactingMultiphaseParcel>, 0);
+    defineTypeNameAndDebug(pcReactingMultiphaseCloud, 0);
 }
+
+
+// * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
+
+Foam::pcReactingMultiphaseCloud::pcReactingMultiphaseCloud()
+{}
+
+
+// * * * * * * * * * * * * * * * *  Destructor   * * * * * * * * * * * * * * //
+
+Foam::pcReactingMultiphaseCloud::~pcReactingMultiphaseCloud()
+{}
 
 
 // ************************************************************************* //

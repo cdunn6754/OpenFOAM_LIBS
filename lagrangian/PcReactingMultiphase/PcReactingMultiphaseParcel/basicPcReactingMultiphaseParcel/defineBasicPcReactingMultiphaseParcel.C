@@ -21,56 +21,18 @@ License
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
-Class
-    Foam::basicDaemReactingMultiphaseParcel
-
-Description
-    Definition of basic reacting multiphase parcel, with DAEM rates
-
-SourceFiles
-    basicDaemReactingMultiphaseParcel.C
-    basicDaemReactingMultiphaseParcelIO.C
-
 \*---------------------------------------------------------------------------*/
 
-#ifndef basicDaemReactingMultiphaseParcel_H
-#define basicDaemReactingMultiphaseParcel_H
-
-#include "contiguous.H"
-#include "particle.H"
-#include "KinematicParcel.H"
-#include "ThermoParcel.H"
-#include "ReactingParcel.H"
-#include "DaemReactingMultiphaseParcel.H"
+#include "basicPcReactingMultiphaseParcel.H"
+#include "Cloud.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    typedef DaemReactingMultiphaseParcel
-    <
-        ReactingParcel
-        <
-            ThermoParcel
-            <
-                KinematicParcel
-                <
-                    particle
-                >
-            >
-        >
-    > basicDaemReactingMultiphaseParcel;
-
-    template<>
-    inline bool contiguous<basicDaemReactingMultiphaseParcel>()
-    {
-        return false;
-    }
+    defineTemplateTypeNameAndDebug(basicPcReactingMultiphaseParcel, 0);
+    defineTemplateTypeNameAndDebug(Cloud<basicPcReactingMultiphaseParcel>, 0);
 }
 
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#endif
 
 // ************************************************************************* //

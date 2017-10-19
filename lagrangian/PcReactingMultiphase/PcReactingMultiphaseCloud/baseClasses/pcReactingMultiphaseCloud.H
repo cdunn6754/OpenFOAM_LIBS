@@ -22,18 +22,18 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::daemReactingMultiphaseCloud
+    Foam::pcReactingMultiphaseCloud
 
 Description
     Virtual abstract base class for templated reactingMultiphaseCloud
 
 SourceFiles
-    daemReactingMultiphaseCloud.C
+    pcReactingMultiphaseCloud.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef daemReactingMultiphaseCloud_H
-#define daemReactingMultiphaseCloud_H
+#ifndef pcReactingMultiphaseCloud_H
+#define pcReactingMultiphaseCloud_H
 
 #include "typeInfo.H"
 
@@ -46,30 +46,30 @@ namespace Foam
                   Class reactingMultiphaseCloud Declaration
 \*---------------------------------------------------------------------------*/
 
-class daemReactingMultiphaseCloud
+class pcReactingMultiphaseCloud
 {
     // Private Member Functions
 
         //- Disallow default bitwise copy construct
-        daemReactingMultiphaseCloud(const daemReactingMultiphaseCloud&);
+        pcReactingMultiphaseCloud(const pcReactingMultiphaseCloud&);
 
         //- Disallow default bitwise assignment
-        void operator=(const daemReactingMultiphaseCloud&);
+        void operator=(const pcReactingMultiphaseCloud&);
 
 
 public:
 
     //- Runtime type information
-    TypeName("daemReactingMultiphaseCloud");
+    TypeName("pcReactingMultiphaseCloud");
 
     // Constructors
 
         //- Null constructor
-        daemReactingMultiphaseCloud();
+        pcReactingMultiphaseCloud();
 
 
     //- Destructor
-    virtual ~daemReactingMultiphaseCloud();
+    virtual ~pcReactingMultiphaseCloud();
 };
 
 

@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "basicDaemReactingMultiphaseCloud.H"
+#include "basicPcReactingMultiphaseCloud.H"
 
 #include "makeParcelCloudFunctionObjects.H"
 
@@ -43,7 +43,7 @@ License
 #include "makeReactingParcelPhaseChangeModels.H"
 
 // Reacting multiphase
-#include "makeReactingMultiphaseParcelDaemDevolatilisationModels.H"
+#include "makeReactingMultiphaseParcelPcDevolatilisationModels.H"
 #include "makeReactingMultiphaseParcelSurfaceReactionModels.H"
 
 // Stuff added 09-18-17 to get the turbulence stuff too
@@ -55,44 +55,44 @@ License
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-makeParcelCloudFunctionObjects(basicDaemReactingMultiphaseCloud);
+makeParcelCloudFunctionObjects(basicPcReactingMultiphaseCloud);
 
 // Kinematic sub-models
-makeThermoParcelForces(basicDaemReactingMultiphaseCloud);
-makeParcelDispersionModels(basicDaemReactingMultiphaseCloud);
-makeReactingMultiphaseParcelInjectionModels(basicDaemReactingMultiphaseCloud);
-makeParcelPatchInteractionModels(basicDaemReactingMultiphaseCloud);
+makeThermoParcelForces(basicPcReactingMultiphaseCloud);
+makeParcelDispersionModels(basicPcReactingMultiphaseCloud);
+makeReactingMultiphaseParcelInjectionModels(basicPcReactingMultiphaseCloud);
+makeParcelPatchInteractionModels(basicPcReactingMultiphaseCloud);
 makeReactingMultiphaseParcelStochasticCollisionModels
 (
-    basicDaemReactingMultiphaseCloud
+    basicPcReactingMultiphaseCloud
 );
-makeParcelSurfaceFilmModels(basicDaemReactingMultiphaseCloud);
+makeParcelSurfaceFilmModels(basicPcReactingMultiphaseCloud);
 
 // Thermo sub-models
-makeParcelHeatTransferModels(basicDaemReactingMultiphaseCloud);
+makeParcelHeatTransferModels(basicPcReactingMultiphaseCloud);
 
 // Reacting sub-models
 makeReactingMultiphaseParcelCompositionModels
 (
-    basicDaemReactingMultiphaseCloud
+    basicPcReactingMultiphaseCloud
 );
-makeReactingParcelPhaseChangeModels(basicDaemReactingMultiphaseCloud);
+makeReactingParcelPhaseChangeModels(basicPcReactingMultiphaseCloud);
 
 // Reacting multiphase sub-models
-makeReactingMultiphaseParcelDaemDevolatilisationModels
+makeReactingMultiphaseParcelPcDevolatilisationModels
 (
-    basicDaemReactingMultiphaseCloud
+    basicPcReactingMultiphaseCloud
 );
 makeReactingMultiphaseParcelSurfaceReactionModels
 (
-    basicDaemReactingMultiphaseCloud
+    basicPcReactingMultiphaseCloud
 );
 
-// Daem dispersion
-makeParcelTurbulenceDispersionModels(basicDaemReactingMultiphaseCloud);
+// Pc dispersion
+makeParcelTurbulenceDispersionModels(basicPcReactingMultiphaseCloud);
 
 // smithIntrinsic
-makeCoalParcelSmithIntrinsicSurfaceReactionModel(basicDaemReactingMultiphaseCloud);
+makeCoalParcelSmithIntrinsicSurfaceReactionModel(basicPcReactingMultiphaseCloud);
 
 
 // ************************************************************************* //

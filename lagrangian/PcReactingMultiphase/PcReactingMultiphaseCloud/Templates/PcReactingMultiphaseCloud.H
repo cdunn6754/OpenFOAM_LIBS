@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::DaemReactingMultiphaseCloud
+    Foam::PcReactingMultiphaseCloud
 
 Description
     Templated base class for multiphase reacting cloud
@@ -33,15 +33,15 @@ Description
       - surface reactions
 
 SourceFiles
-    DaemReactingMultiphaseCloudI.H
-    DaemReactingMultiphaseCloud.C
+    PcReactingMultiphaseCloudI.H
+    PcReactingMultiphaseCloud.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef DaemReactingMultiphaseCloud_H
-#define DaemReactingMultiphaseCloud_H
+#ifndef PcReactingMultiphaseCloud_H
+#define PcReactingMultiphaseCloud_H
 
-#include "daemReactingMultiphaseCloud.H"
+#include "psReactingMultiphaseCloud.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -51,20 +51,20 @@ namespace Foam
 // Forward declaration of classes
 
 template<class CloudType>
-class DaemDevolatilisationModel;
+class PcDevolatilisationModel;
 
 template<class CloudType>
 class SurfaceReactionModel;
 
 /*---------------------------------------------------------------------------*\
-                   Class DaemReactingMultiphaseCloud Declaration
+                   Class PcReactingMultiphaseCloud Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class CloudType>
-class DaemReactingMultiphaseCloud
+class PcReactingMultiphaseCloud
 :
     public CloudType,
-    public daemReactingMultiphaseCloud
+    public pcReactingMultiphaseCloud
 {
 public:
 
@@ -77,9 +77,9 @@ public:
         typedef typename CloudType::particleType parcelType;
 
         //- Convenience typedef for this cloud type
-        typedef DaemReactingMultiphaseCloud<CloudType> daemReactingMultiphaseCloudType;
+        typedef PcReactingMultiphaseCloud<CloudType> pcReactingMultiphaseCloudType;
 
-        typedef DaemReactingMultiphaseCloud<CloudType> reactingMultiphaseCloudType;
+        typedef PcReactingMultiphaseCloud<CloudType> reactingMultiphaseCloudType;
 
 
 private:
@@ -87,16 +87,16 @@ private:
     // Private data
 
         //- Cloud copy pointer
-        autoPtr<DaemReactingMultiphaseCloud<CloudType>> cloudCopyPtr_;
+        autoPtr<PcReactingMultiphaseCloud<CloudType>> cloudCopyPtr_;
 
 
     // Private member functions
 
         //- Disallow default bitwise copy construct
-        DaemReactingMultiphaseCloud(const DaemReactingMultiphaseCloud&);
+        PcReactingMultiphaseCloud(const PcReactingMultiphaseCloud&);
 
         //- Disallow default bitwise assignment
-        void operator=(const DaemReactingMultiphaseCloud&);
+        void operator=(const PcReactingMultiphaseCloud&);
 
 
 protected:
@@ -112,14 +112,14 @@ protected:
             //- Devolatilisation model
             autoPtr
             <
-                DaemDevolatilisationModel<DaemReactingMultiphaseCloud<CloudType>>
+                PcDevolatilisationModel<PcReactingMultiphaseCloud<CloudType>>
             >
             devolatilisationModel_;
 
             //- Surface reaction model
             autoPtr
             <
-                SurfaceReactionModel<DaemReactingMultiphaseCloud<CloudType>>
+                SurfaceReactionModel<PcReactingMultiphaseCloud<CloudType>>
             >
             surfaceReactionModel_;
 
@@ -145,7 +145,7 @@ protected:
         // Cloud evolution functions
 
             //- Reset state of cloud
-            void cloudReset(DaemReactingMultiphaseCloud<CloudType>& c);
+            void cloudReset(PcReactingMultiphaseCloud<CloudType>& c);
 
 
 public:
@@ -153,7 +153,7 @@ public:
     // Constructors
 
         //- Construct given carrier gas fields
-        DaemReactingMultiphaseCloud
+        PcReactingMultiphaseCloud
         (
             const word& cloudName,
             const volScalarField& rho,
@@ -165,18 +165,18 @@ public:
 
 
         //- Copy constructor with new name
-        DaemReactingMultiphaseCloud
+        PcReactingMultiphaseCloud
         (
-            DaemReactingMultiphaseCloud<CloudType>& c,
+            PcReactingMultiphaseCloud<CloudType>& c,
             const word& name
         );
 
         //- Copy constructor with new name - creates bare cloud
-        DaemReactingMultiphaseCloud
+        PcReactingMultiphaseCloud
         (
             const fvMesh& mesh,
             const word& name,
-            const DaemReactingMultiphaseCloud<CloudType>& c
+            const PcReactingMultiphaseCloud<CloudType>& c
         );
 
         //- Construct and return clone based on (this) with new name
@@ -184,7 +184,7 @@ public:
         {
             return autoPtr<Cloud<parcelType>>
             (
-                new DaemReactingMultiphaseCloud(*this, name)
+                new PcReactingMultiphaseCloud(*this, name)
             );
         }
 
@@ -193,13 +193,13 @@ public:
         {
             return autoPtr<Cloud<parcelType>>
             (
-                new DaemReactingMultiphaseCloud(this->mesh(), name, *this)
+                new PcReactingMultiphaseCloud(this->mesh(), name, *this)
             );
         }
 
 
     //- Destructor
-    virtual ~DaemReactingMultiphaseCloud();
+    virtual ~PcReactingMultiphaseCloud();
 
 
     // Member Functions
@@ -207,7 +207,7 @@ public:
         // Access
 
             //- Return a reference to the cloud copy
-            inline const DaemReactingMultiphaseCloud& cloudCopy() const;
+            inline const PcReactingMultiphaseCloud& cloudCopy() const;
 
             //- Return the constant properties
             inline const typename parcelType::constantProperties&
@@ -220,30 +220,30 @@ public:
             // Sub-models
 
                 //- Return const access to devolatilisation model
-                inline const DaemDevolatilisationModel
+                inline const PcDevolatilisationModel
                 <
-                    DaemReactingMultiphaseCloud<CloudType>
+                    PcReactingMultiphaseCloud<CloudType>
                 >&
                 devolatilisation() const;
 
                 //- Return reference to devolatilisation model
-                inline DaemDevolatilisationModel
+                inline PcDevolatilisationModel
                 <
-                    DaemReactingMultiphaseCloud<CloudType>
+                    PcReactingMultiphaseCloud<CloudType>
                 >&
                 devolatilisation();
 
                 //- Return const access to reacting surface reaction model
                 inline const SurfaceReactionModel
                 <
-                    DaemReactingMultiphaseCloud<CloudType>
+                    PcReactingMultiphaseCloud<CloudType>
                 >&
                 surfaceReaction() const;
 
                 //- Return reference to reacting surface reaction model
                 inline SurfaceReactionModel
                 <
-                    DaemReactingMultiphaseCloud<CloudType>
+                    PcReactingMultiphaseCloud<CloudType>
                 >&
                 surfaceReaction();
 
@@ -301,12 +301,12 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "DaemReactingMultiphaseCloudI.H"
+#include "PcReactingMultiphaseCloudI.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #ifdef NoRepository
-    #include "DaemReactingMultiphaseCloud.C"
+    #include "PcReactingMultiphaseCloud.C"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

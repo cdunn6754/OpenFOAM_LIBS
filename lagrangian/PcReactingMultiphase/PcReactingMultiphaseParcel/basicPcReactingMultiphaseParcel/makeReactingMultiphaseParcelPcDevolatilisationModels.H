@@ -23,30 +23,26 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef makeReactingMultiphaseParcelDaemDevolatilisationModels_H
-#define makeReactingMultiphaseParcelDaemDevolatilisationModels_H
+#ifndef makeReactingMultiphaseParcelPcDevolatilisationModels_H
+#define makeReactingMultiphaseParcelPcDevolatilisationModels_H
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "ConstantRateDaemDevolatilisation.H"
-#include "NoDaemDevolatilisation.H"
-#include "SingleKineticRateDaemDevolatilisation.H"
-#include "DaemDaemDevolatilisation.H"
+#include "NoPcDevolatilisation.H"
+#include "SingleKineticRatePcDevolatilisation.H"
+
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#define makeReactingMultiphaseParcelDaemDevolatilisationModels(CloudType)      \
+#define makeReactingMultiphaseParcelPcDevolatilisationModels(CloudType)        \
                                                                                \
-    makeDaemDevolatilisationModel(CloudType);                                  \
-    makeDaemDevolatilisationModelType                                          \
-    (ConstantRateDaemDevolatilisation, CloudType);			       \
-    makeDaemDevolatilisationModelType(NoDaemDevolatilisation, CloudType);      \
-    makeDaemDevolatilisationModelType                                          \
+    makePcDevolatilisationModel(CloudType);                                    \
+    makePcDevolatilisationModelType(NoPcDevolatilisation, CloudType);          \
+    makePcDevolatilisationModelType                                            \
     (                                                                          \
-        SingleKineticRateDaemDevolatilisation,                                 \
+        SingleKineticRatePcDevolatilisation,                                   \
         CloudType                                                              \
     );                                                                         \
-    makeDaemDevolatilisationModelType(DaemDaemDevolatilisation, CloudType);    \
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
