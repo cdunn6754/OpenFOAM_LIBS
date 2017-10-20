@@ -151,7 +151,7 @@ class SingleKineticRatePcDevolatilisation
                 {
                     return E_;
                 }
-
+      //- What do you think this function does?
                 scalar YVolinf() const
                 {
                     return YVolinf_;
