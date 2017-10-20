@@ -35,6 +35,7 @@ Description
         kappa = rate constant
         A1    = activation energy (user input)
         E     = pre-exponential factor (user input)
+	Yinf  = Total mass fraction of tar in daf basis
         R     = universal gas constant
         T     = temperature
 
@@ -44,8 +45,8 @@ Description
         {
             volatileData
             (
-                (CH4     12     0.5)   // (name A1 E)
-                (CO2     12     0.5)   // (name A1 E)
+                (CH4     12     0.5    0.03)   // (name A1 E Yinf)
+                (CO2     12     0.5    0.03)   // (name A1 E Yinf)
             );
 
             volatileResidualCoeff 1e-6;
@@ -85,6 +86,12 @@ class SingleKineticRatePcDevolatilisation
             //- Pre-exponential factor
             scalar E_;
 
+      // Ultimate Yield in daf basis 
+      // (ie what fraction of daf initial mass is volatiles? 
+      // YVolinf_, thats what. 
+      // Then it is also the total fraction that can be 
+      // devolatilized eventually (Clint 10-17)
+      scalar YVolinf_;
 
     public:
 
@@ -95,7 +102,8 @@ class SingleKineticRatePcDevolatilisation
             :
                 name_(word::null),
                 A1_(0.0),
-                E_(0.0)
+                E_(0.0),
+		YVolinf_(0.0)
             {}
 
             //- Construct from Istream
@@ -103,7 +111,8 @@ class SingleKineticRatePcDevolatilisation
             :
                 name_(is),
                 A1_(readScalar(is)),
-                E_(readScalar(is))
+                E_(readScalar(is)),
+                YVolinf_(readScalar(is))
             {}
 
             //- Construct as copy
@@ -111,7 +120,8 @@ class SingleKineticRatePcDevolatilisation
             :
                 name_(vd.name_),
                 A1_(vd.A1_),
-                E_(vd.E_)
+                E_(vd.E_),
+                YVolinf_(vd.YVolinf_)
             {}
 
 
@@ -142,6 +152,11 @@ class SingleKineticRatePcDevolatilisation
                     return E_;
                 }
 
+                scalar YVolinf() const
+                {
+                    return YVolinf_;
+                }
+
 
         // IOstream Operators
 
@@ -149,7 +164,7 @@ class SingleKineticRatePcDevolatilisation
             friend Istream& operator>>(Istream& is, volatileData& vd)
             {
                 is.readBeginList("volatileData");
-                is  >>  vd.name_  >> vd.A1_  >> vd.E_;
+                is  >>  vd.name_  >> vd.A1_  >> vd.E_ >> vd.YVolinf_;
                 is.readEndList("volatileData");
 
                 return is;
@@ -161,7 +176,8 @@ class SingleKineticRatePcDevolatilisation
                 os  << token::BEGIN_LIST
                     << vd.name_ << token::SPACE
                     << vd.A1_ << token::SPACE
-                    << vd.E_
+                    << vd.E_ << token::SPACE
+		    << vd.YVolinf_
                     << token::END_LIST;
 
                 return os;
@@ -186,6 +202,13 @@ class SingleKineticRatePcDevolatilisation
             //  When the fraction of volatiles are depleted below this
             //  threshold, combustion can occur
             const scalar residualCoeff_;
+
+  // In order to work with daf basis in main funtion
+  // we need the mass fraction of ash and water of
+  // the particles so Ydaf0 is the initial 
+  // mass fraction of the particle that is daf
+  // it is assumed that these fractions are the same for all particles
+  scalar Ydaf0_;
 
 
 public:
