@@ -25,32 +25,71 @@ Class
     Foam::SingleKineticRatePcDevolatilisation
 
 Description
-    Single kinetic rate devolatisation model.
+    Single kinetic rate devolatisation model for the 
+    primary particle pyrolysis (i.e. devolatilization). This
+    class also models secondary pyrolysis.
+
+    Primary Pyrolysis:
     - acts on a per-specie basis
     - Rate given by Arrhenius eqn
 
-        kappa = A1.exp(- E/R.T)
+        kappa = A*exp(- E/R*T)
 
     Where:
         kappa = rate constant
-        A1    = activation energy (user input)
-        E     = pre-exponential factor (user input)
-	Yinf  = Total mass fraction of tar in daf basis
+        A    = activation energy (user input) [1/s]
+        E     = pre-exponential factor (user input) [kcal/mole]
         R     = universal gas constant
         T     = temperature
 
+
+    Secondary Pyrolysis
+    - speciated as well
+    - presumes that one of the species of primary pyrolysis is
+      named "TAR". This tar is not released to the gas phase
+      as the other species are and is instead accumulated in the
+      parcel. 
+    - Three variables related to the secondary pyrolysis are tracked
+      with the particle. Yp, dY and Ysoot.
+     . Yp is the product of the primary pyrolysis, i.e. it is the amount
+       of TAR that has been devolatilized (only continues to increase)
+     . dY is the difference between Yp and Ys. Where Ys is the actual
+       amount of tar remaining in the particle (i.e. Yp - (the amount
+       that has been lost to the gas phase through secondary pyrolysis)). 
+       Yp >= Ys and once primary pyrolysis is complete (=> Yp=Yinf) and 
+       all of the tar has been pyrolyzed to gas phase species 
+       => dY=Yp=Yinf. (where Yinf is the daf mass fraction of tar in the
+       parcel.
+     . Ysoot  TBD, currently just released as an inert gas species
+
+
     Usage:
 
-        SingleKineticRatePcDevolatilisationCoeffs
+        SingleKineticRateDevolatilisationCoeffs
         {
             volatileData
             (
-                (CH4     12     0.5    0.03)   // (name A1 E Yinf)
-                (CO2     12     0.5    0.03)   // (name A1 E Yinf)
+                (CH4     12     0.5    191.0    8.3   .23) 
+                (CO2     12     0.5    191.0    8.3   .35)
             );
 
             volatileResidualCoeff 1e-6;
         }
+
+	The parameters are passed in in this form
+	(speciesName    Ap    Ep    As    Ap    YInfs)
+
+	Here p refers to primary rates, s referes to secondary 
+	pyrolyis (tar breakdown). Each species that is involved in
+	either process will need a complete entry. Their inactivity 
+	in the other process can be ensured by setting the activation
+	energy to zero. See units above near discussion of kappa.
+
+	YInfs is the secondary pyrolysis ultimate yield. This should be
+	the mass fraction of the tar which this species comprises. A primary 
+	pyrolysis counterpart does not need to be specified here as it is read 
+	from the Cloud composition. 
+	
 
 \*---------------------------------------------------------------------------*/
 
@@ -80,18 +119,20 @@ class SingleKineticRatePcDevolatilisation
             //- Specie name
             word name_;
 
-            //- Activation energy
-            scalar A1_;
+            //- Activation energy Primary
+            scalar Ap_;
 
-            //- Pre-exponential factor
-            scalar E_;
+            //- Pre-exponential factor Primary
+            scalar Ep_;
 
-      // Ultimate Yield in daf basis 
-      // (ie what fraction of daf initial mass is volatiles? 
-      // YVolinf_, thats what. 
-      // Then it is also the total fraction that can be 
-      // devolatilized eventually (Clint 10-17)
-      scalar YVolinf_;
+            //- Activation energy Secondary
+            scalar As_;
+
+            //- Pre-exponential factor Secondary
+            scalar Es_;
+
+            //- Ultimate species mass fraction (within tar)
+            scalar Yinfs_;
 
     public:
 
@@ -101,27 +142,33 @@ class SingleKineticRatePcDevolatilisation
             volatileData()
             :
                 name_(word::null),
-                A1_(0.0),
-                E_(0.0),
-		YVolinf_(0.0)
+                Ap_(0.0),
+                Ep_(0.0),
+                As_(0.0),
+                Es_(0.0),
+		Yinfs_(0.0)
             {}
 
             //- Construct from Istream
             volatileData(Istream& is)
             :
                 name_(is),
-                A1_(readScalar(is)),
-                E_(readScalar(is)),
-                YVolinf_(readScalar(is))
+                Ap_(readScalar(is)),
+                Ep_(readScalar(is)),
+                As_(readScalar(is)),
+                Es_(readScalar(is)),
+                Yinfs_(readScalar(is))
             {}
 
             //- Construct as copy
             volatileData(const volatileData& vd)
             :
                 name_(vd.name_),
-                A1_(vd.A1_),
-                E_(vd.E_),
-                YVolinf_(vd.YVolinf_)
+                Ap_(vd.Ap_),
+                Ep_(vd.Ep_),
+                As_(vd.As_),
+                Es_(vd.Es_),
+                Yinfs_(vd.Yinfs_)
             {}
 
 
@@ -141,20 +188,31 @@ class SingleKineticRatePcDevolatilisation
                 }
 
                 //- Return const access to the activation energy
-                scalar A1() const
+                scalar Ap() const
                 {
-                    return A1_;
+                    return Ap_;
                 }
 
                 //- Return const access to the pre-exponential factor
-                scalar E() const
+                scalar Ep() const
                 {
-                    return E_;
+                    return Ep_;
                 }
-      //- What do you think this function does?
-                scalar YVolinf() const
+                //- Return const access to the activation energy
+                scalar As() const
                 {
-                    return YVolinf_;
+                    return As_;
+                }
+
+                //- Return const access to the pre-exponential factor
+                scalar Es() const
+                {
+                    return Es_;
+                }
+                //- What do you suppose this function does?
+                scalar Yinfs() const
+                {
+                    return Yinfs_;
                 }
 
 
@@ -164,7 +222,8 @@ class SingleKineticRatePcDevolatilisation
             friend Istream& operator>>(Istream& is, volatileData& vd)
             {
                 is.readBeginList("volatileData");
-                is  >>  vd.name_  >> vd.A1_  >> vd.E_ >> vd.YVolinf_;
+                is  >>  vd.name_  >> vd.Ap_  >> vd.Ep_ >> 
+		  vd.As_ >> vd.Es_ >> vd.Yinfs_;
                 is.readEndList("volatileData");
 
                 return is;
@@ -175,9 +234,11 @@ class SingleKineticRatePcDevolatilisation
             {
                 os  << token::BEGIN_LIST
                     << vd.name_ << token::SPACE
-                    << vd.A1_ << token::SPACE
-                    << vd.E_ << token::SPACE
-		    << vd.YVolinf_
+                    << vd.Ap_ << token::SPACE
+                    << vd.Ep_ << token::SPACE
+                    << vd.As_ << token::SPACE
+                    << vd.Es_ << token::SPACE
+		    << vd.Yinfs_
                     << token::END_LIST;
 
                 return os;

@@ -67,11 +67,21 @@ SingleKineticRatePcDevolatilisation
                 << YVolatile0_[i] << endl;
         }
 
-	// Setting the proper value for Ydaf0_
-	const label ashId = owner.composition().localId(idGas, "ash");
-	const label waterId = owner.composition().localId(idGas, "H2O");
-	Ydaf0_ = 1.0 - YGas0[ashId] - YGas0[waterId];
+	// Setting the proper value for Ydaf0
+	const label idSolid = owner.composition().idSolid();
+	const label idLiquid = owner.composition().idLiquid();
+	const scalarField& YSolid0 = owner.composition().Y0(idSolid);
+	const scalarField& YLiquid0 = owner.composition().Y0(idLiquid);
+	const label ashId = owner.composition().localId(idSolid, "ash");
+	const label waterId = owner.composition().localId(idLiquid, "H2O");
+	const scalar YSolidTot = owner.composition().YMixture0()[idSolid];
+	const scalar YLiquidTot = owner.composition().YMixture0()[idLiquid];
+	const scalar Yash = YSolidTot * YSolid0[ashId];
+	const scalar Ywater = YLiquidTot * YLiquid0[waterId];
+	Ydaf0_ = 1.0 - Yash - Ywater;
     }
+
+
 }
 
 
@@ -117,6 +127,7 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
 ) const
 {
     bool done = true;
+    Info << "\nTar Fields: " << tarFields[0] << endl;
 
     // Initial daf mass of particle
     const scalar dafMass0 = this->Ydaf0_ * mass0;
@@ -127,30 +138,42 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
         const scalar massVolatile0 = mass0*YVolatile0_[i];
         const scalar massVolatile = mass*YGasEff[id];
 
+	// For the PC coal lab devol rate laws we need daf based 
+	// YdafVolatile0, as opposed to the YVolatile0 we already have.
+	const scalar YdafVolatile0 = YVolatile0_[i]/this->Ydaf0_;
+
+	// Find the percentage of the intial daf mass 
+	// that has been devolatilized
+	// TDevoled starts at 0.0 and approaches YdafVolatile0
 	const scalar massDevoled = massVolatile0 - massVolatile;
-	scalar fracDevoled = massDevoled/dafMass0;
-	
+	scalar YDevoled = massDevoled/dafMass0;	
  
 
         // Combustion allowed once all volatile components evolved
         done = done && (massVolatile <= residualCoeff_*massVolatile0);
 
         // Model coefficients
-        const scalar A1 = volatileData_[i].A1();
-        const scalar E = volatileData_[i].E();
-	const scalar Y_inf = volatileData_[i].YVolinf();
+        const scalar Ap = volatileData_[i].Ap();
+        const scalar Ep = volatileData_[i].Ep();
 
 	// make sure we dont exceed the amount of volatiles in the coal
-	if (fracDevoled >= Y_inf)
+	if (YDevoled >= YdafVolatile0)
 	  {
-	    fracDevoled = Y_inf;
+	    YDevoled = YdafVolatile0;
 	  }
 
+	
+	// Convert the builtin RR from [J/kmol K] 
+	// to [kcal/mol K]
+	const scalar pcR = ((RR/1000.)/4184);
+
         // Kinetic rate
-        const scalar kappa = A1*exp(-E/(RR*T));
+        const scalar kappa = Ap*exp(-Ep/(pcR*T));
 
         // Mass transferred from particle to carrier gas phase
-	const scalar massTransfered = dt*kappa*(Y_inf - fracDevoled) * dafMass0;
+	// The rates are also based on the daf mass
+	const scalar massTransfered = dt * kappa * (YdafVolatile0 - YDevoled) 
+	  * dafMass0;
         dMassDV[id] = min(massTransfered, massVolatile);
     }
 
