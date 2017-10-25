@@ -94,7 +94,8 @@ public:
             const scalarField& YSolidEff,
             label& canCombust,
             scalarField& dMassDV,
-	    scalarField& tarfields
+	    scalarField& tarProps,
+	    scalarField& dMassSP
         ) const;
 };
 

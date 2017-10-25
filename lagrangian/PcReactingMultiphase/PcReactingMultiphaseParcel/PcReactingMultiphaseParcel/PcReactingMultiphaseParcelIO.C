@@ -70,7 +70,7 @@ Foam::PcReactingMultiphaseParcel<ParcelType>::PcReactingMultiphaseParcel
         YGas_.transfer(Yg);
         YLiquid_.transfer(Yl);
         YSolid_.transfer(Ys);
-	tarFields_.transfer(tar);
+	tarProps_.transfer(tar);
 
         // scale the mass fractions
         const scalarField& YMix = this->Y_;
@@ -214,16 +214,16 @@ void Foam::PcReactingMultiphaseParcel<ParcelType>::readFields
 
     // Tar read stuff 10-17 Clint
     IOField<scalarField> 
-      tarFields(c.fieldIOobject("tarFields",
+      tarProps(c.fieldIOobject("tarProps",
 		 IOobject::MUST_READ));
-    c.checkFieldIOobject(c, tarFields);
+    c.checkFieldIOobject(c, tarProps);
 
     label i = 0;
     forAllIter(typename CloudType, c, iter)
       {
 	PcReactingMultiphaseParcel<ParcelType>& p = iter();
 	
-	p.tarFields_ = tarFields[i];
+	p.tarProps_ = tarProps[i];
 
 	i++;
       }
@@ -348,9 +348,9 @@ void Foam::PcReactingMultiphaseParcel<ParcelType>::writeFields
     }
 
 
-    // tarFields writeout added 10-17 Clint 
+    // tarProps writeout added 10-17 Clint 
     IOField<scalarField> 
-      tarFields(c.fieldIOobject("tarFields", 
+      tarProps(c.fieldIOobject("tarProps", 
 					  IOobject::NO_READ), np);
 
     label i = 0;
@@ -358,12 +358,12 @@ void Foam::PcReactingMultiphaseParcel<ParcelType>::writeFields
     forAllConstIter(typename CloudType, c, iter)
       {
 	const PcReactingMultiphaseParcel<ParcelType>& p = iter();
-	tarFields[i] = p.tarFields();
+	tarProps[i] = p.tarProps();
 
 	i++;
       }
 
-    tarFields.write();
+    tarProps.write();
 }
 
 
@@ -385,13 +385,13 @@ Foam::Ostream& Foam::operator<<
             << token::SPACE << YGasLoc
             << token::SPACE << YLiquidLoc
             << token::SPACE << YSolidLoc
-	    << token::SPACE << p.tarFields();
+	    << token::SPACE << p.tarProps();
     }
     else
     {
         os  << static_cast<const ParcelType&>(p);
         os  << YGasLoc << YLiquidLoc << YSolidLoc 
-	    << p.tarFields();
+	    << p.tarProps();
     }
 
     // Check state of Ostream

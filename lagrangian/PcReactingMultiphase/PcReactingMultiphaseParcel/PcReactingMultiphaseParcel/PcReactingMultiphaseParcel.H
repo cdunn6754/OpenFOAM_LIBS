@@ -26,7 +26,7 @@ Class
 
 Description
     Multiphase variant of the reacting parcel class with one/two-way coupling
-    with the continuous phase. Builds upon RMP by adding the tarFields scalarField.
+    with the continuous phase. Builds upon RMP by adding the tarProps scalarField.
     This is used in devolatilization to determine tar breakdown.
 
 SourceFiles
@@ -201,10 +201,10 @@ protected:
             // -1 = cannot devolatilise or combust, and cannot change
             label canCombust_;
 
-  // tarFields added for tar decomposition model, 
+  // tarProps added for tar decomposition model, 
   // will be passed to devolatilization model
   // added 10-17 Clint
-  scalarField tarFields_;
+  scalarField tarProps_;
 
 
     // Protected Member Functions
@@ -230,7 +230,8 @@ protected:
             scalar& N,                 // flux of species emitted from particle
             scalar& NCpW,              // sum of N*Cp*W of emission species
             scalarField& Cs,            // carrier conc. of emission species
-	    scalarField& tarFields     // fields for tar breakdown
+	    scalarField& tarProps,     // primary and secondary particle tar mass fractions
+	    scalarField& dMassSP       // to temporarily hold the products of tar pyrolysis
         ) const;
 
         //- Calculate surface reactions
@@ -384,8 +385,8 @@ public:
             //- Return const access to the canCombust flag
             inline label canCombust() const;
 
-  // Return const access to the tarFields
-  inline const scalarField& tarFields() const;
+  // Return const access to the tarProps
+  inline const scalarField& tarProps() const;
 
 
         // Edit
@@ -402,8 +403,8 @@ public:
             //- Return access to the canCombust flag
             inline label& canCombust();
 
-  // Return access to the tarFields
-  inline scalarField& tarFields();
+  // Return access to the tarProps
+  inline scalarField& tarProps();
 
 
         // Main calculation loop

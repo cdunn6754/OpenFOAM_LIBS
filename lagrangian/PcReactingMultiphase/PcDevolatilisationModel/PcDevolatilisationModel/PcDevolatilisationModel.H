@@ -129,7 +129,8 @@ public:
             const scalarField& YSolidEff,
             label& canCombust,
             scalarField& dMassDV,
-	    scalarField& tarFields
+	    scalarField& tarProps,
+	    scalarField& dMassSP
         ) const = 0;
 
         //- Add to devolatilisation mass

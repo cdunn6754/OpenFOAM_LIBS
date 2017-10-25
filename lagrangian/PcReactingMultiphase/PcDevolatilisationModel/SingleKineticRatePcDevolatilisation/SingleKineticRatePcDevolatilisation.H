@@ -276,17 +276,6 @@ class SingleKineticRatePcDevolatilisation
   label ashId_;
   label waterId_;
 
-  //- Ultimate daf yield of tar
-  scalar YdafInfTar_;
-  //- Activatation Energy for primary tar equation [1/s]
-  scalar Atar_;
-  //- Frequency Factor for primary tar equation [kcal/mol]
-  scalar Etar_;
-  //- Activatation Energy for dY tar equation [1/s]
-  scalar AtarDy_;
-  //- Frequency Factor for dY tar equation [kcal/mol]
-  scalar EtarDy_;
-
   //- Reference to the cloud
   const CloudType& owner_;
 
@@ -341,7 +330,8 @@ public:
             const scalarField& YSolidEff,
             label& canCombust,
             scalarField& dMassDV,
-	    scalarField& tarFields
+	    scalarField& tarProps,
+	    scalarField& dMassSP
         ) const;
 };
 

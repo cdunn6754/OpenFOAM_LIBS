@@ -262,9 +262,11 @@ void Foam::PcReactingMultiphaseParcel<ParcelType>::calc
 
     // Mass transfer due to devolatilisation
     scalarField dMassDV(YGas_.size(), 0.0);
+    // Mass transfer due to secondary pyrolysis of tar
+    scalarField dMassSP(YGas_.size(), 0.0);
 
-    // make a copy of the tarFields to go into the devol function
-    scalarField& tarFields = this->tarFields_;
+    // reference to the tarProps to go into the devol function
+    scalarField& tarProps = this->tarProps_;
 
     
     // Calc mass and enthalpy transfer due to devolatilisation
@@ -287,7 +289,8 @@ void Foam::PcReactingMultiphaseParcel<ParcelType>::calc
         Ne,
         NCpW,
         Cs,
-	tarFields
+	tarProps,
+	dMassSP
     );
     
 
@@ -333,6 +336,13 @@ void Foam::PcReactingMultiphaseParcel<ParcelType>::calc
     scalarField dMassSolid(dMassSRSolid);
     scalar mass1 =
         updateMassFractions(mass0, dMassGas, dMassLiquid, dMassSolid);
+
+    // Now the parcel mass fractions are updated, replace the tar mass
+    // to be lost with the proper mixture of its breakdown SP products
+    dMassGas += dMassSP;
+    // Getting rid of the tar with the assumption that it is the first 
+    // specie listed
+    dMassGas[0] = 0.0;
 
     this->Cp_ = CpEff(td, pc, T0, idG, idL, idS);
 
@@ -512,7 +522,8 @@ void Foam::PcReactingMultiphaseParcel<ParcelType>::calcDevolatilisation
     scalar& N,
     scalar& NCpW,
     scalarField& Cs,
-    scalarField& tarFields
+    scalarField& tarProps,
+    scalarField& dMassSP
 ) const
 {
     // Check that model is active
@@ -550,7 +561,8 @@ void Foam::PcReactingMultiphaseParcel<ParcelType>::calcDevolatilisation
         YSolidEff,
         canCombust,
         dMassDV,
-	tarFields
+	tarProps,
+	dMassSP
     );
 
     scalar dMassTot = sum(dMassDV);
@@ -687,7 +699,7 @@ Foam::PcReactingMultiphaseParcel<ParcelType>::PcReactingMultiphaseParcel
     YLiquid_(p.YLiquid_),
     YSolid_(p.YSolid_),
     canCombust_(p.canCombust_),
-    tarFields_(p.tarFields_)
+    tarProps_(p.tarProps_)
 {
 }
 
@@ -704,7 +716,7 @@ Foam::PcReactingMultiphaseParcel<ParcelType>::PcReactingMultiphaseParcel
     YLiquid_(p.YLiquid_),
     YSolid_(p.YSolid_),
     canCombust_(p.canCombust_),
-    tarFields_(p.tarFields_)
+    tarProps_(p.tarProps_)
 {
 }
 

@@ -41,11 +41,6 @@ SingleKineticRatePcDevolatilisation
     volatileToGasMap_(volatileData_.size()),
     residualCoeff_(readScalar(this->coeffDict().lookup("residualCoeff"))),
     Ydaf0_(1.0),
-    YdafInfTar_(0.24),
-    Atar_(382.0),
-    Etar_(7.88),
-    AtarDy_(3.41e+8),
-    EtarDy_(44.0),
     owner_(owner)
 {
     if (volatileData_.empty())
@@ -133,7 +128,8 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
     const scalarField& YSolidEff,
     label& canCombust,
     scalarField& dMassDV,
-    scalarField& tarFields
+    scalarField& tarProps,
+    scalarField& dMassSP
 ) const
 {
     bool done = true;
@@ -158,6 +154,7 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
     
 
 
+    // Loop through volatile species
     forAll(volatileData_, i)
     {
         const label id = volatileToGasMap_[i];
@@ -222,12 +219,12 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
 	// in addition to the primary devolatilization
 	else if (volatileData_[i].name() == "TAR")
 	  {
-	    // - Get the particle data from tarFields
+	    // - Get the particle data from tarProps
 	    // Primary released by particle daf mass fraction
-	    scalar& Yp = tarFields[0];
+	    scalar& Yp = tarProps[0];
 	    // difference between Primary tar released (Yp)
 	    // and actual tar remaining (i.e. secondary tar (Ys))
-	    scalar& dY = tarFields[1];
+	    scalar& dY = tarProps[1];
 
 	    // increment the primary tar release
 	    Yp += YdafTransfered;
@@ -254,20 +251,24 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
 	    // and release them to the gas phase
 	    forAll(volatileData_, j)
 	      {
+		if (volatileData_[j].name() == "TAR")
+		  {
+		    continue;
+		  }
 		const label ids = volatileToGasMap_[j];
-		dMassDV[ids] += volatileData_[j].Yinfs() * (massIncrement);
+		dMassSP[ids] = volatileData_[j].Yinfs() * (massIncrement);
 	      }
 	    
 	    Info << "TAR: " << Yp << endl;
 	    Info << "dY: " << dY << endl;
 	  } // end tar
 
-    } // end per specie primary devolatilization
+    } // end per specie loop
 
 
 
     // // --- Secondary Pyrolysis
-    // // - Get the particle data from tarFields
+    // // - Get the particle data from tarPro
     // // Primary released by particle daf mass fraction
     // scalar& Yp = tarFields[0];
     // // difference between Primary tar released (Yp)

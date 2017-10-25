@@ -79,10 +79,10 @@ inline Foam::PcReactingMultiphaseParcel<ParcelType>::PcReactingMultiphaseParcel
     YLiquid_(0),
     YSolid_(0),
     canCombust_(0)
-    //tarFields_(4,0.0)
+    //tarProps_(4,0.0)
 {
   scalarField temp(4,0.0);
-  tarFields_ = temp;
+  tarProps_ = temp;
 }
 
 
@@ -131,10 +131,10 @@ inline Foam::PcReactingMultiphaseParcel<ParcelType>::PcReactingMultiphaseParcel
     YLiquid_(YLiquid0),
     YSolid_(YSolid0),
     canCombust_(0)
-//tarFields_(4,0.0)
+//tarProps_(4,0.0)
 {
   scalarField temp(4,0.0);
-  tarFields_ = temp;
+  tarProps_ = temp;
 }
 
 
@@ -209,9 +209,9 @@ Foam::PcReactingMultiphaseParcel<ParcelType>::canCombust() const
 
 template<class ParcelType> 
 inline const Foam::scalarField& 
-Foam::PcReactingMultiphaseParcel<ParcelType>::tarFields() const
+Foam::PcReactingMultiphaseParcel<ParcelType>::tarProps() const
 {
-  return tarFields_;
+  return tarProps_;
 }
 
 
@@ -244,9 +244,9 @@ inline Foam::label& Foam::PcReactingMultiphaseParcel<ParcelType>::canCombust()
 
 template<class ParcelType>
 inline Foam::scalarField& 
-Foam::PcReactingMultiphaseParcel<ParcelType>::tarFields()
+Foam::PcReactingMultiphaseParcel<ParcelType>::tarProps()
 {
-  return tarFields_;
+  return tarProps_;
 }
 
 

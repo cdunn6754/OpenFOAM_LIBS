@@ -77,6 +77,7 @@ void Foam::NoPcDevolatilisation<CloudType>::calculate
     const scalarField&,
     label& canCombust,
     scalarField&,
+    scalarField&,
     scalarField&
 ) const
 {
