@@ -37,8 +37,8 @@ Description
 
     Where:
         kappa = rate constant
-        A    = activation energy (user input) [1/s]
-        E     = pre-exponential factor (user input) [kcal/mole]
+        A    = pre-exponential factor (user input) [1/s]
+        E     = activation energy (user input) [kcal/mole]
         R     = universal gas constant
         T     = temperature
 
@@ -71,13 +71,14 @@ Description
             (
                 (CH4     12     0.5    191.0    8.3   .23) 
                 (CO2     12     0.5    191.0    8.3   .35)
+		(TAR     382    7.88   3.41e8   44    .24)
             );
 
             volatileResidualCoeff 1e-6;
         }
 
 	The parameters are passed in in this form
-	(speciesName    Ap    Ep    As    Ap    YInfs)
+	(speciesName    Ap    Ep    As    Es    YInfs)
 
 	Here p refers to primary rates, s refers to secondary 
 	pyrolyis (tar breakdown). Each species that is involved in
