@@ -79,7 +79,7 @@ Description
 	The parameters are passed in in this form
 	(speciesName    Ap    Ep    As    Ap    YInfs)
 
-	Here p refers to primary rates, s referes to secondary 
+	Here p refers to primary rates, s refers to secondary 
 	pyrolyis (tar breakdown). Each species that is involved in
 	either process will need a complete entry. Their inactivity 
 	in the other process can be ensured by setting the activation
@@ -270,6 +270,24 @@ class SingleKineticRatePcDevolatilisation
   // mass fraction of the particle that is daf
   // it is assumed that these fractions are the same for all particles
   scalar Ydaf0_;
+
+  // ashID and waterID for the Composition object
+  label ashId_;
+  label waterId_;
+
+  //- Ultimate daf yield of tar
+  scalar YdafInfTar_;
+  //- Activatation Energy for primary tar equation [1/s]
+  scalar Atar_;
+  //- Frequency Factor for primary tar equation [kcal/mol]
+  scalar Etar_;
+  //- Activatation Energy for dY tar equation [1/s]
+  scalar AtarDy_;
+  //- Frequency Factor for dY tar equation [kcal/mol]
+  scalar EtarDy_;
+
+  //- Reference to the cloud
+  const CloudType& owner_;
 
 
 public:

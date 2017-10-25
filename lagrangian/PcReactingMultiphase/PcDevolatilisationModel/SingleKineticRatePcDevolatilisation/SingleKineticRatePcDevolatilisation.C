@@ -40,7 +40,13 @@ SingleKineticRatePcDevolatilisation
     YVolatile0_(volatileData_.size()),
     volatileToGasMap_(volatileData_.size()),
     residualCoeff_(readScalar(this->coeffDict().lookup("residualCoeff"))),
-    Ydaf0_(1.0)
+    Ydaf0_(1.0),
+    YdafInfTar_(0.24),
+    Atar_(382.0),
+    Etar_(7.88),
+    AtarDy_(3.41e+8),
+    EtarDy_(44.0),
+    owner_(owner)
 {
     if (volatileData_.empty())
     {
@@ -79,6 +85,9 @@ SingleKineticRatePcDevolatilisation
 	const scalar Yash = YSolidTot * YSolid0[ashId];
 	const scalar Ywater = YLiquidTot * YLiquid0[waterId];
 	Ydaf0_ = 1.0 - Yash - Ywater;
+
+	ashId_ = ashId;
+	waterId_ = waterId;
     }
 
 
@@ -96,7 +105,8 @@ SingleKineticRatePcDevolatilisation
     volatileData_(dm.volatileData_),
     YVolatile0_(dm.YVolatile0_),
     volatileToGasMap_(dm.volatileToGasMap_),
-    residualCoeff_(dm.residualCoeff_)
+    residualCoeff_(dm.residualCoeff_),
+    owner_(dm.owner_)
 {}
 
 
@@ -127,28 +137,49 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
 ) const
 {
     bool done = true;
-    Info << "\nTar Fields: " << tarFields[0] << endl;
 
     // Initial daf mass of particle
-    const scalar dafMass0 = this->Ydaf0_ * mass0;
+    const scalar dafMass0 = Ydaf0_ * mass0;
+
+    // Convert the builtin RR from [J/kmol K] 
+    // to [kcal/mol K]
+    const scalar pcR = ((RR/1000.)/4184);
+
+    // Find the current daf mass fraction of tar within the particle
+    const scalar Yash = YSolidEff[ashId_];
+    const scalar Ywater = YLiquidEff[waterId_];
+    const scalar dafMass = (1.0 - Ywater - Yash) * mass;
+    const scalar YdafTar = (YdafInfTar_ - tarFields[0]);
+
+    
+
 
     forAll(volatileData_, i)
     {
         const label id = volatileToGasMap_[i];
-        const scalar massVolatile0 = mass0*YVolatile0_[i];
-        const scalar massVolatile = mass*YGasEff[id];
 
-	// For the PC coal lab devol rate laws we need daf based 
+	// Find the mass of this specie within the particle
+	// but we need to account for the mass of tar that
+	// is not included in the composition list
+	// hence the (1.0 - YdafInfTar_) factor
+        const scalar massVolatile0 = dafMass0*YVolatile0_[i]*(1.0 - YdafInfTar_);
+	// 
+        const scalar massVolatile = dafMass*YGasEff[id]*(1.0 - YdafTar);
+
+	// For the PC coal lab devol rate laws we need daf based
 	// YdafVolatile0, as opposed to the YVolatile0 we already have.
-	const scalar YdafVolatile0 = YVolatile0_[i]/this->Ydaf0_;
+	// it should also be adjusted to account for the tar fraction
+	// in the particle that isnt included in the composition list
+	const scalar YdafVolatile0 = (YVolatile0_[i]/Ydaf0_) * (1.0 - YdafInfTar_);
+	Info << "YdafVolatile0: " << YdafVolatile0 << endl;
 
 	// Find the percentage of the intial daf mass 
 	// that has been devolatilized
-	// TDevoled starts at 0.0 and approaches YdafVolatile0
+	// YDevoled starts at 0.0 and approaches YdafVolatile0
 	const scalar massDevoled = massVolatile0 - massVolatile;
-	scalar YDevoled = massDevoled/dafMass0;	
+	scalar YdafDevoled = massDevoled/dafMass0;	
  
-
+	Info << "YdafDevoled: " << YdafDevoled << endl;
         // Combustion allowed once all volatile components evolved
         done = done && (massVolatile <= residualCoeff_*massVolatile0);
 
@@ -157,25 +188,55 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
         const scalar Ep = volatileData_[i].Ep();
 
 	// make sure we dont exceed the amount of volatiles in the coal
-	if (YDevoled >= YdafVolatile0)
+	if (YdafDevoled >= YdafVolatile0)
 	  {
-	    YDevoled = YdafVolatile0;
+	    YdafDevoled = YdafVolatile0;
 	  }
-
-	
-	// Convert the builtin RR from [J/kmol K] 
-	// to [kcal/mol K]
-	const scalar pcR = ((RR/1000.)/4184);
 
         // Kinetic rate
         const scalar kappa = Ap*exp(-Ep/(pcR*T));
 
         // Mass transferred from particle to carrier gas phase
 	// The rates are also based on the daf mass
-	const scalar massTransfered = dt * kappa * (YdafVolatile0 - YDevoled) 
-	  * dafMass0;
-        dMassDV[id] = min(massTransfered, massVolatile);
-    }
+	const scalar YdafTransfered = dt * kappa * (YdafVolatile0 - YdafDevoled);
+
+	dMassDV[id] = min(YdafTransfered*dafMass0, massVolatile);
+
+    } // end per specie primary devolatilization
+
+
+
+    // --- Secondary Pyrolysis
+
+    // - Get the particle data from tarFields
+    // Primary released by particle daf mass fraction
+    scalar& Yp = tarFields[0];
+    // difference between Primary tar released (Yp)
+    // and actual tar remaining (i.e. secondary tar (Ys))
+    scalar& dY = tarFields[1];
+
+    // - Devolatilize the primary tar (just like any other species)
+    const scalar kappaTar = Atar_ * exp(- Etar_/(pcR*T));
+    const scalar YpNew = dt * kappaTar * (YdafInfTar_ - Yp);
+     
+    // Add to primary tar and decompose tar mass fraction
+    Yp += YpNew;
+
+
+    // -  Now evaluate the dY equation
+
+    // rate constant for dY equation
+    const scalar kappaDy = this->AtarDy_ * exp(- this->EtarDy_/(pcR*T) );
+    const scalar dYnew = dt * kappaDy * (YdafInfTar_ - dY);
+    dY += dYnew;
+    const scalar dYmass = dYnew * dafMass0;
+
+    // Separate the tar breakdown mass into its contituents
+    forAll(volatileData_, j)
+      {
+	const label ids = volatileToGasMap_[j];
+	dMassDV[ids] += volatileData_[j].Yinfs() * (dYmass);
+      }
 
     if (done && canCombust != -1)
     {
