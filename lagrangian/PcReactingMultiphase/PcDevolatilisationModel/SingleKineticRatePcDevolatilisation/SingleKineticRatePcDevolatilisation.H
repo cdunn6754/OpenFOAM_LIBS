@@ -44,7 +44,6 @@ Description
 
 
     Secondary Pyrolysis
-    - speciated as well
     - presumes that one of the species of primary pyrolysis is
       named "TAR". This tar is not released to the gas phase
       as the other species are and is instead accumulated in the
@@ -271,13 +270,6 @@ class SingleKineticRatePcDevolatilisation
   // mass fraction of the particle that is daf
   // it is assumed that these fractions are the same for all particles
   scalar Ydaf0_;
-
-  // ashID and waterID for the Composition object
-  label ashId_;
-  label waterId_;
-
-  //- Reference to the cloud
-  const CloudType& owner_;
 
 
 public:
