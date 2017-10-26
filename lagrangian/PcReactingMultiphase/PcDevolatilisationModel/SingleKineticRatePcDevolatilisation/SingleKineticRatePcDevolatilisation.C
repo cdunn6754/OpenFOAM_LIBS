@@ -67,7 +67,7 @@ SingleKineticRatePcDevolatilisation
                 << YVolatile0_[i] << endl;
         }
 
-	// Setting the proper value for Ydaf0
+	// Setting the proper value for Ydaf0 (yikes)
 	const label idSolid = owner.composition().idSolid();
 	const label idLiquid = owner.composition().idLiquid();
 	const scalarField& YSolid0 = owner.composition().Y0(idSolid);
@@ -130,25 +130,12 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
     bool done = true;
 
     // Initial daf mass of particle
-    // needs to incorporate the tar mass 
-    // that isnt included
-    // so we are basically tacking on a fake 
-    // mass here
     const scalar dafMass0 = Ydaf0_ * mass0;
 
     // Convert the builtin RR from [J/kmol K] 
     // to [kcal/mol K] (PCCL B.S.)
     const scalar pcR = ((RR/1000.)/4184);
-
-    // Find the current daf mass fraction of tar within the particle
-    //const scalar Yash = YSolidEff[ashId_];
-    //const scalar Ywater = YLiquidEff[waterId_];
-    //const scalar YdafTar = (YdafInfTar_ - tarFields[0]);
-    //const scalar dafMass = (1.0 - Ywater - Yash) * mass;
-
     
-
-
     // Loop through volatile species
     forAll(volatileData_, i)
     {
@@ -169,12 +156,6 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
 	const scalar massDevoled = massVolatile0 - massVolatile;
 	scalar YdafDevoled = massDevoled/(dafMass0);	
  
-	Info << "YdafDevoled " <<  volatileData_[i].name() << ": "
-	     << YdafDevoled << endl;
-
-	Info << "YdafDevol0 " <<  volatileData_[i].name() << ": "
-	     << YdafVolatile0 << endl;
-
         // Combustion allowed once all volatile components evolved
         done = done && (massVolatile <= residualCoeff_*massVolatile0);
 
@@ -188,13 +169,12 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
 	    YdafDevoled = YdafVolatile0;
 	  }
 
-        // Kinetic rate
+        // Kinetic rate for primary devolatilization
         const scalar kappa = Ap*exp(-Ep/(pcR*T));
 
-        // Mass transferred from particle to carrier gas phase
-	// The rates are also based on the daf mass
+        // daf Mass fraction transferred from particle to carrier gas phase
+	// over this dt
 	const scalar YdafTransfered = dt * kappa * (YdafVolatile0 - YdafDevoled);
-
 
 	// Give the primary devolatilization products to gas phase
 	// (including tar, we will remove in outer function)
@@ -236,6 +216,9 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
 	    // and release them to the gas phase
 	    forAll(volatileData_, j)
 	      {
+		// need to skip tar since Yinf
+		// in that case is the daf ultimate yield
+		// not same as the other species
 		if (volatileData_[j].name() == "TAR")
 		  {
 		    continue;
@@ -243,46 +226,9 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
 		const label ids = volatileToGasMap_[j];
 		dMassSP[ids] = volatileData_[j].Yinfs() * (massIncrement);
 	      }
-	    
-	    Info << "Yp: " << Yp << endl;
-	    Info << "dY: " << dY << endl;
 	  } // end tar
 
     } // end per specie loop
-
-
-
-    // // --- Secondary Pyrolysis
-    // // - Get the particle data from tarPro
-    // // Primary released by particle daf mass fraction
-    // scalar& Yp = tarFields[0];
-    // // difference between Primary tar released (Yp)
-    // // and actual tar remaining (i.e. secondary tar (Ys))
-    // scalar& dY = tarFields[1];
-
-
-    // // - Devolatilize the primary tar (just like any other species)
-    // const scalar kappaTar = Atar_ * exp(- Etar_/(pcR*T));
-    // const scalar YpNew = dt * kappaTar * (YdafInfTar_ - Yp);
-     
-    // // Add to primary tar and decompose tar mass fraction
-    // Yp += YpNew;
-
-
-    // // -  Now evaluate the dY equation (Y here based on daf)
-
-    // // rate constant for dY equation
-    // const scalar kappaDy = AtarDy_ * exp(- EtarDy_/(pcR*T) );
-    // const scalar dYnew = dt * kappaDy * (YdafInfTar_ - dY);
-    // dY += dYnew;
-    // const scalar dYmass = dYnew * dafMass0;
-
-    // // Separate the tar breakdown mass into its contituents
-    // forAll(volatileData_, j)
-    //   {
-    // 	const label ids = volatileToGasMap_[j];
-    // 	dMassDV[ids] += volatileData_[j].Yinfs() * (dYmass);
-    //   }
 
     if (done && canCombust != -1)
     {

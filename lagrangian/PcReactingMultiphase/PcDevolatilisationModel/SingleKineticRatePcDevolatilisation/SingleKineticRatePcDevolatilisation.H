@@ -26,10 +26,12 @@ Class
 
 Description
     Single kinetic rate devolatisation model for the 
-    primary particle pyrolysis (i.e. devolatilization). This
-    class also models secondary pyrolysis.
+    primary particle pyrolysis (i.e. devolatilization) and
+    secondary pyrolysis (i.e. the breakdown of tar into
+    smaller molecules that are actually in the chemical 
+    mechanism).
 
-    Primary Pyrolysis:
+    Primary Pyrolysis (PP):
     - acts on a per-specie basis
     - Rate given by Arrhenius eqn
 
@@ -37,29 +39,30 @@ Description
 
     Where:
         kappa = rate constant
-        A    = pre-exponential factor (user input) [1/s]
-        E     = activation energy (user input) [kcal/mole]
+        Ap    = pre-exponential factor (user input) [1/s]
+        Ep     = activation energy (user input) [kcal/mole]
         R     = universal gas constant
         T     = temperature
 
 
-    Secondary Pyrolysis
-    - presumes that one of the species of primary pyrolysis is
-      named "TAR". This tar is not released to the gas phase
-      as the other species are and is instead accumulated in the
-      parcel. 
-    - Three variables related to the secondary pyrolysis are tracked
-      with the particle. Yp, dY and Ysoot.
-     . Yp is the product of the primary pyrolysis, i.e. it is the amount
-       of TAR that has been devolatilized (only continues to increase)
-     . dY is the difference between Yp and Ys. Where Ys is the actual
-       amount of tar remaining in the particle (i.e. Yp - (the amount
-       that has been lost to the gas phase through secondary pyrolysis)). 
-       Yp >= Ys and once primary pyrolysis is complete (=> Yp=Yinf) and 
-       all of the tar has been pyrolyzed to gas phase species 
-       => dY=Yp=Yinf. (where Yinf is the daf mass fraction of tar in the
-       parcel.
-     . Ysoot  TBD, currently just released as an inert gas species
+    Secondary Pyrolysis (SP):
+    - Through PP TAR is treated as a normal species (therefore
+      there needs to be an entry named 'TAR' in the chemical mechanism).
+      In PP the tar is evolved and returned appropriately in dMassDV, still
+      as if it is going to be released into the gas phase.
+    - In SP (within this class) we calculate, given the mass of tar being
+      evolved, the mass of the actual gas species that should be released
+      in its place and store them in dMassSP (which is ordered just 
+      as dMassDV so dMassDV + dMassSP makes sense). dMassSP is returned by 
+      the main calculate function in this class as well.
+    - In the outer function (calc() in PcReactingMultiphaseParcel.C) the tar
+      in dMassDV is left untill the parcel mass fractions have updated =>
+      the tar fraction of the particle is update appropriately. BUT ! the tar 
+      is then removed and replaced with its breakdown products stored in dMassSP
+      before the source terms to the gas phase are calculated => No TAR is actually
+      release to the gas phase.
+
+      
 
 
     Usage:
@@ -68,9 +71,10 @@ Description
         {
             volatileData
             (
-                (CH4     12     0.5    191.0    8.3   .23) 
-                (CO2     12     0.5    191.0    8.3   .35)
-		(TAR     382    7.88   3.41e8   44    .24)
+	        (TAR     382    7.88   3.41e8   44    .24)
+                (CH4     12     0.5    0.0      0.0   .23) 
+                (CO2     12     0.5    0.0      0.0   .35)
+		(SOOT    0      0      0        0     .42)
             );
 
             volatileResidualCoeff 1e-6;
@@ -78,17 +82,51 @@ Description
 
 	The parameters are passed in in this form
 	(speciesName    Ap    Ep    As    Es    YInfs)
+	
+	The forms of the entry are dependant on whether the specie is
+	TAR or not:
 
-	Here p refers to primary rates, s refers to secondary 
-	pyrolyis (tar breakdown). Each species that is involved in
-	either process will need a complete entry. Their inactivity 
-	in the other process can be ensured by setting the activation
-	energy to zero. See units above near discussion of kappa.
+	For non-TAR:
+	 -Ap and Ep are the standard primary pyrolysis rates, they have nothing 
+	  to do with the breakdown of tar. From PCCL V. 5.0 this information
+	  is obtained in the file 'SFORC1T1.rpt'. Depending on whether it is a
+	  hydrocabon or some other PCCL specie class.
 
-	YInfs is the secondary pyrolysis ultimate yield. This should be
-	the mass fraction of the tar which this species comprises. A primary 
-	pyrolysis counterpart does not need to be specified here as it is read 
-	from the Cloud composition. 
+	 -In these species Yinfs stands for the 
+	  mass fraction of the species from tar breakdown. In other words
+	  for species X with Yinfs = 0.5 there will be 0.5 grams of X produced
+	  when 1 gram of Tar is broken down (through secondary pyrolysis). This
+	  fraction information is obtained from the PCCL file 'SFTRC1T1.rpt'.
+	  Note that excluding tar sum(Yinfs) = 1.0, i.e. you need to fully account
+	  for where the tar mass will go.
+
+	 -As and Es should be set to 0.
+
+	For TAR:
+	 -Ap and Ep are just the normal speciated PP rate parameters. In this 
+	  sense TAR is treated as any other volatile specie. These parameters
+	  are also obtained from the 'SFORC1T1.rpt' file (taking the rates for 
+	  tar in that file).
+
+	 -Yinfs in the tar line is the daf mass fraction of tar initially in the 
+	  particle. This is also the ultimate daf mass fraction  yield of Tar.
+	  Also can be obtained from 'SFORC1T1.rpt' file. Note that it has no 
+	  relationship to the Yinfs from the other species.
+
+	 -As and Es are the rate parameters for the Arrhenius reation that
+	  describes the breakdown of tar into its constituents through SP.
+	  This corresponds to Eqn. 9 from page 13-5 in the PCCL manual (i.e.
+	  the 'dY' equation.
+
+	
+
+	 /// ********************************************************
+	IMPORTANT BUG NOTE:
+	 Right now there is one known weakness in the code, TAR must be the 
+	 first specie listed in the cloudProperties when specifying the gas
+	 mass fractions within the singleMixtureFractionCoeffs dict.
+	 /// ********************************************************
+	 
 	
 
 \*---------------------------------------------------------------------------*/

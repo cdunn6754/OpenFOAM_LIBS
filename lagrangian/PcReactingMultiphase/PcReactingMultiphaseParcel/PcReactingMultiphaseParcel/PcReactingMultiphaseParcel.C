@@ -340,8 +340,11 @@ void Foam::PcReactingMultiphaseParcel<ParcelType>::calc
     // Now the parcel mass fractions are updated, replace the tar mass
     // to be lost with the proper mixture of its breakdown SP products
     dMassGas += dMassSP;
-    // Getting rid of the tar with the assumption that it is the first 
-    // specie listed
+
+    // Remove tar mass with the assumption that it is the first 
+    // specie listed in singleMixtureFractiondict
+    // (needs to be fixed, definitly possible just
+    // need to figure out how the get the specie name from the composition)
     dMassGas[0] = 0.0;
 
     this->Cp_ = CpEff(td, pc, T0, idG, idL, idS);
