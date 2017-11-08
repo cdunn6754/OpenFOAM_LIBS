@@ -330,7 +330,6 @@ void Foam::PcReactingMultiphaseParcel<ParcelType>::calc
 
     // 2. Update the parcel properties due to change in mass
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Info <<"dMassDV: " << dMassDV << endl;
     scalarField dMassGas(dMassDV + dMassSRGas);
     scalarField dMassLiquid(dMassPC + dMassSRLiquid);
     scalarField dMassSolid(dMassSRSolid);
