@@ -67,7 +67,7 @@ SingleKineticRatePcDevolatilisation
                 << YVolatile0_[i] << endl;
         }
 
-	// Setting the proper value for Ydaf0 (yikes)
+	// Setting the proper value for Ydaf0
 	const label idSolid = owner.composition().idSolid();
 	const label idLiquid = owner.composition().idLiquid();
 	const scalarField& YSolid0 = owner.composition().Y0(idSolid);
@@ -141,7 +141,7 @@ void Foam::SingleKineticRatePcDevolatilisation<CloudType>::calculate
     {
         const label id = volatileToGasMap_[i];
 
-	// Find the mass of this specie within the particle
+	// Find the initial mass of this specie within the particle
         const scalar massVolatile0 = mass0*YVolatile0_[i];
 	// get the current mass of this specie volatiles in the particle
         const scalar massVolatile = mass*YGasEff[id];

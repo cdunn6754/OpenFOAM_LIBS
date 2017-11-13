@@ -90,7 +90,8 @@ Description
 	 -Ap and Ep are the standard primary pyrolysis rates, they have nothing 
 	  to do with the breakdown of tar. From PCCL V. 5.0 this information
 	  is obtained in the file 'SFORC1T1.rpt'. Depending on whether it is a
-	  hydrocabon or some other PCCL specie class.
+	  hydrocabon or some other PCCL specie class. Enter here in units 
+          provided in PCCL i.e. A=[1/s] and E=[kcal/mol]
 
 	 -In these species Yinfs stands for the 
 	  mass fraction of the species from tar breakdown. In other words
@@ -122,7 +123,7 @@ Description
 
 	 /// ********************************************************
 	IMPORTANT BUG NOTE:
-	 Right now there is one known weakness in the code, TAR must be the 
+	 Right now there is one known problem in the code, TAR must be the 
 	 first specie listed in the cloudProperties when specifying the gas
 	 mass fractions within the singleMixtureFractionCoeffs dict.
 	 /// ********************************************************
