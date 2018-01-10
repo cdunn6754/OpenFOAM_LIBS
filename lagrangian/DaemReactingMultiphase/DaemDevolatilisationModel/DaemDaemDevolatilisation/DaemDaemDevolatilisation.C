@@ -179,7 +179,6 @@ void Foam::DaemDaemDevolatilisation<CloudType>::calculate
 	    // The mass of this species lost during this iteration
 	    scalar speciesMassLoss = speciesMassFraction * totalParticleMassLoss;
 	    
-
 	    // If from some error the massloss is negative just set it a zero
 	    // this can happend with rounding errors from in low temps
 	    if (speciesMassLoss < 0.0)
@@ -204,9 +203,10 @@ void Foam::DaemDaemDevolatilisation<CloudType>::calculate
 
     else // if there are not volatiles to begin with, lose nothing
       {
-	dMassDV[0] = 0.0;
-	dMassDV[1] = 0.0;
-	dMassDV[2] = 0.0;
+          forAll(initialVolatileMassFractions_, i)
+          {
+              dMassDV[i] = 0.0;
+          }
       }
 
     if (done && canCombust != -1)
